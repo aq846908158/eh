@@ -1,14 +1,16 @@
 package cn.lcvc.dao;
 
+import cn.lcvc.POJO.Admin;
+
 import java.util.List;
 
 public interface AdminDao {
 
-    public void addAdminr();
-    public void deleteAdminr();
-    public void updateAdminr();
-    public Object getAdminr(Integer id);
-    public List<Object> getAdminrList();
+    public void addAdminr(Admin admin);
+    public void deleteAdminr(Admin admin);
+    public void updateAdminr(Admin admin);
+    public Admin getAdminr(Integer id);
+    public List<Admin> getAdminrList();
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
@@ -16,7 +18,7 @@ public interface AdminDao {
      * @param_value需要查询的字段的值
      * @return 一个Adminr对象，null表示没查到
      */
-    public Object getAdminrBy_OneColumn(String column, Object value);
+    public Admin getAdminrBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -26,7 +28,7 @@ public interface AdminDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Adminr对象，null表示没查到
      */
-    public Object getAdminrBy_TowColumn(String column1, Object value1, String column2, Object value2);
+    public Admin getAdminrBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -35,5 +37,5 @@ public interface AdminDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<Adminr>集合，null表示没查到
      */
-    public List<Object> getAdminrListOrderBy(String column, String orderBy);
+    public List<Admin> getAdminrListOrderBy(String column, String orderBy);
 }
