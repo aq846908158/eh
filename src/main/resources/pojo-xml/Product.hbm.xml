@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.lcvc.POJO.Product" table="product" schema="eh">
+        <id name="id" column="id"/>
+        <property name="productName" column="productName"/>
+        <property name="productNumber" column="productNumber"/>
+        <property name="productType" column="productType"/>
+        <property name="productPrice" column="productPrice"/>
+        <property name="school" column="school"/>
+        <property name="productIntroduce" column="productIntroduce"/>
+        <property name="degree" column="degree"/>
+        <property name="grounding" column="grounding"/>
+        <property name="buyTime" column="buyTime"/>
+        <property name="expire" column="expire"/>
+        <property name="user" column="user"/>
+        <property name="seeNumber" column="seeNumber"/>
+    </class>
+</hibernate-mapping>

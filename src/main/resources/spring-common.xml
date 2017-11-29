@@ -12,7 +12,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 只解析除controller之外的注解(即解析service、dao), 避免重复加载导致事务失效  -->
-    <context:component-scan base-package="com.lcvc.service">
+    <context:component-scan base-package="cn.lcvc.service">
         <!-- annotation为spting-mvc中解析的内容 -->
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
@@ -22,7 +22,7 @@
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
         <!-- 换成自己的数据库路径 -->
-        <property name="url" value="jdbc:mysql://localhost/test"></property>
+        <property name="url" value="jdbc:mysql://localhost/eh"></property>
         <property name="username" value="root"></property>
         <property name="password" value="123456"></property>
     </bean>
@@ -53,14 +53,32 @@
 
         <property name="annotatedClasses">
             <list>
-            <!--   <value>cn.lcvc.POJO.User</value>-->
-
+               <value>cn.lcvc.POJO.User</value>
+                <value>cn.lcvc.POJO.Admin</value>
+                <value>cn.lcvc.POJO.Adminpermissions</value>
+                <value>cn.lcvc.POJO.Favorites</value>
+                <value>cn.lcvc.POJO.Message</value>
+                <value>cn.lcvc.POJO.Order</value>
+                <value>cn.lcvc.POJO.Product</value>
+                <value>cn.lcvc.POJO.Productimg</value>
+                <value>cn.lcvc.POJO.Producttype</value>
+                <value>cn.lcvc.POJO.School</value>
+                <value>cn.lcvc.POJO.Shoppingcartitem</value>
             </list>
         </property>
         <property name="mappingLocations">
             <list>
-                <!--<value>classpath:cn/lcvc/POJO/User.hbm.xml</value>-->
-
+                <value>classpath:pojo-xml/User.hbm.xml</value>
+                <value>classpath:pojo-xml/Admin.hbm.xml</value>
+                <value>classpath:pojo-xml/Adminpermissions.hbm.xml</value>
+                <value>classpath:pojo-xml/Favorites.hbm.xml</value>
+                <value>classpath:pojo-xml/Message.hbm.xml</value>
+                <value>classpath:pojo-xml/Order.hbm.xml</value>
+                <value>classpath:pojo-xml/Product.hbm.xml</value>
+                <value>classpath:pojo-xml/Productimg.hbm.xml</value>
+                <value>classpath:pojo-xml/Producttype.hbm.xml</value>
+                <value>classpath:pojo-xml/School.hbm.xml</value>
+                <value>classpath:pojo-xml/Shoppingcartitem.hbm.xml</value>
             </list>
         </property>
 

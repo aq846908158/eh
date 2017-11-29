@@ -2,575 +2,574 @@
 <dataSource name="@localhost">
   <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
     <root id="1"/>
-    <schema id="2" parent="1" name="ebuy_date">
+    <schema id="2" parent="1" name="information_schema"/>
+    <schema id="3" parent="1" name="mysql"/>
+    <schema id="4" parent="1" name="performance_schema"/>
+    <schema id="5" parent="1" name="sys"/>
+    <schema id="6" parent="1" name="ebuy">
       <Current>1</Current>
     </schema>
-    <schema id="3" parent="1" name="information_schema"/>
-    <schema id="4" parent="1" name="mysql"/>
-    <schema id="5" parent="1" name="orderset"/>
-    <schema id="6" parent="1" name="pandl"/>
-    <schema id="7" parent="1" name="performance_schema"/>
-    <schema id="8" parent="1" name="sys"/>
-    <schema id="9" parent="1" name="test"/>
-    <schema id="10" parent="1" name="eh">
+    <schema id="7" parent="1" name="eh">
       <Visible>1</Visible>
     </schema>
-    <table id="11" parent="10" name="admin"/>
-    <table id="12" parent="10" name="adminpermissions"/>
-    <table id="13" parent="10" name="favorites"/>
-    <table id="14" parent="10" name="message"/>
-    <table id="15" parent="10" name="order"/>
-    <table id="16" parent="10" name="product"/>
-    <table id="17" parent="10" name="productimg"/>
-    <table id="18" parent="10" name="producttype"/>
-    <table id="19" parent="10" name="school"/>
-    <table id="20" parent="10" name="shoppingcartitem"/>
-    <table id="21" parent="10" name="user"/>
-    <column id="22" parent="11" name="id">
+    <schema id="8" parent="1" name="sakila"/>
+    <schema id="9" parent="1" name="world"/>
+    <table id="10" parent="7" name="admin"/>
+    <table id="11" parent="7" name="adminpermissions"/>
+    <table id="12" parent="7" name="favorites"/>
+    <table id="13" parent="7" name="message"/>
+    <table id="14" parent="7" name="order"/>
+    <table id="15" parent="7" name="product"/>
+    <table id="16" parent="7" name="productimg"/>
+    <table id="17" parent="7" name="producttype"/>
+    <table id="18" parent="7" name="school"/>
+    <table id="19" parent="7" name="shoppingcartitem"/>
+    <table id="20" parent="7" name="user"/>
+    <column id="21" parent="10" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="23" parent="11" name="userName">
+    <column id="22" parent="10" name="userName">
       <Position>2</Position>
       <DataType>varchar(32)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="24" parent="11" name="userPassword">
+    <column id="23" parent="10" name="userPassword">
       <Position>3</Position>
       <DataType>char(32)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="25" parent="11" name="salt">
+    <column id="24" parent="10" name="salt">
       <Position>4</Position>
       <DataType>char(32)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="26" parent="11" name="trueName">
+    <column id="25" parent="10" name="trueName">
       <Position>5</Position>
       <DataType>varchar(4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="27" parent="11" name="phone">
+    <column id="26" parent="10" name="phone">
       <Position>6</Position>
       <DataType>char(11)|0</DataType>
     </column>
-    <column id="28" parent="11" name="email">
+    <column id="27" parent="10" name="email">
       <Position>7</Position>
       <DataType>varchar(30)|0</DataType>
     </column>
-    <column id="29" parent="11" name="createTime">
+    <column id="28" parent="10" name="createTime">
       <Position>8</Position>
       <DataType>timestamp|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0000-00-00 00:00:00&apos;</DefaultExpression>
     </column>
-    <column id="30" parent="11" name="lastTime">
+    <column id="29" parent="10" name="lastTime">
       <Position>9</Position>
       <DataType>timestamp|0</DataType>
     </column>
-    <column id="31" parent="11" name="title">
+    <column id="30" parent="10" name="title">
       <Position>10</Position>
       <DataType>varchar(30)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="32" parent="11" name="PRIMARY">
+    <key id="31" parent="10" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="33" parent="12" name="id">
+    <column id="32" parent="11" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="34" parent="12" name="admin">
+    <column id="33" parent="11" name="admin">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="35" parent="12" name="low">
+    <column id="34" parent="11" name="low">
       <Position>3</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="36" parent="12" name="in">
+    <column id="35" parent="11" name="in">
       <Position>4</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="37" parent="12" name="height">
+    <column id="36" parent="11" name="height">
       <Position>5</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="38" parent="12" name="admin_adminPermissions">
+    <index id="37" parent="11" name="admin_adminPermissions">
       <ColNames>admin</ColNames>
     </index>
-    <key id="39" parent="12" name="PRIMARY">
+    <key id="38" parent="11" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="40" parent="12" name="admin_adminPermissions">
+    <foreign-key id="39" parent="11" name="admin_adminPermissions">
       <ColNames>admin</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>admin</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="41" parent="13" name="id">
+    <column id="40" parent="12" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="42" parent="13" name="user">
+    <column id="41" parent="12" name="user">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="43" parent="13" name="product">
+    <column id="42" parent="12" name="product">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="44" parent="13" name="product_favorites">
+    <index id="43" parent="12" name="product_favorites">
       <ColNames>product</ColNames>
     </index>
-    <index id="45" parent="13" name="user_favorites">
+    <index id="44" parent="12" name="user_favorites">
       <ColNames>user</ColNames>
     </index>
-    <key id="46" parent="13" name="PRIMARY">
+    <key id="45" parent="12" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="47" parent="13" name="user_favorites">
+    <foreign-key id="46" parent="12" name="user_favorites">
       <ColNames>user</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="48" parent="13" name="product_favorites">
+    <foreign-key id="47" parent="12" name="product_favorites">
       <ColNames>product</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>product</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="49" parent="14" name="id">
+    <column id="48" parent="13" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="50" parent="14" name="text">
+    <column id="49" parent="13" name="text">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="51" parent="14" name="user">
+    <column id="50" parent="13" name="user">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="52" parent="14" name="product">
+    <column id="51" parent="13" name="product">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="53" parent="14" name="code">
+    <column id="52" parent="13" name="code">
       <Position>5</Position>
       <DataType>char(6)|0</DataType>
     </column>
-    <column id="54" parent="14" name="superCode">
+    <column id="53" parent="13" name="superCode">
       <Position>6</Position>
       <DataType>char(6)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="55" parent="14" name="createTime">
+    <column id="54" parent="13" name="createTime">
       <Position>7</Position>
       <DataType>timestamp|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0000-00-00 00:00:00&apos;</DefaultExpression>
     </column>
-    <index id="56" parent="14" name="product_message">
+    <index id="55" parent="13" name="product_message">
       <ColNames>product</ColNames>
     </index>
-    <index id="57" parent="14" name="user_message">
+    <index id="56" parent="13" name="user_message">
       <ColNames>user</ColNames>
     </index>
-    <key id="58" parent="14" name="PRIMARY">
+    <key id="57" parent="13" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="59" parent="14" name="user_message">
+    <foreign-key id="58" parent="13" name="user_message">
       <ColNames>user</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="60" parent="14" name="product_message">
+    <foreign-key id="59" parent="13" name="product_message">
       <ColNames>product</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>product</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="61" parent="15" name="id">
+    <column id="60" parent="14" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="62" parent="15" name="orderCode">
+    <column id="61" parent="14" name="orderCode">
       <Position>2</Position>
       <DataType>char(20)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="63" parent="15" name="number">
+    <column id="62" parent="14" name="number">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="64" parent="15" name="sellUser">
+    <column id="63" parent="14" name="sellUser">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="65" parent="15" name="buyUser">
+    <column id="64" parent="14" name="buyUser">
       <Position>5</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="66" parent="15" name="orderPrice">
+    <column id="65" parent="14" name="orderPrice">
       <Position>6</Position>
       <DataType>float|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="67" parent="15" name="chalkUp">
+    <column id="66" parent="14" name="chalkUp">
       <Position>7</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="68" parent="15" name="createTime">
+    <column id="67" parent="14" name="createTime">
       <Position>8</Position>
       <DataType>timestamp|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0000-00-00 00:00:00&apos;</DefaultExpression>
     </column>
-    <column id="69" parent="15" name="message">
+    <column id="68" parent="14" name="message">
       <Position>9</Position>
       <DataType>varchar(50)|0</DataType>
     </column>
-    <index id="70" parent="15" name="buyUser_order">
+    <index id="69" parent="14" name="buyUser_order">
       <ColNames>buyUser</ColNames>
     </index>
-    <index id="71" parent="15" name="sellUser_order">
+    <index id="70" parent="14" name="sellUser_order">
       <ColNames>sellUser</ColNames>
     </index>
-    <key id="72" parent="15" name="PRIMARY">
+    <key id="71" parent="14" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="73" parent="15" name="sellUser_order">
+    <foreign-key id="72" parent="14" name="sellUser_order">
       <ColNames>sellUser</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="74" parent="15" name="buyUser_order">
+    <foreign-key id="73" parent="14" name="buyUser_order">
       <ColNames>buyUser</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="75" parent="16" name="id">
+    <column id="74" parent="15" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="76" parent="16" name="productName">
+    <column id="75" parent="15" name="productName">
       <Position>2</Position>
       <DataType>varchar(30)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="77" parent="16" name="productNumber">
+    <column id="76" parent="15" name="productNumber">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="78" parent="16" name="productType">
+    <column id="77" parent="15" name="productType">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="79" parent="16" name="productPrice">
+    <column id="78" parent="15" name="productPrice">
       <Position>5</Position>
       <DataType>float|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="80" parent="16" name="school">
+    <column id="79" parent="15" name="school">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="81" parent="16" name="productIntroduce">
+    <column id="80" parent="15" name="productIntroduce">
       <Position>7</Position>
       <DataType>text|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="82" parent="16" name="degree">
+    <column id="81" parent="15" name="degree">
       <Position>8</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="83" parent="16" name="grounding">
+    <column id="82" parent="15" name="grounding">
       <Position>9</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="84" parent="16" name="buyTime">
+    <column id="83" parent="15" name="buyTime">
       <Position>10</Position>
       <DataType>timestamp|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0000-00-00 00:00:00&apos;</DefaultExpression>
     </column>
-    <column id="85" parent="16" name="expire">
+    <column id="84" parent="15" name="expire">
       <Position>11</Position>
       <DataType>timestamp|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0000-00-00 00:00:00&apos;</DefaultExpression>
     </column>
-    <column id="86" parent="16" name="user">
+    <column id="85" parent="15" name="user">
       <Position>12</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="87" parent="16" name="seeNumber">
+    <column id="86" parent="15" name="seeNumber">
       <Position>13</Position>
       <DataType>int(10) unsigned zerofill|0</DataType>
     </column>
-    <index id="88" parent="16" name="productType_product">
+    <index id="87" parent="15" name="productType_product">
       <ColNames>productType</ColNames>
     </index>
-    <index id="89" parent="16" name="school_product">
+    <index id="88" parent="15" name="school_product">
       <ColNames>school</ColNames>
     </index>
-    <index id="90" parent="16" name="user_product">
+    <index id="89" parent="15" name="user_product">
       <ColNames>user</ColNames>
     </index>
-    <key id="91" parent="16" name="PRIMARY">
+    <key id="90" parent="15" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="92" parent="16" name="productType_product">
+    <foreign-key id="91" parent="15" name="productType_product">
       <ColNames>productType</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>producttype</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="93" parent="16" name="school_product">
+    <foreign-key id="92" parent="15" name="school_product">
       <ColNames>school</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>school</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="94" parent="16" name="user_product">
+    <foreign-key id="93" parent="15" name="user_product">
       <ColNames>user</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="95" parent="17" name="id">
+    <column id="94" parent="16" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="96" parent="17" name="product">
+    <column id="95" parent="16" name="product">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="97" parent="17" name="imgUrl">
+    <column id="96" parent="16" name="imgUrl">
       <Position>3</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="98" parent="17" name="product_productImg">
+    <index id="97" parent="16" name="product_productImg">
       <ColNames>product</ColNames>
     </index>
-    <key id="99" parent="17" name="PRIMARY">
+    <key id="98" parent="16" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="100" parent="17" name="product_productImg">
+    <foreign-key id="99" parent="16" name="product_productImg">
       <ColNames>product</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>product</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="101" parent="18" name="id">
+    <column id="100" parent="17" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="102" parent="18" name="productTypeName">
+    <column id="101" parent="17" name="productTypeName">
       <Position>2</Position>
       <DataType>varchar(10)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="103" parent="18" name="productTypeRank">
+    <column id="102" parent="17" name="productTypeRank">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="104" parent="18" name="productTypeCode">
+    <column id="103" parent="17" name="productTypeCode">
       <Position>4</Position>
       <DataType>char(6)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="105" parent="18" name="superType">
+    <column id="104" parent="17" name="superType">
       <Position>5</Position>
       <DataType>char(6)|0</DataType>
     </column>
-    <key id="106" parent="18" name="PRIMARY">
+    <key id="105" parent="17" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="107" parent="19" name="id">
+    <column id="106" parent="18" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="108" parent="19" name="schoolName">
+    <column id="107" parent="18" name="schoolName">
       <Position>2</Position>
       <DataType>varchar(35)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="109" parent="19" name="PRIMARY">
+    <key id="108" parent="18" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="110" parent="20" name="id">
+    <column id="109" parent="19" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="111" parent="20" name="user">
+    <column id="110" parent="19" name="user">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="112" parent="20" name="product">
+    <column id="111" parent="19" name="product">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="113" parent="20" name="number">
+    <column id="112" parent="19" name="number">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="114" parent="20" name="product_shoppingCartItem">
+    <index id="113" parent="19" name="product_shoppingCartItem">
       <ColNames>product</ColNames>
     </index>
-    <index id="115" parent="20" name="user_shoppingCartItem">
+    <index id="114" parent="19" name="user_shoppingCartItem">
       <ColNames>user</ColNames>
     </index>
-    <key id="116" parent="20" name="PRIMARY">
+    <key id="115" parent="19" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="117" parent="20" name="user_shoppingCartItem">
+    <foreign-key id="116" parent="19" name="user_shoppingCartItem">
       <ColNames>user</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="118" parent="20" name="product_shoppingCartItem">
+    <foreign-key id="117" parent="19" name="product_shoppingCartItem">
       <ColNames>product</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>product</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="119" parent="21" name="id">
+    <column id="118" parent="20" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="120" parent="21" name="userName">
+    <column id="119" parent="20" name="userName">
       <Position>2</Position>
       <DataType>char(32)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="121" parent="21" name="userPassword">
+    <column id="120" parent="20" name="userPassword">
       <Position>3</Position>
       <DataType>char(32)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="122" parent="21" name="salt">
+    <column id="121" parent="20" name="salt">
       <Position>4</Position>
       <DataType>char(32)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="123" parent="21" name="trueName">
+    <column id="122" parent="20" name="trueName">
       <Position>5</Position>
       <DataType>varchar(4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="124" parent="21" name="school">
+    <column id="123" parent="20" name="school">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="125" parent="21" name="sellNumber">
+    <column id="124" parent="20" name="sellNumber">
       <Position>7</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="126" parent="21" name="forSaleNumber">
+    <column id="125" parent="20" name="forSaleNumber">
       <Position>8</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="127" parent="21" name="phone">
+    <column id="126" parent="20" name="phone">
       <Position>9</Position>
       <DataType>char(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="128" parent="21" name="email">
+    <column id="127" parent="20" name="email">
       <Position>10</Position>
       <DataType>varchar(35)|0</DataType>
     </column>
-    <column id="129" parent="21" name="createTime">
+    <column id="128" parent="20" name="createTime">
       <Position>11</Position>
       <DataType>timestamp|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0000-00-00 00:00:00&apos;</DefaultExpression>
     </column>
-    <column id="130" parent="21" name="lastTime">
+    <column id="129" parent="20" name="lastTime">
       <Position>12</Position>
       <DataType>timestamp|0</DataType>
     </column>
-    <index id="131" parent="21" name="school_user">
+    <index id="130" parent="20" name="school_user">
       <ColNames>school</ColNames>
     </index>
-    <key id="132" parent="21" name="PRIMARY">
+    <key id="131" parent="20" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="133" parent="21" name="school_user">
+    <foreign-key id="132" parent="20" name="school_user">
       <ColNames>school</ColNames>
       <RefSchemaName>eh</RefSchemaName>
       <RefTableName>school</RefTableName>
