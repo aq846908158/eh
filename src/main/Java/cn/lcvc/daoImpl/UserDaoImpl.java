@@ -23,6 +23,7 @@ public class UserDaoImpl implements UserDao {
     public List<User> getAllUser() {
         String hql = "from User";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        
         return query.list();
     }
 
