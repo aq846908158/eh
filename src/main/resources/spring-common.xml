@@ -54,11 +54,13 @@
         <property name="annotatedClasses">
             <list>
             <!--   <value>cn.lcvc.POJO.User</value>-->
+
             </list>
         </property>
         <property name="mappingLocations">
             <list>
                 <!--<value>classpath:cn/lcvc/POJO/User.hbm.xml</value>-->
+
             </list>
         </property>
 
