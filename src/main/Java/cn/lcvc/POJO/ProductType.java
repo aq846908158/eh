@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Producttype {
+public class ProductType {
     private Integer id;
     private String productTypeName;
     private Integer productTypeRank;
@@ -68,7 +68,7 @@ public class Producttype {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Producttype that = (Producttype) o;
+        ProductType that = (ProductType) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (productTypeName != null ? !productTypeName.equals(that.productTypeName) : that.productTypeName != null)

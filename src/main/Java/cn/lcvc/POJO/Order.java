@@ -1,9 +1,6 @@
 package cn.lcvc.POJO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -11,12 +8,12 @@ public class Order {
     private Integer id;
     private String orderCode;
     private Integer number;
-    private Integer sellUser;
-    private Integer buyUser;
     private Double orderPrice;
     private Boolean chalkUp;
     private Timestamp createTime;
     private String message;
+    private User buyUser;
+    private User sellUser;
 
     @Id
     @Column(name = "id")
@@ -46,26 +43,6 @@ public class Order {
 
     public void setNumber(Integer number) {
         this.number = number;
-    }
-
-    @Basic
-    @Column(name = "sellUser")
-    public Integer getSellUser() {
-        return sellUser;
-    }
-
-    public void setSellUser(Integer sellUser) {
-        this.sellUser = sellUser;
-    }
-
-    @Basic
-    @Column(name = "buyUser")
-    public Integer getBuyUser() {
-        return buyUser;
-    }
-
-    public void setBuyUser(Integer buyUser) {
-        this.buyUser = buyUser;
     }
 
     @Basic
@@ -118,8 +95,6 @@ public class Order {
         if (id != null ? !id.equals(order.id) : order.id != null) return false;
         if (orderCode != null ? !orderCode.equals(order.orderCode) : order.orderCode != null) return false;
         if (number != null ? !number.equals(order.number) : order.number != null) return false;
-        if (sellUser != null ? !sellUser.equals(order.sellUser) : order.sellUser != null) return false;
-        if (buyUser != null ? !buyUser.equals(order.buyUser) : order.buyUser != null) return false;
         if (orderPrice != null ? !orderPrice.equals(order.orderPrice) : order.orderPrice != null) return false;
         if (chalkUp != null ? !chalkUp.equals(order.chalkUp) : order.chalkUp != null) return false;
         if (createTime != null ? !createTime.equals(order.createTime) : order.createTime != null) return false;
@@ -133,12 +108,30 @@ public class Order {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (orderCode != null ? orderCode.hashCode() : 0);
         result = 31 * result + (number != null ? number.hashCode() : 0);
-        result = 31 * result + (sellUser != null ? sellUser.hashCode() : 0);
-        result = 31 * result + (buyUser != null ? buyUser.hashCode() : 0);
         result = 31 * result + (orderPrice != null ? orderPrice.hashCode() : 0);
         result = 31 * result + (chalkUp != null ? chalkUp.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "sellUser", referencedColumnName = "id", nullable = false)
+    public User getBuyUser() {
+        return buyUser;
+    }
+
+    public void setBuyUser(User buyUser) {
+        this.buyUser = buyUser;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "buyUser", referencedColumnName = "id", nullable = false)
+    public User getSellUser() {
+        return sellUser;
+    }
+
+    public void setSellUser(User sellUser) {
+        this.sellUser = sellUser;
     }
 }

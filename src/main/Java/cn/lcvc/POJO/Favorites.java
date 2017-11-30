@@ -1,15 +1,12 @@
 package cn.lcvc.POJO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Favorites {
     private Integer id;
-    private Integer user;
-    private Integer product;
+    private User user;
+    private Product product;
 
     @Id
     @Column(name = "id")
@@ -21,26 +18,6 @@ public class Favorites {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "user")
-    public Integer getUser() {
-        return user;
-    }
-
-    public void setUser(Integer user) {
-        this.user = user;
-    }
-
-    @Basic
-    @Column(name = "product")
-    public Integer getProduct() {
-        return product;
-    }
-
-    public void setProduct(Integer product) {
-        this.product = product;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,17 +26,32 @@ public class Favorites {
         Favorites favorites = (Favorites) o;
 
         if (id != null ? !id.equals(favorites.id) : favorites.id != null) return false;
-        if (user != null ? !user.equals(favorites.user) : favorites.user != null) return false;
-        if (product != null ? !product.equals(favorites.product) : favorites.product != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (product != null ? product.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "product", referencedColumnName = "id", nullable = false)
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

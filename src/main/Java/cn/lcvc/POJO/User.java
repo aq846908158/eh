@@ -1,9 +1,6 @@
 package cn.lcvc.POJO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -13,13 +10,13 @@ public class User {
     private String userPassword;
     private String salt;
     private String trueName;
-    private Integer school;
     private Integer sellNumber;
     private Integer forSaleNumber;
     private String phone;
     private String email;
     private Timestamp createTime;
     private Timestamp lastTime;
+    private School school;
 
     @Id
     @Column(name = "id")
@@ -69,16 +66,6 @@ public class User {
 
     public void setTrueName(String trueName) {
         this.trueName = trueName;
-    }
-
-    @Basic
-    @Column(name = "school")
-    public Integer getSchool() {
-        return school;
-    }
-
-    public void setSchool(Integer school) {
-        this.school = school;
     }
 
     @Basic
@@ -153,7 +140,6 @@ public class User {
         if (userPassword != null ? !userPassword.equals(user.userPassword) : user.userPassword != null) return false;
         if (salt != null ? !salt.equals(user.salt) : user.salt != null) return false;
         if (trueName != null ? !trueName.equals(user.trueName) : user.trueName != null) return false;
-        if (school != null ? !school.equals(user.school) : user.school != null) return false;
         if (sellNumber != null ? !sellNumber.equals(user.sellNumber) : user.sellNumber != null) return false;
         if (forSaleNumber != null ? !forSaleNumber.equals(user.forSaleNumber) : user.forSaleNumber != null)
             return false;
@@ -172,7 +158,6 @@ public class User {
         result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
         result = 31 * result + (salt != null ? salt.hashCode() : 0);
         result = 31 * result + (trueName != null ? trueName.hashCode() : 0);
-        result = 31 * result + (school != null ? school.hashCode() : 0);
         result = 31 * result + (sellNumber != null ? sellNumber.hashCode() : 0);
         result = 31 * result + (forSaleNumber != null ? forSaleNumber.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
@@ -180,5 +165,15 @@ public class User {
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (lastTime != null ? lastTime.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "school", referencedColumnName = "id")
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
     }
 }

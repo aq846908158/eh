@@ -1,9 +1,6 @@
 package cn.lcvc.POJO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -11,16 +8,16 @@ public class Product {
     private Integer id;
     private String productName;
     private Integer productNumber;
-    private Integer productType;
     private Double productPrice;
-    private Integer school;
     private String productIntroduce;
     private Integer degree;
     private Boolean grounding;
     private Timestamp buyTime;
     private Timestamp expire;
-    private Integer user;
     private Integer seeNumber;
+    private ProductType productType;
+    private School school;
+    private User user;
 
     @Id
     @Column(name = "id")
@@ -53,16 +50,6 @@ public class Product {
     }
 
     @Basic
-    @Column(name = "productType")
-    public Integer getProductType() {
-        return productType;
-    }
-
-    public void setProductType(Integer productType) {
-        this.productType = productType;
-    }
-
-    @Basic
     @Column(name = "productPrice")
     public Double getProductPrice() {
         return productPrice;
@@ -70,16 +57,6 @@ public class Product {
 
     public void setProductPrice(Double productPrice) {
         this.productPrice = productPrice;
-    }
-
-    @Basic
-    @Column(name = "school")
-    public Integer getSchool() {
-        return school;
-    }
-
-    public void setSchool(Integer school) {
-        this.school = school;
     }
 
     @Basic
@@ -133,16 +110,6 @@ public class Product {
     }
 
     @Basic
-    @Column(name = "user")
-    public Integer getUser() {
-        return user;
-    }
-
-    public void setUser(Integer user) {
-        this.user = user;
-    }
-
-    @Basic
     @Column(name = "seeNumber")
     public Integer getSeeNumber() {
         return seeNumber;
@@ -163,17 +130,14 @@ public class Product {
         if (productName != null ? !productName.equals(product.productName) : product.productName != null) return false;
         if (productNumber != null ? !productNumber.equals(product.productNumber) : product.productNumber != null)
             return false;
-        if (productType != null ? !productType.equals(product.productType) : product.productType != null) return false;
         if (productPrice != null ? !productPrice.equals(product.productPrice) : product.productPrice != null)
             return false;
-        if (school != null ? !school.equals(product.school) : product.school != null) return false;
         if (productIntroduce != null ? !productIntroduce.equals(product.productIntroduce) : product.productIntroduce != null)
             return false;
         if (degree != null ? !degree.equals(product.degree) : product.degree != null) return false;
         if (grounding != null ? !grounding.equals(product.grounding) : product.grounding != null) return false;
         if (buyTime != null ? !buyTime.equals(product.buyTime) : product.buyTime != null) return false;
         if (expire != null ? !expire.equals(product.expire) : product.expire != null) return false;
-        if (user != null ? !user.equals(product.user) : product.user != null) return false;
         if (seeNumber != null ? !seeNumber.equals(product.seeNumber) : product.seeNumber != null) return false;
 
         return true;
@@ -184,16 +148,43 @@ public class Product {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (productName != null ? productName.hashCode() : 0);
         result = 31 * result + (productNumber != null ? productNumber.hashCode() : 0);
-        result = 31 * result + (productType != null ? productType.hashCode() : 0);
         result = 31 * result + (productPrice != null ? productPrice.hashCode() : 0);
-        result = 31 * result + (school != null ? school.hashCode() : 0);
         result = 31 * result + (productIntroduce != null ? productIntroduce.hashCode() : 0);
         result = 31 * result + (degree != null ? degree.hashCode() : 0);
         result = 31 * result + (grounding != null ? grounding.hashCode() : 0);
         result = 31 * result + (buyTime != null ? buyTime.hashCode() : 0);
         result = 31 * result + (expire != null ? expire.hashCode() : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (seeNumber != null ? seeNumber.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "productType", referencedColumnName = "id", nullable = false)
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "school", referencedColumnName = "id")
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

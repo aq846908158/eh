@@ -1,8 +1,10 @@
 package cn.lcvc.dao;
 
 import cn.lcvc.POJO.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 public interface UserDao {
 

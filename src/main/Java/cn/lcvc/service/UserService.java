@@ -12,12 +12,12 @@ import java.util.List;
 public class UserService{
     //注入Dao
     @Autowired
-    private UserDao userDao;
+    private  UserDao userDao;
 
 
 
     public List<User> getAllUser() {
-        return userDao.getAllUser();
+        return userDao.getUserList();
     }
 
 }

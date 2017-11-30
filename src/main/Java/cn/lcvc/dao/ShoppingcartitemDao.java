@@ -1,16 +1,16 @@
 package cn.lcvc.dao;
 
-import cn.lcvc.POJO.Shoppingcartitem;
+import cn.lcvc.POJO.ShoppingcartItem;
 
 import java.util.List;
 
 public interface ShoppingcartitemDao {
 
-    public void addShoppingcartitemr(Shoppingcartitem shoppingcartitem);
-    public void deleteShoppingcartitemr(Shoppingcartitem shoppingcartitem);
-    public void updateShoppingcartitemr(Shoppingcartitem shoppingcartitem);
-    public Shoppingcartitem getShoppingcartitemr(Integer id);
-    public List<Shoppingcartitem> getShoppingcartitemrList();
+    public void addShoppingcartitemr(ShoppingcartItem shoppingcartItem);
+    public void deleteShoppingcartitemr(ShoppingcartItem shoppingcartItem);
+    public void updateShoppingcartitemr(ShoppingcartItem shoppingcartItem);
+    public ShoppingcartItem getShoppingcartitemr(Integer id);
+    public List<ShoppingcartItem> getShoppingcartitemrList();
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
@@ -18,7 +18,7 @@ public interface ShoppingcartitemDao {
      * @param_value需要查询的字段的值
      * @return 一个Shoppingcartitemr对象，null表示没查到
      */
-    public Shoppingcartitem getShoppingcartitemrBy_OneColumn(String column, Object value);
+    public ShoppingcartItem getShoppingcartitemrBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -28,7 +28,7 @@ public interface ShoppingcartitemDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Shoppingcartitemr对象，null表示没查到
      */
-    public Shoppingcartitem getShoppingcartitemrBy_TowColumn(String column1, Object value1, String column2, Object value2);
+    public ShoppingcartItem getShoppingcartitemrBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -37,5 +37,5 @@ public interface ShoppingcartitemDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<Shoppingcartitemr>集合，null表示没查到
      */
-    public List<Shoppingcartitem> getShoppingcartitemrListOrderBy(String column, String orderBy);
+    public List<ShoppingcartItem> getShoppingcartitemrListOrderBy(String column, String orderBy);
 }

@@ -1,16 +1,16 @@
 package cn.lcvc.dao;
 
-import cn.lcvc.POJO.Adminpermissions;
+import cn.lcvc.POJO.AdminPermissions;
 
 import java.util.List;
 
 public interface AdminpermissionsDao {
 
-    public void addAdminpermissionsr(Adminpermissions adminpermissions);
-    public void deleteAdminpermissionsr(Adminpermissions adminpermissions);
-    public void updateAdminpermissionsr(Adminpermissions adminpermissions);
-    public Adminpermissions getAdminpermissionsr(Integer id);
-    public List<Adminpermissions> getAdminpermissionsrList();
+    public void addAdminpermissionsr(AdminPermissions adminPermissions);
+    public void deleteAdminpermissionsr(AdminPermissions adminPermissions);
+    public void updateAdminpermissionsr(AdminPermissions adminPermissions);
+    public AdminPermissions getAdminpermissionsr(Integer id);
+    public List<AdminPermissions> getAdminpermissionsrList();
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
@@ -18,7 +18,7 @@ public interface AdminpermissionsDao {
      * @param_value需要查询的字段的值
      * @return 一个Adminpermissionsr对象，null表示没查到
      */
-    public Adminpermissions getAdminpermissionsrBy_OneColumn(String column, Object value);
+    public AdminPermissions getAdminpermissionsrBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -28,7 +28,7 @@ public interface AdminpermissionsDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Adminpermissionsr对象，null表示没查到
      */
-    public Adminpermissions getAdminpermissionsrBy_TowColumn(String column1, Object value1, String column2, Object value2);
+    public AdminPermissions getAdminpermissionsrBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -37,5 +37,5 @@ public interface AdminpermissionsDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<Adminpermissionsr>集合，null表示没查到
      */
-    public List<Adminpermissions> getAdminpermissionsrListOrderBy(String column, String orderBy);
+    public List<AdminPermissions> getAdminpermissionsrListOrderBy(String column, String orderBy);
 }

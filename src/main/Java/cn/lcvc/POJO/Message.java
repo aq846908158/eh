@@ -1,20 +1,17 @@
 package cn.lcvc.POJO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 public class Message {
     private Integer id;
     private String text;
-    private Integer user;
-    private Integer product;
     private String code;
     private String superCode;
     private Timestamp createTime;
+    private User user;
+    private Product product;
 
     @Id
     @Column(name = "id")
@@ -34,26 +31,6 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    @Basic
-    @Column(name = "user")
-    public Integer getUser() {
-        return user;
-    }
-
-    public void setUser(Integer user) {
-        this.user = user;
-    }
-
-    @Basic
-    @Column(name = "product")
-    public Integer getProduct() {
-        return product;
-    }
-
-    public void setProduct(Integer product) {
-        this.product = product;
     }
 
     @Basic
@@ -95,8 +72,6 @@ public class Message {
 
         if (id != null ? !id.equals(message.id) : message.id != null) return false;
         if (text != null ? !text.equals(message.text) : message.text != null) return false;
-        if (user != null ? !user.equals(message.user) : message.user != null) return false;
-        if (product != null ? !product.equals(message.product) : message.product != null) return false;
         if (code != null ? !code.equals(message.code) : message.code != null) return false;
         if (superCode != null ? !superCode.equals(message.superCode) : message.superCode != null) return false;
         if (createTime != null ? !createTime.equals(message.createTime) : message.createTime != null) return false;
@@ -108,11 +83,29 @@ public class Message {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (code != null ? code.hashCode() : 0);
         result = 31 * result + (superCode != null ? superCode.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "product", referencedColumnName = "id", nullable = false)
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

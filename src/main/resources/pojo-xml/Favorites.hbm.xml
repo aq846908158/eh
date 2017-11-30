@@ -6,7 +6,11 @@
 
     <class name="cn.lcvc.POJO.Favorites" table="favorites" schema="eh">
         <id name="id" column="id"/>
-        <property name="user" column="user"/>
-        <property name="product" column="product"/>
+        <many-to-one name="user" class="cn.lcvc.POJO.User" lazy="false">
+            <column name="user"/>
+        </many-to-one>
+        <many-to-one name="product" class="cn.lcvc.POJO.Product" lazy="false">
+            <column name="product"/>
+        </many-to-one>
     </class>
 </hibernate-mapping>

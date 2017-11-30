@@ -4,12 +4,9 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.lcvc.POJO.Message" table="message" schema="eh">
+    <class name="cn.lcvc.POJO.ShoppingcartItem" table="shoppingcartItem" schema="eh">
         <id name="id" column="id"/>
-        <property name="text" column="text"/>
-        <property name="code" column="code"/>
-        <property name="superCode" column="superCode"/>
-        <property name="createTime" column="createTime"/>
+        <property name="number" column="number"/>
         <many-to-one name="user" class="cn.lcvc.POJO.User" lazy="false">
             <column name="user"/>
         </many-to-one>

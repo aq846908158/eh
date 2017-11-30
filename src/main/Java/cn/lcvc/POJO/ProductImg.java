@@ -1,15 +1,12 @@
 package cn.lcvc.POJO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Productimg {
+public class ProductImg {
     private Integer id;
-    private Integer product;
     private String imgUrl;
+    private Product product;
 
     @Id
     @Column(name = "id")
@@ -19,16 +16,6 @@ public class Productimg {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "product")
-    public Integer getProduct() {
-        return product;
-    }
-
-    public void setProduct(Integer product) {
-        this.product = product;
     }
 
     @Basic
@@ -46,10 +33,9 @@ public class Productimg {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Productimg that = (Productimg) o;
+        ProductImg that = (ProductImg) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (product != null ? !product.equals(that.product) : that.product != null) return false;
         if (imgUrl != null ? !imgUrl.equals(that.imgUrl) : that.imgUrl != null) return false;
 
         return true;
@@ -58,8 +44,17 @@ public class Productimg {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (imgUrl != null ? imgUrl.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "product", referencedColumnName = "id", nullable = false)
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

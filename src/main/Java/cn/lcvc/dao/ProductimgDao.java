@@ -1,16 +1,16 @@
 package cn.lcvc.dao;
 
-import cn.lcvc.POJO.Productimg;
+import cn.lcvc.POJO.ProductImg;
 
 import java.util.List;
 
 public interface ProductimgDao {
 
-    public void addProductimgr(Productimg productimg);
-    public void deleteProductimgr(Productimg productimg);
-    public void updateProductimgr(Productimg productimg);
-    public Productimg getProductimgr(Integer id);
-    public List<Productimg> getProductimgrList();
+    public void addProductimgr(ProductImg productImg);
+    public void deleteProductimgr(ProductImg productImg);
+    public void updateProductimgr(ProductImg productImg);
+    public ProductImg getProductimgr(Integer id);
+    public List<ProductImg> getProductimgrList();
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
@@ -18,7 +18,7 @@ public interface ProductimgDao {
      * @param_value需要查询的字段的值
      * @return 一个Productimgr对象，null表示没查到
      */
-    public Productimg getProductimgrBy_OneColumn(String column, Object value);
+    public ProductImg getProductimgrBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -28,7 +28,7 @@ public interface ProductimgDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Productimgr对象，null表示没查到
      */
-    public Productimg getProductimgrBy_TowColumn(String column1, Object value1, String column2, Object value2);
+    public ProductImg getProductimgrBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -37,5 +37,5 @@ public interface ProductimgDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<Productimgr>集合，null表示没查到
      */
-    public List<Productimg> getProductimgrListOrderBy(String column, String orderBy);
+    public List<ProductImg> getProductimgrListOrderBy(String column, String orderBy);
 }
