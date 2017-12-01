@@ -104,12 +104,12 @@
             <tx:method name="use*" propagation="REQUIRED" />
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到 -->
             <tx:method name="get*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="update*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="update*" propagation="REQUIRED" read-only="false" />
             <tx:method name="find*" propagation="REQUIRED" read-only="true" />
             <tx:method name="list*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="add*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="del*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="*" read-only="true" />
+            <tx:method name="add*" propagation="REQUIRED" read-only="false" />
+            <tx:method name="del*" propagation="REQUIRED" read-only="false" />
+            <tx:method name="*" read-only="false" />
         </tx:attributes>
     </tx:advice>
     <aop:config expose-proxy="true">

@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void deleteUser(User user) {
-        getSession().delete(user);
+        getSession().delete(getSession().load(User.class,user.getId()));
     }
 
     public void updateUser(User user) {
