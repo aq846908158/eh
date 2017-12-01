@@ -15,7 +15,7 @@ public class UserServiceTest extends BaseJunit{
 
     @Test
     public void addUser() throws Exception {
-
+       userService.getUserList();
     }
 
     @Test
