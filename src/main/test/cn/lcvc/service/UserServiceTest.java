@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Timestamp;
+
 import static org.junit.Assert.*;
 
 public class UserServiceTest extends BaseJunit{
@@ -15,7 +17,7 @@ public class UserServiceTest extends BaseJunit{
 
     @Test
     public void addUser() throws Exception {
-       userService.getUserList();
+
     }
 
     @Test
