@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.lcvc.POJO.ShoppingcartItem" table="shoppingcartItem" schema="eh">
+    <class name="cn.lcvc.POJO.ShoppingCartItem" table="shoppingcartItem" schema="eh">
         <id name="id" column="id"/>
         <property name="number" column="number"/>
         <many-to-one name="user" class="cn.lcvc.POJO.User" lazy="false">

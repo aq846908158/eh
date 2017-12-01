@@ -3,7 +3,7 @@ package cn.lcvc.POJO;
 import javax.persistence.*;
 
 @Entity
-public class ShoppingcartItem {
+public class ShoppingCartItem {
     private Integer id;
     private Integer number;
     private User user;
@@ -34,7 +34,7 @@ public class ShoppingcartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ShoppingcartItem that = (ShoppingcartItem) o;
+        ShoppingCartItem that = (ShoppingCartItem) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;

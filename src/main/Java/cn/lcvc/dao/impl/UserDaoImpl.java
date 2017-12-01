@@ -2,12 +2,17 @@ package cn.lcvc.dao.impl;
 
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.UserDao;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.persistence.OrderBy;
 import java.util.List;
 @Service
 public class UserDaoImpl implements UserDao {
@@ -21,36 +26,68 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void addUser(User user) {
-
+        getSession().save(user);
     }
 
     public void deleteUser(User user) {
-
+        getSession().delete(user);
     }
 
     public void updateUser(User user) {
-
+        getSession().update(user);
     }
 
     public User getUser(Integer id) {
+        Criteria criteria=getSession().createCriteria(User.class);
+        criteria.add(Restrictions.eq("id",id));
+        List list=criteria.list();
+        if(list.size()!=0)
+        {
+            return (User)list.get(0);
+        }
         return null;
     }
 
     public List<User> getUserList() {
-        String hql="from  User ";
-        Query query=getSession().createQuery(hql);
-        return query.list();
+        Criteria criteria=getSession().createCriteria(User.class);
+        return criteria.list();
     }
 
     public User getUserBy_OneColumn(String column, Object value) {
+        Criteria criteria=getSession().createCriteria(User.class);
+        criteria.add(Restrictions.eq(column,value));
+        List list=criteria.list();
+        if(list.size()!=0)
+        {
+            return (User)list.get(0);
+        }
+
         return null;
     }
 
     public User getUserBy_TowColumn(String column1, Object value1, String column2, Object value2) {
+        Criteria criteria=getSession().createCriteria(User.class);
+        criteria.add(Restrictions.eq(column1,value1));
+        criteria.add(Restrictions.eq(column2,value2));
+        List list=criteria.list();
+        if(list.size()!=0)
+        {
+            return (User)list.get(0);
+        }
         return null;
     }
 
     public List<User> getUserListOrderBy(String column, String orderBy) {
+        Criteria criteria=getSession().createCriteria(User.class);
+        if(orderBy.equals("asc"))
+        criteria.addOrder(Order.asc(column));
+        else if (orderBy.equals("desc"))
+        criteria.addOrder(Order.desc(column));
+        List list=criteria.list();
+        if(list.size()!=0)
+        {
+            return list;
+        }
         return null;
     }
 }

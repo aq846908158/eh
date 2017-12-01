@@ -6,19 +6,19 @@ import java.util.List;
 
 public interface AdminDao {
 
-    public void addAdminr(Admin admin);
-    public void deleteAdminr(Admin admin);
-    public void updateAdminr(Admin admin);
-    public Admin getAdminr(Integer id);
-    public List<Admin> getAdminrList();
+    public void addAdmin(Admin admin);
+    public void deleteAdmin(Admin admin);
+    public void updateAdmin(Admin admin);
+    public Admin getAdmin(Integer id);
+    public List<Admin> getAdminList();
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
      * @param_column需要查询的字段
      * @param_value需要查询的字段的值
-     * @return 一个Adminr对象，null表示没查到
+     * @return 一个Admin对象，null表示没查到
      */
-    public Admin getAdminrBy_OneColumn(String column, Object value);
+    public Admin getAdminBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -26,16 +26,16 @@ public interface AdminDao {
      * @param_ value1需要查询的第一个字段的值
      * @param_ column1需要查询的第二个字段
      * @param_ value1需要查询的第二个字段的值
-     * @return 一个Adminr对象，null表示没查到
+     * @return 一个Admin对象，null表示没查到
      */
-    public Admin getAdminrBy_TowColumn(String column1, Object value1, String column2, Object value2);
+    public Admin getAdminBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
      * @date 2017-11-29 17:21:59
      * @param_column排序所依据的字段
      * @param_orderBy排序规则 如"asc","desc"
-     * @return 一个有序List<Adminr>集合，null表示没查到
+     * @return 一个有序List<Admin>集合，null表示没查到
      */
-    public List<Admin> getAdminrListOrderBy(String column, String orderBy);
+    public List<Admin> getAdminListOrderBy(String column, String orderBy);
 }

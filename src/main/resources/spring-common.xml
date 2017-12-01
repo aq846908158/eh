@@ -63,7 +63,7 @@
                 <value>cn.lcvc.POJO.ProductImg</value>
                 <value>cn.lcvc.POJO.ProductType</value>
                 <value>cn.lcvc.POJO.School</value>
-                <value>cn.lcvc.POJO.ShoppingcartItem</value>
+                <value>cn.lcvc.POJO.ShoppingCartItem</value>
             </list>
         </property>
         <property name="mappingLocations">
@@ -78,7 +78,7 @@
                 <value>classpath:pojo-xml/ProductImg.hbm.xml</value>
                 <value>classpath:pojo-xml/ProductType.hbm.xml</value>
                 <value>classpath:pojo-xml/School.hbm.xml</value>
-                <value>classpath:pojo-xml/ShoppingcartItem.hbm.xml</value>
+                <value>classpath:pojo-xml/ShoppingCartItem.hbm.xml</value>
             </list>
         </property>
 
