@@ -38,4 +38,14 @@ public interface AdminDao {
      * @return 一个有序List<Admin>集合，null表示没查到
      */
     public List<Admin> getAdminListOrderBy(String column, String orderBy);
+
+    /**
+     * @author @wuruibao
+     * date 2017年12月2日14:47:42
+   * 获取管理员登录信息 ，获取对象中的salt和userpassword属性，用于登录验证；亦或可以判断username是否存在
+   * @param username 账户名，数据库唯一值
+   * @
+   * */
+    public Admin getAdminByUserName(String username);
 }
+

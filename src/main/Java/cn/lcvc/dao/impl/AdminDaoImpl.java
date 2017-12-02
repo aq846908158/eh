@@ -88,4 +88,14 @@ public class AdminDaoImpl implements AdminDao {
         }
         return null;
     }
+
+    public Admin getAdminByUserName(String username) {
+        Criteria criteria=getSession().createCriteria(Admin.class);
+        criteria.add(Restrictions.eq("userName",username));
+        List list = criteria.list();
+        if(list.size() != 0){
+            return (Admin) list.get(0);
+        }
+        return null;
+    }
 }
