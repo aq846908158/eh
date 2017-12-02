@@ -18,6 +18,8 @@
         <property name="email" column="email"/>
         <property name="createTime" column="createTime"/>
         <property name="lastTime" column="lastTime"/>
+        <property name="banLogin" column="banLogin"/>
+        <property name="banSell" column="banSell"/>
         <many-to-one name="school" class="cn.lcvc.POJO.School"  lazy="false">
             <column name="school" not-null="true" />
         </many-to-one>

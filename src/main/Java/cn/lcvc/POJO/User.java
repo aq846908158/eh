@@ -17,6 +17,8 @@ public class User {
     private Timestamp createTime;
     private Timestamp lastTime;
     private School school;
+    private Boolean banLogin;
+    private Boolean banSell;
 
     @Id
     @Column(name = "id")
@@ -46,6 +48,28 @@ public class User {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+
+
+    @Basic
+    @Column(name = "banLogin")
+    public Boolean getBanLogin() {
+        return banLogin;
+    }
+
+    public void setBanLogin(Boolean banLogin) {
+        this.banLogin = banLogin;
+    }
+
+    @Basic
+    @Column(name = "banSell")
+    public Boolean getBanSell() {
+        return banSell;
+    }
+
+    public void setBanSell(Boolean banSell) {
+        this.banSell = banSell;
     }
 
     @Basic

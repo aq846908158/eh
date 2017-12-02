@@ -14,4 +14,10 @@ public class DataCheck {
         Matcher m = p.matcher(email);
         return m.matches();
     }
+
+    public static boolean isTrueName(String trueName) {
+        Pattern p = Pattern.compile("[\\u4E00-\\u9FA5]{2,4}");
+        Matcher m = p.matcher(trueName);
+        return m.matches();
+    }
 }

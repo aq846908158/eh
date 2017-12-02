@@ -15,8 +15,7 @@ public class Contorller {
 
     @RequestMapping("/getAllUser")
     public String getAllUser(HttpServletRequest request) {
-        request.setAttribute("userList", userService.getUserList());
-        System.out.println(userService.getUserList().size());
+
         return "/index";
     }
 }
