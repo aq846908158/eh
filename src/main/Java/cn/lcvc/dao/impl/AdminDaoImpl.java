@@ -3,6 +3,7 @@ package cn.lcvc.dao.impl;
 import cn.lcvc.POJO.Admin;
 import cn.lcvc.dao.AdminDao;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -98,4 +99,15 @@ public class AdminDaoImpl implements AdminDao {
         }
         return null;
     }
+
+    public List<Admin> getAdminByUserNameInId(Admin admin) {
+        String hql = "from Admin  where userName=? and id!=?";
+        Query query=getSession().createQuery(hql);
+        query.setString(0, admin.getUserName());
+        query.setInteger(1, admin.getId());
+        List<Admin> list = query.list();
+        return  list;
+    }
+
+
 }

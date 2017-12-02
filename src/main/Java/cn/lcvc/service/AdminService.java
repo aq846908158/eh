@@ -10,12 +10,17 @@ import sun.security.provider.MD2;
 import sun.security.provider.MD5;
 import cn.lcvc.uitl.Md5;
 
+import javax.swing.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ *@Author @wuruibao
+ *@Date 2017/12/2 22:14
+*/
 @Service
 public class AdminService {
 
@@ -105,11 +110,18 @@ public class AdminService {
         }*/
 
         if (admin.getTrueName() != null) {
-            if (admin.getTrueName().length() <  1 || admin.getTrueName().length() > 4) {
+            if (DataCheck.isTrueName(admin.getTrueName())){
+                if (admin.getTrueName().length() <  2 || admin.getTrueName().length() > 4) {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("真实姓名长度在1-4位之间.");
+                    return jsonResult;
+                }
+            }else {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("真实姓名长度在1-4位之间.");
+                jsonResult.setMessage("请输入真实姓名.");
                 return jsonResult;
             }
+
         } else {
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("请输入真实姓名.");
@@ -151,8 +163,71 @@ public class AdminService {
 
     }
 
+    /*修改当前登录管理员密码
+     *@Author @wuruibao
+     *@Date 2017/12/2 22:22
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     *@return
+    */
+    public JsonResult updateAdminPassword(Admin admin,String oldPassword,String newPassword){
+        JsonResult jsonResult = new JsonResult();
 
+        Admin admin1=adminDao.getAdmin(admin.getId());
 
+         oldPassword=Md5.MD5(oldPassword.concat(admin1.getSalt()));//旧密码+盐值
+
+        if (!admin1.getUserPassword().equals(oldPassword)) {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("旧密码错误.请重试");
+            return jsonResult;
+        }
+
+        String salt=Md5.getRandomString(32);//盐值
+        String password=newPassword.concat(salt);
+        String md5password=Md5.MD5(password);
+
+        admin1.setSalt(salt);
+        admin1.setUserPassword(md5password);
+
+        adminDao.updateAdmin(admin1);
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("修改成功.");
+        return  jsonResult;
+    }
+
+    /*修改管理员个人信息
+     *@Author @wuruibao
+     *@Date 2017/12/2 22:51
+     * @param admin   管理员实体
+     *@return jsonResult：修改结果
+    */
+    public JsonResult updateAdminInfo(Admin admin){
+        JsonResult jsonResult = new JsonResult();
+
+        /*本方法假设所有字段通过验证,验证将在controller实现*/
+
+        if (adminDao.getAdminByUserNameInId(admin).size() >0) {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("账户名已存在.请重试");
+
+        }else {
+            Admin oldadmin = adminDao.getAdmin(admin.getId());
+
+            oldadmin.setUserName(admin.getUserName());
+            oldadmin.setTrueName(admin.getTrueName());
+            oldadmin.setPhone(admin.getPhone());
+            oldadmin.setEmail(admin.getEmail());
+
+            adminDao.updateAdmin(oldadmin);
+
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("修改成功.");
+
+        }
+
+        return  jsonResult;
+    }
 
 
 

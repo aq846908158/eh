@@ -47,5 +47,13 @@ public interface AdminDao {
    * @
    * */
     public Admin getAdminByUserName(String username);
+
+   /**获取数据库admin表中userName=admin.userName && id=admin.id的实体
+    *@Author @wuruibao
+    *@Date 2017/12/2 23:00
+    * @param
+    *@return
+   */
+    public List<Admin> getAdminByUserNameInId(Admin admin);
 }
 

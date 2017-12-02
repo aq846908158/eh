@@ -15,6 +15,7 @@ public class DataCheck {
         return m.matches();
     }
 
+    /*真实姓名正则表达式*/
     public static boolean isTrueName(String trueName) {
         Pattern p = Pattern.compile("[\\u4E00-\\u9FA5]{2,4}");
         Matcher m = p.matcher(trueName);
