@@ -2,6 +2,7 @@ package cn.lcvc.service;
 
 import cn.lcvc.POJO.School;
 import cn.lcvc.POJO.User;
+import cn.lcvc.uitl.JsonResult;
 import cn.lcvc.uitl.Md5;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,17 +24,15 @@ public class UserServiceTest extends BaseJunit{
        User user =new User();
         School school=new School();
         school.setId(1);
-       user.setCreateTime(new Timestamp(System.currentTimeMillis()));
        user.setEmail("599999@qq.com");
-       user.setForSaleNumber(0);
-       user.setLastTime(new Timestamp(System.currentTimeMillis()));
        user.setPhone("13999999999");
        user.setSchool(school);
-       user.setTrueName("哈哈哈");
-       user.setUserName("user1");
-       user.setUserPassword("123456");
-       user.setSellNumber(0);
-       userService.registerUser(user);
+       user.setTrueName("哈哈哈哈");
+       user.setUserName("user11");
+       user.setUserPassword("12345678");
+       JsonResult jsonResult=userService.registerUser(user);
+        System.out.println(jsonResult.getErrorCode());
+        System.out.println(jsonResult.getMessage());
     }//通过
     @Test
     public void deleteUser() throws Exception {
