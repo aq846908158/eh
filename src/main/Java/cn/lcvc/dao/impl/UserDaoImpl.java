@@ -46,6 +46,7 @@ public class UserDaoImpl implements UserDao {
         oldUser.setForSaleNumber(user.getForSaleNumber());
         oldUser.setSalt(user.getSalt());
         getSession().update(oldUser);
+
     }
 
     public User getUser(Integer id) {
