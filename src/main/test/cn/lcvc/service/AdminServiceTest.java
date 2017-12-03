@@ -5,6 +5,8 @@ import cn.lcvc.uitl.JsonResult;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class AdminServiceTest extends  BaseJunit {
     @Autowired
     private AdminService adminService;
@@ -15,7 +17,7 @@ public class AdminServiceTest extends  BaseJunit {
         Admin admin = new Admin();
 
         admin.setUserName("admin_9");
-        admin.setTrueName("A3.");
+        admin.setTrueName("神仙伍");
         admin.setEmail("10775@sina.cn");
         JsonResult jsonResult=adminService.registerAdmin(admin);
 
@@ -48,12 +50,42 @@ public class AdminServiceTest extends  BaseJunit {
     public  void  updateAdminInfoTest(){
         Admin admin=new Admin();
         admin.setId(6);
-        admin.setUserName("admin");
+        admin.setUserName("admin_1");
         admin.setTrueName("伍锐保");
         admin.setPhone("18269652102");
         admin.setEmail("1056042624@qq.com");
         JsonResult jsonResult=adminService.updateAdminInfo(admin);
         System.out.println(jsonResult.getMessage());
     }
+
+    /*管理员管理 75%*/
+    @Test
+    public  void  seleteAllAdminManageTest(){
+        JsonResult jsonResult=adminService.selectAllAdminManage("","","");
+        List<Admin> adminList= (List<Admin>) jsonResult.getItem().get("admin");
+        System.out.println(jsonResult.getMessage());
+
+        for(int i = 0 ; i < adminList.size() ; i++) {
+            System.out.println(adminList.get(i).getUserName());
+        }
+
+    }
+
+
+    /*删除管理员 100%*/
+    @Test
+    public  void deleteAdminTest(){
+        JsonResult jsonResult=adminService.deleteAdmin(40);
+        System.out.println(jsonResult.getMessage());
+    }
+
+
+
+
+
+
+
+
+
 
 }

@@ -11,7 +11,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminDaoImpl implements AdminDao {
@@ -107,6 +109,36 @@ public class AdminDaoImpl implements AdminDao {
         query.setInteger(1, admin.getId());
         List<Admin> list = query.list();
         return  list;
+    }
+
+    public List<Admin> queryAllAdminManage(Object object, Map<String, String> map) {
+        List<Admin> list = new ArrayList<Admin>();
+        Criteria criteria=getSession().createCriteria((Class) object);
+        if (map.get("seltype") != null && map.get("seltype").equals("like")  ){
+            for (Map.Entry  entry : map.entrySet()) {
+                if (entry.getKey().equals("seltype")) continue;
+                criteria.add(Restrictions.like((String) entry.getKey(), "%"+entry.getValue()+"%"));
+            }
+        }else if (map.get("seltype") != null && map.get("seltype").equals("eq")){
+            for (Map.Entry  entry : map.entrySet()) {
+                if (entry.getKey().equals("seltype")) continue;
+                 criteria.add(Restrictions.eq((String) entry.getKey(), entry.getValue()));
+            }
+        }else {
+            for (Map.Entry  entry : map.entrySet()) {
+                criteria.add(Restrictions.like((String) entry.getKey(), "%"+entry.getValue()+"%"));
+            }
+        }
+
+        try {
+            list = criteria.list();
+
+        } catch (Exception e) {
+
+        }finally{
+
+        }
+        return list;
     }
 
 

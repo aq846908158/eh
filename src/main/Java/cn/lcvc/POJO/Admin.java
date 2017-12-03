@@ -17,7 +17,10 @@ public class Admin {
     private String email;
     private Timestamp createTime;
     private Timestamp lastTime;
+    private Integer loginState; //登录状态 0表示允许登录 1表示禁止登录
+    private Integer loginNum; //登录次数
     private String title;
+
 
     @Id
     @Column(name = "id")
@@ -117,6 +120,26 @@ public class Admin {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Basic
+    @Column(name = "loginState")
+    public Integer getLoginState() {
+        return loginState;
+    }
+
+    public void setLoginState(Integer loginState) {
+        this.loginState = loginState;
+    }
+
+    @Basic
+    @Column(name = "loginNum")
+    public Integer getLoginNum() {
+        return loginNum;
+    }
+
+    public void setLoginNum(Integer loginNum) {
+        this.loginNum = loginNum;
     }
 
     @Override

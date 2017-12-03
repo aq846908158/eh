@@ -37,23 +37,23 @@ public class AdminService {
         JsonResult jsonResult=new JsonResult();
         Map<Object,Object> map= new HashMap<Object, Object>();
 
-        if (username == null || username.length() == 0){
+        if (username == null || username.trim().length() == 0){
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("请输入账户名.");
             return  jsonResult;
         }
 
-        if(password == null || password.length() == 0){
+        if(password == null || password.trim().length() == 0){
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("请输入密码.");
             return  jsonResult;
         }
         //获取登录对象
-        Admin  admin=adminDao.getAdminByUserName(username);
+        Admin  admin=adminDao.getAdminByUserName(username.trim());
         if (admin != null){
             String salt=admin.getSalt();
             String loginPassword = password.concat(salt);
-            String  md5PasswordOfLogin = Md5.MD5(loginPassword);
+            String  md5PasswordOfLogin = Md5.MD5(loginPassword.trim());
             if (md5PasswordOfLogin.equals(admin.getUserPassword()) && username.equals(admin.getUserName())){//验证密码
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("登录成功!");
@@ -80,14 +80,17 @@ public class AdminService {
  * */
     public JsonResult  registerAdmin(Admin admin) {
         JsonResult jsonResult = new JsonResult();
-        Admin admin_username=adminDao.getAdminByUserName(admin.getUserName());
+        Admin admin_username=new Admin();
+        if (admin.getUserName() != null && admin.getUserName().trim().length() !=0){
+             admin_username=adminDao.getAdminByUserName(admin.getUserName().trim());
+        }
         if (admin_username != null){
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("账户名已存在.请重试.");
             return jsonResult;
         }
         if (admin.getUserName() != null) {
-            if (admin.getUserName().length() < 6 || admin.getUserName().length() > 32) {
+            if (admin.getUserName().trim().length() < 6 || admin.getUserName().trim().length() > 32) {
                 jsonResult.setErrorCode("500");
                 jsonResult.setMessage("账户名长度在6-32位之间.");
                 return jsonResult;
@@ -111,7 +114,7 @@ public class AdminService {
 
         if (admin.getTrueName() != null) {
             if (DataCheck.isTrueName(admin.getTrueName())){
-                if (admin.getTrueName().length() <  2 || admin.getTrueName().length() > 4) {
+                if (admin.getTrueName().trim().length() <  2 || admin.getTrueName().trim().length() > 4) {
                     jsonResult.setErrorCode("500");
                     jsonResult.setMessage("真实姓名长度在1-4位之间.");
                     return jsonResult;
@@ -131,7 +134,7 @@ public class AdminService {
         if (admin.getEmail() != null) {
 
             if (DataCheck.isEmailNO(admin.getEmail())) {
-                if (admin.getEmail().length() < 8 || admin.getEmail().length() > 30) {
+                if (admin.getEmail().trim().length() < 8 || admin.getEmail().trim().length() > 30) {
                     jsonResult.setErrorCode("500");
                     jsonResult.setMessage("邮箱长度8-30位之间.");
                     return jsonResult;
@@ -209,15 +212,15 @@ public class AdminService {
 
         if (adminDao.getAdminByUserNameInId(admin).size() >0) {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("账户名已存在.请重试");
+            jsonResult.setMessage("账户名已存在.请重试.");
 
         }else {
             Admin oldadmin = adminDao.getAdmin(admin.getId());
 
-            oldadmin.setUserName(admin.getUserName());
-            oldadmin.setTrueName(admin.getTrueName());
-            oldadmin.setPhone(admin.getPhone());
-            oldadmin.setEmail(admin.getEmail());
+            oldadmin.setUserName(admin.getUserName().trim());
+            oldadmin.setTrueName(admin.getTrueName().trim());
+            oldadmin.setPhone(admin.getPhone().trim());
+            oldadmin.setEmail(admin.getEmail().trim());
 
             adminDao.updateAdmin(oldadmin);
 
@@ -230,10 +233,72 @@ public class AdminService {
     }
 
 
+    /**
+     * 管理员管理,如果username与truename为空，则查询所有管理员，否则根据条件查询
+     *@Author @wuruibao
+     *@Date 2017/12/3 14:46
+     *@params    userNmae:账户名；truneName：真实姓名,selectType:查询类型,(like:模糊查询,eq:精准查询)
+     *@return 将list集合放入jsonResult的Map集合里，返回到前台
+    */
+    public  JsonResult selectAllAdminManage(String userNmae,String trueName,String selectType){
+     JsonResult jsonResult = new JsonResult();
+     Map<String, String>  map = new HashMap<String, String>(); //查询所用Map容器
+     Map<Object,Object> map_admin= new HashMap<Object, Object>(); //存放查询所得数据
+
+
+      if(userNmae != null && userNmae.trim().length() != 0) map.put("userName", userNmae.trim());
+      if(trueName != null && trueName.trim().length() != 0) map.put("trueName", trueName.trim());
+      if (selectType != null && selectType.trim().length() != 0) map.put("seltype",selectType.trim());
+
+        List<Admin> list=adminDao.queryAllAdminManage(Admin.class,map);
+        if (list.size() > 0) {
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("查询成功.");
+            map_admin.put("admin",list);
+            jsonResult.setItem(map_admin);
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("无数据.");
+        }
+
+     return  jsonResult;
+    }
+
+
+    /**
+     *删除管理员
+     *@Author @wuruibao
+     *@Date 2017/12/3 16:10
+     *@params   id:所需删除id
+     *@return 删除结果
+    */
+    public  JsonResult deleteAdmin(Integer id){
+        JsonResult jsonResult = new JsonResult();
+        if (id != null) {
+            Admin admin=adminDao.getAdmin(id);
+            if (admin != null) {
+                adminDao.deleteAdmin(admin);
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("删除异常.");
+                return  jsonResult;
+            }
+            if (adminDao.getAdmin(id) == null){
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("删除成功.");
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("删除失败.");
+            }
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("删除异常.");
+        }
 
 
 
-
+        return  jsonResult;
+    }
 
 
 
