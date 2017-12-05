@@ -15,10 +15,10 @@
         <property name="createTime" column="createTime"/>
         <property name="message" column="message"/>
         <many-to-one name="buyUser" class="cn.lcvc.POJO.User" lazy="false">
-            <column name="sellUser"/>
+            <column name="buyUser"/>
         </many-to-one>
         <many-to-one name="sellUser" class="cn.lcvc.POJO.User" lazy="false">
-            <column name="buyUser"/>
+            <column name="sellUser"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

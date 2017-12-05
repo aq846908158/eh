@@ -94,12 +94,17 @@ public class OrderDaoImpl implements OrderDao {
         List<Order> list =new ArrayList<Order>();
         Criteria criteria=getSession().createCriteria((Class) object);
 
-        for (Map.Entry  entry : map.entrySet()) {
+        for (Map.Entry  entry : map.entrySet()) {//遍历map
             if (entry.getKey().equals("lowOrderPrice") || entry.getKey().equals("heightOrderPrice") ) {
-                criteria.add(Restrictions.between("orderPrice",map.get("lowOrderPrice"),map.get("heightOrderPrice")));
+                criteria.add(Restrictions.between("orderPrice",map.get("lowOrderPrice"),map.get("heightOrderPrice")));//价格区间搜索
                 continue;
             }
-            criteria.add(Restrictions.like((String) entry.getKey(), "%"+entry.getValue()+"%"));
+            if (entry.getKey().equals("orderCode")){
+                criteria.add(Restrictions.like((String) entry.getKey(), "%"+entry.getValue()+"%")); //订单号模糊查询
+                continue;
+            }
+                criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
+
         }
         try{
             list=criteria.list();

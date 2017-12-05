@@ -116,7 +116,7 @@ public class Order {
     }
 
     @ManyToOne
-    @JoinColumn(name = "sellUser", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "buyUser", referencedColumnName = "id", nullable = false)
     public User getBuyUser() {
         return buyUser;
     }
@@ -126,7 +126,7 @@ public class Order {
     }
 
     @ManyToOne
-    @JoinColumn(name = "buyUser", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "sellUser", referencedColumnName = "id", nullable = false)
     public User getSellUser() {
         return sellUser;
     }

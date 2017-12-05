@@ -83,10 +83,9 @@ public class AdminServiceTest extends  BaseJunit {
     /**管理员密码重置   100%*/
     @Test
     public void resetAdminPasswordTest(){
-        JsonResult jsonResult=adminService.resetAdminPassword(2);
+        JsonResult jsonResult=adminService.resetAdminPassword(3);
         System.out.println(jsonResult.getMessage());
     }
-
 
 
 

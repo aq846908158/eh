@@ -7,6 +7,7 @@ import cn.lcvc.uitl.DataCheck;
 import cn.lcvc.uitl.JsonResult;
 import cn.lcvc.uitl.Md5;
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.util.ObjectIdMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -378,6 +379,85 @@ public class UserService{
     {
         return  userDao.getUser(id);
     }
+
+
+
+
+    /**************************************    @author wuruibao      *************************************** **/
+
+    /**
+     *用户管理（后天管理）
+     *@Author @wuruibao
+     *@Date 2017/12/5 19:52
+     *@params   user:User对象, lowSellNumber:最低销售成功数，hiSellNumber:最高销售成功数 lowForSaleNumber:最低在售, hiForSaleNumber:最高在售
+     *@return   根据查询条件返回结果
+    */
+    public  JsonResult getAllUserManage(User user,Integer lowSellNumber,Integer hiSellNumber,Integer lowForSaleNumber,Integer hiForSaleNumber) {
+        JsonResult jsonResult = new JsonResult();
+        Map<String, Object> map = new HashMap<String, Object>(); //查询所用Map容器
+        Map<Object, Object> map_Users = new HashMap<Object, Object>(); //存放查询所得数据
+
+        if (user != null) {
+
+            if (user.getUserName() != null && user.getUserName().trim().length() != 0) map.put("userName", user.getUserName().trim());//用户名
+            if (user.getTrueName() != null && user.getTrueName().trim().length() != 0) map.put("trueName", user.getTrueName().trim());//真实姓名
+//            if (user.getSellNumber() != null && user.getSellNumber() > 0) map.put("sellNumber",user.getSellNumber());//销售成功数
+//            if (user.getForSaleNumber() != null && user.getForSaleNumber() > 0) map.put("forSaleNumber",user.getForSaleNumber());//在售数量
+            if (user.getBanLogin() != null) map.put("banLogin", user.getBanLogin());//禁止登录
+            if (user.getBanSell() != null) map.put("banSell", user.getBanSell());//交易禁止
+
+        }
+
+        if (lowSellNumber != null && hiSellNumber != null) {
+            if (lowSellNumber > 0 && hiSellNumber > 0) {
+                map.put("lowSellNumber", lowSellNumber);
+                map.put("hiSellNumber", hiSellNumber);
+            }
+        }
+
+        if (lowForSaleNumber != null && hiForSaleNumber != null) {
+            if (lowForSaleNumber > 0 && hiForSaleNumber > 0) {
+                map.put("lowForSaleNumber", lowForSaleNumber);
+                map.put("hiForSaleNumber", hiForSaleNumber);
+            }
+        }
+            List<User> users = userDao.getUser(User.class, map);
+
+        if (users.size() > 0){
+            map_Users.put("users",users);
+
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("查询成功.");
+            jsonResult.setItem(map_Users);
+        }else {
+            jsonResult.setMessage("500");
+            jsonResult.setMessage("无数据.");
+        }
+
+            return jsonResult;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

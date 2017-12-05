@@ -4,6 +4,7 @@ import cn.lcvc.POJO.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface UserDao {
@@ -40,4 +41,13 @@ public interface UserDao {
      * @return 一个有序List<User>集合，null表示没查到
      */
     public List<User> getUserListOrderBy(String column,String orderBy);
+
+    /**
+     *获取数据库中object对象。如map中存在数据则根据数据进行查询
+     *@Author @wuruibao
+     *@Date 2017-12-5 19:42:55
+     *@params object 对象 map:map集合
+     *@return 返回查询List
+     */
+    List<User> getUser(Object object, Map<String, Object> map);
 }
