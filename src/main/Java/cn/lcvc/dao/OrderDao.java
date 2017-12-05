@@ -3,6 +3,7 @@ package cn.lcvc.dao;
 import cn.lcvc.POJO.Order;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderDao {
 
@@ -38,4 +39,13 @@ public interface OrderDao {
      * @return 一个有序List<Order>集合，null表示没查到
      */
     public List<Order> getOrderListOrderBy(String column, String orderBy);
+
+    /**
+     *获取数据库中object对象。如map中存在数据则根据数据今天模糊查询
+     *@Author @wuruibao
+     *@Date 2017-12-5 11:46:33
+     *@params
+     *@return
+     */
+    List<Order> getOrder(Object  object, Map<String, Object> map);
 }

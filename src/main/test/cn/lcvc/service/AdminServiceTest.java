@@ -16,9 +16,10 @@ public class AdminServiceTest extends  BaseJunit {
     public void addAdminTest() throws  Exception{
         Admin admin = new Admin();
 
-        admin.setUserName("admin_9");
-        admin.setTrueName("神仙伍");
+        admin.setUserName("admin_wu");
+        admin.setTrueName("蛇皮伍");
         admin.setEmail("10775@sina.cn");
+        admin.setTitle("中级");
         JsonResult jsonResult=adminService.registerAdmin(admin);
 
         System.out.println(jsonResult.getErrorCode());
@@ -28,9 +29,9 @@ public class AdminServiceTest extends  BaseJunit {
     /*管理员登录功能测试成功*/
     @Test
     public  void loginAdminTest() throws  Exception{
-        JsonResult jsonResult=adminService.login("admin","admin7792");
+        JsonResult jsonResult=adminService.login("admin_wu","admin_wu");
         Admin admin= (Admin) jsonResult.getItem().get("admin");
-        System.out.println(admin.getEmail());
+        System.out.println(admin.getTrueName());
         System.out.println(jsonResult.getMessage());
 
     }
@@ -79,7 +80,12 @@ public class AdminServiceTest extends  BaseJunit {
         System.out.println(jsonResult.getMessage());
     }
 
-
+    /**管理员密码重置   100%*/
+    @Test
+    public void resetAdminPasswordTest(){
+        JsonResult jsonResult=adminService.resetAdminPassword(2);
+        System.out.println(jsonResult.getMessage());
+    }
 
 
 

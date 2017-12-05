@@ -9,7 +9,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderDaoImpl implements OrderDao {
@@ -86,5 +88,25 @@ public class OrderDaoImpl implements OrderDao {
             return list;
         }
         return null;
+    }
+
+    public List<Order> getOrder(Object object, Map<String, Object> map) {
+        List<Order> list =new ArrayList<Order>();
+        Criteria criteria=getSession().createCriteria((Class) object);
+
+        for (Map.Entry  entry : map.entrySet()) {
+            if (entry.getKey().equals("lowOrderPrice") || entry.getKey().equals("heightOrderPrice") ) {
+                criteria.add(Restrictions.between("orderPrice",map.get("lowOrderPrice"),map.get("heightOrderPrice")));
+                continue;
+            }
+            criteria.add(Restrictions.like((String) entry.getKey(), "%"+entry.getValue()+"%"));
+        }
+        try{
+            list=criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return list;
     }
 }

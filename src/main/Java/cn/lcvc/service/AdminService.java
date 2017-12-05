@@ -300,8 +300,43 @@ public class AdminService {
         return  jsonResult;
     }
 
+    /**
+     *管理员密码重置
+     *@Author @wuruibao
+     *@Date 2017-12-5 10:41:12
+     *@params   id:所需重置id
+     *@return  返回重置结果
+     */
+    public JsonResult resetAdminPassword(Integer id){
+        JsonResult jsonResult = new JsonResult();
+        if (id != null){
+            Admin admin=adminDao.getAdmin(id);
+            if (admin != null){
+                String salt=Md5.getRandomString(32);//从新生成盐值
+                String password=admin.getUserName().concat(salt);//账户名+盐值 组合成字符串
+                String md5password=Md5.MD5(password);//重置密码为 登录账户名.
+
+                admin.setSalt(salt);
+                admin.setUserPassword(md5password);
+
+                adminDao.updateAdmin(admin);
+
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("重置成功,重置密码为您的账户名.");
+            }else{
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("重置失败,账户不存在");
+            }
+
+        }else{
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("重置失败,账户为空");
+        }
 
 
+
+        return  jsonResult;
+    }
 
 
 
