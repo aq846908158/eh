@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -92,6 +93,14 @@ public class UserServiceTest extends BaseJunit{
         JsonResult jsonResult=userService.updateSellNumber(8,10);
         System.out.println(jsonResult.getErrorCode());
         System.out.println(jsonResult.getMessage());
+    }//通过
+
+    @Test
+    public void getAllUser() throws Exception
+    {
+        JsonResult jsonResult=userService.getAllUser();
+        List<User> users= (List<User>) jsonResult.getItem().get("users");
+        System.out.println(users.size());
     }//通过
 
     @Test

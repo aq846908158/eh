@@ -91,8 +91,26 @@ public class UserService{
     }//完成
 
     /**
+     * 获取所有用户List列表
+     * @return JsonResult数据 获取到的用户列表存储在JsonResult.item中  key为"users"
+     */
+    public JsonResult getAllUser() {
+        JsonResult jsonResult=new JsonResult();
+        List<User> users=userDao.getUserList();
+        Map<Object,Object> item=new HashMap<Object,Object>();
+        item.put("users",users);
+        jsonResult.setItem(item);
+
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("获取成功");
+        return jsonResult;
+
+    }//完成
+
+    /**
      * 删除一个用户
      * @param id 用户的Id
+
      */
     public JsonResult deleteUser(Integer id) {
         JsonResult jsonResult=new JsonResult();
