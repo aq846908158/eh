@@ -18,6 +18,7 @@ public class Product {
     private ProductType productType;
     private School school;
     private User user;
+    private Timestamp criateTime;
 
     @Id
     @Column(name = "id")
@@ -117,6 +118,16 @@ public class Product {
 
     public void setSeeNumber(Integer seeNumber) {
         this.seeNumber = seeNumber;
+    }
+
+    @Basic
+    @Column(name = "criateTime")
+    public Timestamp getCriateTime() {
+        return criateTime;
+    }
+
+    public void setCriateTime(Timestamp criateTime) {
+        this.criateTime = criateTime;
     }
 
     @Override
