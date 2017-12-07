@@ -11,7 +11,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminPermissionsDaoImpl implements AdminPermissionsDao {
@@ -89,4 +91,36 @@ public class AdminPermissionsDaoImpl implements AdminPermissionsDao {
         }
         return null;
     }
+
+    public List<AdminPermissions> getAdminPermissionsList(Object object, Map<Object, Object> map) {
+        List<AdminPermissions> adminPermissionsList=new ArrayList<AdminPermissions>();
+
+        Criteria criteria = getSession().createCriteria((Class) object);
+
+        for (Map.Entry  entry : map.entrySet()) {//遍历map
+
+            criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
+        }
+
+        try {
+            adminPermissionsList = criteria.list();
+        }catch (Exception e){
+            e.getStackTrace();
+        }
+
+        return adminPermissionsList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

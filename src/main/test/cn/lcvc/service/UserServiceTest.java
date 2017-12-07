@@ -118,10 +118,10 @@ public class UserServiceTest extends BaseJunit{
     public void getAllUserManageTest() throws  Exception{
         User user=new User();
 
-        user.setUserName("use");
+       // user.setUserName("use");
 //        user.setTrueName("哈");
 //        user.setBanLogin(true);
-        user.setBanSell(false);
+     //   user.setBanSell(false);
         JsonResult jsonResult = userService.getAllUserManage(user,1,10,1,2);
 
         List<User> users = (List<User>) jsonResult.getItem().get("users");

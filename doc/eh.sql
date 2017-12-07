@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50719
 File Encoding         : 65001
 
-Date: 2017-12-03 16:08:42
+Date: 2017-12-07 22:48:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,24 +33,23 @@ CREATE TABLE `admin` (
   `loginState` int(11) DEFAULT NULL,
   `loginNum` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('2', 'admin_1', '249811E9EBEBAB67C8DB3851C259582C', 'N8UCL.FJY@KGYEP9PIE75.OJ-FKQ9LEB', '胖肥臀', null, '1056042624@qq.com', '2017-12-02 15:54:11', null, null, null, null);
-INSERT INTO `admin` VALUES ('3', '123456', '04D15ADE20932FF77BC0D3F4C46F404D', 'IEL1QS+EZJ+16-%2O7EMNEYT$@%7Z25X', '欧阳大', null, 'qq@qq.com', '2017-12-02 16:00:05', null, null, null, null);
+INSERT INTO `admin` VALUES ('2', 'admin_1', '6C9D77E7542BE90A008E77F4BE0E4F20', '~&S4KFI/WN9/8C$AM7HXA-WOFLB%8PNL', '胖肥臀', null, '1056042624@qq.com', '2017-12-02 15:54:11', null, null, null, null);
+INSERT INTO `admin` VALUES ('3', '123456', 'B75906D9187091E2D7EDA4BE531E63D5', 'LGYZEG$G82SB+V~7PRKNGODDWUB34/6M', '欧阳大', null, 'qq@qq.com', '2017-12-02 16:00:05', null, null, null, null);
 INSERT INTO `admin` VALUES ('4', 'admin_6', '0253724A73473C624FE1E24FAB921F9E', '7WJ37ZS/WR2~F2-F&UVFI#3G*L9N4%@2', '欧阳大', null, '10560426241056042@qq.com', '2017-12-02 16:01:01', null, null, null, null);
 INSERT INTO `admin` VALUES ('5', 'admin_7', '7DB207D901FEC62C3F65D14A2A4D449A', 'N#E/H1L0#VEU0T&%YASRZQ$1@Q2VI.@P', '欧阳大', null, '10560426241056042112311@qq.com', '2017-12-02 16:02:21', null, null, null, null);
 INSERT INTO `admin` VALUES ('6', 'admin', '1E337A9B7144B26909DBB539506CEF91', '*KFBO#O6X1I/TJ480V/X8S&AOPRRFXB/', '伍锐保', '18269652102', '1056042624@qq.com', '2017-12-02 16:08:26', null, null, null, null);
-INSERT INTO `admin` VALUES ('7', 'admin_9', '9269882938D3B1CF67D97FD8A8247AA2', '&5GHR0TKEEFAPHI94FKK&TC*BN#756./', '神仙伍', null, '10775@sina.cn', '2017-12-03 16:07:50', null, null, null, null);
 
 -- ----------------------------
 -- Table structure for adminpermissions
 -- ----------------------------
 DROP TABLE IF EXISTS `adminpermissions`;
 CREATE TABLE `adminpermissions` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `admin` int(11) NOT NULL,
   `low` bit(1) NOT NULL,
   `in` bit(1) NOT NULL,
@@ -58,11 +57,14 @@ CREATE TABLE `adminpermissions` (
   PRIMARY KEY (`id`),
   KEY `admin_adminPermissions` (`admin`),
   CONSTRAINT `admin_adminPermissions` FOREIGN KEY (`admin`) REFERENCES `admin` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of adminpermissions
 -- ----------------------------
+INSERT INTO `adminpermissions` VALUES ('1', '2', '', '', '');
+INSERT INTO `adminpermissions` VALUES ('2', '3', '', '\0', '\0');
+INSERT INTO `adminpermissions` VALUES ('3', '4', '\0', '', '\0');
 
 -- ----------------------------
 -- Table structure for favorites
@@ -125,11 +127,12 @@ CREATE TABLE `order` (
   KEY `buyUser_order` (`buyUser`),
   CONSTRAINT `buyUser_order` FOREIGN KEY (`buyUser`) REFERENCES `user` (`id`),
   CONSTRAINT `sellUser_order` FOREIGN KEY (`sellUser`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of order
 -- ----------------------------
+INSERT INTO `order` VALUES ('2', '20170314646', '1', '3', '1', '92.08', '\0', '2017-12-05 13:10:44', '发圆通');
 
 -- ----------------------------
 -- Table structure for product
@@ -149,6 +152,7 @@ CREATE TABLE `product` (
   `expire` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `user` int(11) NOT NULL,
   `seeNumber` int(10) unsigned zerofill DEFAULT NULL,
+  `criateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `productType_product` (`productType`),
   KEY `school_product` (`school`),
@@ -254,9 +258,11 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   KEY `school_user` (`school`),
   CONSTRAINT `school_user` FOREIGN KEY (`school`) REFERENCES `school` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'user', '123456', '312', 'hhh', '1', '1', '2', '18269652102', '3', '2017-11-30 16:59:51', '2017-11-30 16:59:51', null, null);
+INSERT INTO `user` VALUES ('1', 'user', '123456', '312', 'hhh', '1', '10', '2', '18269652102', '3', '2017-12-05 21:57:55', '2017-12-05 21:57:55', '\0', '\0');
+INSERT INTO `user` VALUES ('2', 'user1111', '8597D2D22983B61EA0C6E0B392B04801', '/X*AYMC0%ZL.~Q.NKEJ~QKNZQPMQR%3$', '哈哈浏览', '1', '17', '3', '13999999999', '599999@qq.com', '2017-12-05 22:02:32', '2017-12-05 22:02:32', '\0', '\0');
+INSERT INTO `user` VALUES ('3', 'user2222', '58A8A3534160128C05DB01F9586832F7', 'X&M.1KRV.OCYU3#37R&B&W507O5UA-SW', '哈哈浏览', '1', '8', '4', '13999999999', '599999@qq.com', '2017-12-05 21:58:15', '2017-12-05 21:58:15', '\0', '\0');

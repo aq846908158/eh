@@ -3,6 +3,7 @@ package cn.lcvc.dao;
 import cn.lcvc.POJO.AdminPermissions;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdminPermissionsDao {
 
@@ -38,4 +39,14 @@ public interface AdminPermissionsDao {
      * @return 一个有序List<AdminPermissions>集合，null表示没查到
      */
     public List<AdminPermissions> getAdminPermissionsListOrderBy(String column, String orderBy);
+
+    /**
+     *
+     *@Author @wuruibao
+     *@Date 2017/12/7 22:11
+     *@params   obj :所需查询对象 map:条件集合
+     *@return
+    */
+    List<AdminPermissions> getAdminPermissionsList(Object object, Map<Object, Object> map);
+
 }
