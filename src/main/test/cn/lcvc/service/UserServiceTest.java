@@ -132,7 +132,21 @@ public class UserServiceTest extends BaseJunit{
             System.out.println(users.get(i).getBanLogin());
 
         }
-
-
     }
+    /*用户登录封号  75%*/
+    @Test
+    public  void setUserSealTest(){
+        JsonResult jsonResult =userService.setUserBanLogin(20,false);
+
+        System.out.println(jsonResult.getMessage());
+    }
+
+    /*用户交易封号  75%*/
+    @Test
+    public  void setUserBanSellTest(){
+        JsonResult jsonResult =userService.setUserBanSell(-13,false);
+
+        System.out.println(jsonResult.getMessage());
+    }
+
 }

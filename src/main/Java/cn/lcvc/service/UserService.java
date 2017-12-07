@@ -440,9 +440,75 @@ public class UserService{
     }
 
 
+    /**
+     *用户封号
+     *@Author @wuruibao
+     *@Date 2017/12/7 19:30
+     *@params id：所需封号对象的ID  banLogin:禁止状态(true/false)
+     *@return 如admin有权封号则返回封号结果，如无权限则提示无操作权限
+    */
+    public  JsonResult setUserBanLogin(Integer id,Boolean banLogin){
+        JsonResult jsonResult = new JsonResult();
+        if (id != null && banLogin != null) {
+            User user=userDao.getUser(id);
+            if (user != null) {
+                user.setBanLogin(banLogin);
+                userDao.updateUser(user);
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("登录封号异常.用户不存在.");
+                return  jsonResult;
+            }
+            if (userDao.getUser(id).getBanLogin().equals(banLogin)){
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("登录封号成功.");
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("登录封号失败.");
+            }
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("登录封号异常.");
+        }
+
+        return  jsonResult;
+    }
 
 
+    /**
+     *用户交易封号
+     *@Author @wuruibao
+     *@Date 2017/12/7 19:52
+     *@params   id:所需封号对象ID, banSell :  禁止状态(true/false)
+     *@return 如admin有权封号则返回封号结果，如无权限则提示无操作权限
+    */
+    public JsonResult setUserBanSell(Integer id,Boolean banSell){
+        JsonResult jsonResult = new JsonResult();
 
+        if (id != null && banSell != null) {
+            User user=userDao.getUser(id);
+            if (user != null) {
+                user.setBanSell(banSell);
+                userDao.updateUser(user);
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("交易封号异常.用户不存在.");
+                return  jsonResult;
+            }
+            if (userDao.getUser(id).getBanSell().equals(banSell)){
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("交易封号成功.");
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("交易封号失败.");
+            }
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("交易封号异常.");
+        }
+
+        return  jsonResult;
+    }
 
 
 
