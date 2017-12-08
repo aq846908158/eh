@@ -6,7 +6,9 @@ import cn.lcvc.uitl.JsonResult;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author @wuruibao
@@ -22,11 +24,10 @@ public class AdminPermissionsServiceTest extends  BaseJunit {
         AdminPermissions adminPermissions = new AdminPermissions();
         Admin admin = new Admin();
 //        adminPermissions.setLow(true);
-//     adminPermissions.setIn(false);
+    adminPermissions.setMiddle(false);
 //     adminPermissions.setHeight(false);
 //        admin.setUserName("123456");
-        admin.setTrueName("欧阳大");
-//       admin.setUserName("admin_1");
+        // admin.setUserName("admin_9");
         JsonResult jsonResult=adminPermissionsService.getAdminPermissions(adminPermissions,admin);
 
         List<AdminPermissions> adminPermissionsList= (List<AdminPermissions>) jsonResult.getItem().get("adminPermissions");
@@ -35,10 +36,24 @@ public class AdminPermissionsServiceTest extends  BaseJunit {
             System.out.print(adminPermissionsList.get(i).getAdmin().getUserName()+"         ");
             System.out.print(adminPermissionsList.get(i).getAdmin().getTrueName()+"         ");
             System.out.print(adminPermissionsList.get(i).getLow()+"         ");
-            System.out.print(adminPermissionsList.get(i).getIn()+"         ");
+            System.out.print(adminPermissionsList.get(i).getMiddle()+"         ");
             System.out.println(adminPermissionsList.get(i).getHeight()+"         ");
 
         }
 
+    }
+
+    /*管理员权限添加*/
+    @Test
+    public  void registerAdminPermissionsTest(){
+        Map<Object,Object> map=new HashMap<Object, Object>();
+        Admin admin=new Admin();
+        admin.setId(2);
+//        map.put("middle",true );
+//        map.put("low",true );
+        map.put("height",true);
+        JsonResult jsonResult=adminPermissionsService.registerAdminPermissions(admin,map);
+
+        System.out.println(jsonResult.getMessage());
     }
 }

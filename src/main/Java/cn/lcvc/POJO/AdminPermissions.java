@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class AdminPermissions {
     private Integer id;
     private Boolean low;
-    private Boolean in;
+    private Boolean middle;
     private Boolean height;
     private Admin admin;
 
@@ -31,13 +31,13 @@ public class AdminPermissions {
     }
 
     @Basic
-    @Column(name = "in")
-    public Boolean getIn() {
-        return in;
+    @Column(name = "middle")
+    public Boolean getMiddle() {
+        return middle;
     }
 
-    public void setIn(Boolean in) {
-        this.in = in;
+    public void setMiddle(Boolean middle) {
+        this.middle=middle;
     }
 
     @Basic
@@ -59,7 +59,7 @@ public class AdminPermissions {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (low != null ? !low.equals(that.low) : that.low != null) return false;
-        if (in != null ? !in.equals(that.in) : that.in != null) return false;
+        if (middle != null ? !middle.equals(that.middle) : that.middle != null) return false;
         if (height != null ? !height.equals(that.height) : that.height != null) return false;
 
         return true;
@@ -69,7 +69,7 @@ public class AdminPermissions {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (low != null ? low.hashCode() : 0);
-        result = 31 * result + (in != null ? in.hashCode() : 0);
+        result = 31 * result + (middle != null ? middle.hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
         return result;
     }

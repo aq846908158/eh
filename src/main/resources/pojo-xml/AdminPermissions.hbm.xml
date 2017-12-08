@@ -4,12 +4,12 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.lcvc.POJO.AdminPermissions" table="adminPermissions" schema="eh">
+    <class name="cn.lcvc.POJO.AdminPermissions" table="adminpermissions" schema="eh">
         <id name="id" column="id">
             <generator class="native" />
         </id>
         <property name="low" column="low"/>
-        <property name="in" column="in"/>
+        <property name="middle" column="middle"/>
         <property name="height" column="height"/>
         <many-to-one name="admin" class="cn.lcvc.POJO.Admin" lazy="false" >
             <column name="admin"/>

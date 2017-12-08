@@ -5,6 +5,7 @@ import cn.lcvc.POJO.AdminPermissions;
 import cn.lcvc.dao.AdminDao;
 import cn.lcvc.dao.AdminPermissionsDao;
 import cn.lcvc.uitl.JsonResult;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,12 @@ public class AdminPermissionsService {
     @Autowired
     private AdminDao adminDao;
 
-
+    /*
+   * 管理员权限管理
+   * @param adminPermissions 管理员权限对象
+   * @param admin 管理员对象
+   * @return
+   * */
     public JsonResult getAdminPermissions(AdminPermissions adminPermissions, Admin admin){
         JsonResult jsonResult= new JsonResult();
         Map<Object, Object> map = new HashMap<Object, Object>(); //查询所用Map容器
@@ -33,7 +39,7 @@ public class AdminPermissionsService {
 
         if (adminPermissions != null){
            if (adminPermissions.getLow() != null) map.put("low",adminPermissions.getLow());
-           if (adminPermissions.getIn() != null) map.put("in",adminPermissions.getIn());
+           if (adminPermissions.getMiddle() != null) map.put("middle",adminPermissions.getMiddle());
            if (adminPermissions.getHeight() != null) map.put("height",adminPermissions.getHeight());
 
         }
@@ -67,6 +73,69 @@ public class AdminPermissionsService {
         return  jsonResult;
     }
 
+    /*
+    * 管理员权限添加
+    * @param admin 管理员实体
+    * @param map:存放权限值 low/middle/height  如对应的key == true,则连同key级别之下aminPermissions表中的字段设置为true,key级别之上的字段属性设置为false (如map中存在 middle键值对，则把low，middle 两个字段设置为true,height设置为false)
+    * @return 返回Json格式的添加结果，如数据库表已存在改admin实体，则提示不能重复添加，否则进行添加
+    * */
+    public JsonResult registerAdminPermissions(Admin admin,Map<Object,Object> map){
+        JsonResult jsonResult= new JsonResult();
+        AdminPermissions adminPermissions = new AdminPermissions();
+        if ( admin != null && admin.getId() != null){
+            admin = adminDao.getAdmin(admin.getId());
+            AdminPermissions old = adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",admin);
+            if ( old !=null){ // 判断权限表唯一
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("权限已存在,请勿重复添加！");
+                return  jsonResult;
+            }else {
+                adminPermissions.setAdmin(admin);
+            }
+        }
+
+        for (Map.Entry  entry : map.entrySet()) {//遍历map
+
+
+            if (entry.getKey().equals("low")){
+                if (entry.getValue().equals(true)) {
+                    adminPermissions.setLow(true);
+                    adminPermissions.setMiddle(false);
+                    adminPermissions.setHeight(false);
+                }else {
+                    adminPermissions.setLow((Boolean) entry.getValue());
+                }
+            }
+
+            if (entry.getKey().equals("middle")){
+                if (entry.getValue().equals(true)) {
+                    adminPermissions.setLow(true);
+                    adminPermissions.setMiddle(true);
+                    adminPermissions.setHeight(false);
+                }else {
+                    adminPermissions.setMiddle((Boolean) entry.getValue());
+                }
+            }
+
+            if (entry.getKey().equals("height")){
+                if (entry.getValue().equals(true)) {
+                    adminPermissions.setLow(true);
+                    adminPermissions.setMiddle(true);
+                    adminPermissions.setHeight(true);
+                }else {
+                    adminPermissions.setHeight((Boolean) entry.getValue());
+                }
+            }
+
+        }
+
+        adminPermissionsDao.addAdminPermissions(adminPermissions);
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("权限添加成功.");
+
+
+        return  jsonResult;
+    }
 
 
 
