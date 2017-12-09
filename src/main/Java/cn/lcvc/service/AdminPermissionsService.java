@@ -74,18 +74,50 @@ public class AdminPermissionsService {
     }
 
     /*
-    * 管理员权限添加
+    * 管理员权限添加 (该功能需要高级管理员操作权限)
     * @param admin 管理员实体
     * @param map:存放权限值 low/middle/height  如对应的key == true,则连同key级别之下aminPermissions表中的字段设置为true,key级别之上的字段属性设置为false (如map中存在 middle键值对，则把low，middle 两个字段设置为true,height设置为false)
+    *@param loginAdmin  执行操作的admin，应为已登录admin对象， 判断该admin是否有权执行 权限添加 如果没有则提示无权限，如有则执行对应操作
     * @return 返回Json格式的添加结果，如数据库表已存在改admin实体，则提示不能重复添加，否则进行添加
     * */
-    public JsonResult registerAdminPermissions(Admin admin,Map<Object,Object> map){
+    public JsonResult registerAdminPermissions(Admin admin,Admin loginAdmin,Map<Object,Object> map){
         JsonResult jsonResult= new JsonResult();
         AdminPermissions adminPermissions = new AdminPermissions();
+
+        //判断是否有权限执行该操作
+        if (loginAdmin != null && loginAdmin.getId() != null){
+            //是否存在admin表
+            Admin loginAdminPermissions=adminDao.getAdmin(loginAdmin.getId());
+            if (loginAdminPermissions != null){
+                AdminPermissions getAdminPermissions = adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",loginAdmin);
+
+                if (!getAdminPermissions.getHeight().equals(true)){
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("您没有权限执行该操作!!");
+                    return jsonResult;
+                }
+
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("账户不存在，请重新登录.");
+                return  jsonResult;
+            }
+
+
+
+        }
+
         if ( admin != null && admin.getId() != null){
             admin = adminDao.getAdmin(admin.getId());
+
+            if (admin == null){
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("该管理员不存在!!");
+                return  jsonResult;
+            }
+
             AdminPermissions old = adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",admin);
-            if ( old !=null){ // 判断权限表唯一
+            if ( old !=null){ // 判断权限表唯一是否存在该amdin
                 jsonResult.setErrorCode("500");
                 jsonResult.setMessage("权限已存在,请勿重复添加！");
                 return  jsonResult;
@@ -136,7 +168,6 @@ public class AdminPermissionsService {
 
         return  jsonResult;
     }
-
 
 
 

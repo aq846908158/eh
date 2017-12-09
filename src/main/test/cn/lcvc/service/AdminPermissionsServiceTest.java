@@ -48,11 +48,15 @@ public class AdminPermissionsServiceTest extends  BaseJunit {
     public  void registerAdminPermissionsTest(){
         Map<Object,Object> map=new HashMap<Object, Object>();
         Admin admin=new Admin();
-        admin.setId(2);
+        Admin loginAdmin = new Admin();
+
+        loginAdmin.setId(6);
+
+        admin.setId(3);
 //        map.put("middle",true );
 //        map.put("low",true );
         map.put("height",true);
-        JsonResult jsonResult=adminPermissionsService.registerAdminPermissions(admin,map);
+        JsonResult jsonResult=adminPermissionsService.registerAdminPermissions(admin,loginAdmin,map);
 
         System.out.println(jsonResult.getMessage());
     }

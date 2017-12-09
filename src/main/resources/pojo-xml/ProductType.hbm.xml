@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.lcvc.POJO.ProductType" table="productType" schema="eh">
+    <class name="cn.lcvc.POJO.ProductType" table="producttype" schema="eh">
         <id name="id" column="id">
             <generator class="native" />
         </id>
