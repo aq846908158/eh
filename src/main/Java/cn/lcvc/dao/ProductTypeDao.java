@@ -3,6 +3,7 @@ package cn.lcvc.dao;
 import cn.lcvc.POJO.ProductType;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductTypeDao {
 
@@ -11,6 +12,17 @@ public interface ProductTypeDao {
     public void updateProductType(ProductType productType);
     public ProductType getProductType(Integer id);
     public List<ProductType> getProductTypeList();
+
+    /**
+     * @author wuruibao
+     * @date 2017-12-10 14:51:54
+     * @param_object需要查询的对象
+     * @param_map需要查询的字段的值
+     * @return 一个list集合的ProductType对象，0表示没查到
+     */
+    List<ProductType> getProductTypeList(Object object, Map<Object,Object> map);
+
+
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15

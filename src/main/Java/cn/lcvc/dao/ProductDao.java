@@ -3,6 +3,7 @@ package cn.lcvc.dao;
 import cn.lcvc.POJO.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductDao {
 
@@ -38,4 +39,13 @@ public interface ProductDao {
      * @return 一个有序List<Product>集合，null表示没查到
      */
     public List<Product> getProductListOrderBy(String column, String orderBy);
+
+    /**
+     * @author wuruibao
+     * @date 2017-12-10 17:26:02
+     * @param_object:查询的实体对象
+     * @param_map：存放对应的数据库键值对条件
+     * @return 一个有序List<Product>集合，null表示没查到
+     */
+    List<Product> getProductList(Object object, Map<Object, Object> map);
 }

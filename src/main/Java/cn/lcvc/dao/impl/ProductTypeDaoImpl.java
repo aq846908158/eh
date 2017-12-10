@@ -1,5 +1,6 @@
 package cn.lcvc.dao.impl;
 
+import cn.lcvc.POJO.AdminPermissions;
 import cn.lcvc.POJO.ProductType;
 import cn.lcvc.dao.ProductTypeDao;
 import org.hibernate.Criteria;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductTypeDaoImpl implements ProductTypeDao {
@@ -50,6 +52,28 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
     public List<ProductType> getProductTypeList() {
         Criteria criteria=getSession().createCriteria(ProductType.class);
         return criteria.list();
+    }
+
+    public List<ProductType> getProductTypeList(Object object, Map<Object, Object> map) {
+        List<ProductType> productTypeArrayList=new ArrayList<ProductType>();
+
+        Criteria criteria = getSession().createCriteria((Class) object);
+
+        for (Map.Entry  entry : map.entrySet()) {//遍历map
+            if (entry.getKey().equals("productTypeName")){ //产品分类名称执行模糊查询
+                criteria.add(Restrictions.like((String) entry.getKey(),"%"+entry.getValue()+"%"));
+                continue;
+            }
+            criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
+        }
+
+        try {
+            productTypeArrayList = criteria.list();
+        }catch (Exception e){
+            e.getStackTrace();
+        }
+
+        return productTypeArrayList;
     }
 
     public ProductType getProductTypeBy_OneColumn(String column, Object value) {

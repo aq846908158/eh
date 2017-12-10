@@ -10,7 +10,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductDaoImpl implements ProductDao {
@@ -87,5 +89,25 @@ public class ProductDaoImpl implements ProductDao {
             return list;
         }
         return null;
+    }
+
+    public List<Product> getProductList(Object object, Map<Object, Object> map) {
+        List<Product> list =new ArrayList<Product>();
+        Criteria criteria=getSession().createCriteria((Class) object);
+
+        for (Map.Entry  entry : map.entrySet()) {//遍历map
+           if (entry.getKey().equals("productName")){
+               criteria.add(Restrictions.like((String) entry.getKey(),"%"+entry.getValue()+"%"));
+               continue;
+           }
+            criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
+        }
+        try{
+            list=criteria.list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return list;
     }
 }

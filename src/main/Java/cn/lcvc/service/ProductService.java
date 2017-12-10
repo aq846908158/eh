@@ -130,4 +130,92 @@ public class ProductService {
         return jsonResult;
 
     }//完成
+
+
+
+    /**********************************    @wurubiao  2017-12-10 15:42:24   *************************************/
+
+     /*
+    * 全站点商品管理
+    * @param product:指的是商品对象  lowProductNumber,hiProductNumber：最低库存,最高库存  , lowProductPrice,hiProductPrice: 最低价，最高价，lowSeeNumber,hiSeeNumber: 最低浏览量，最高浏览量
+    * @return 返回查询结果
+    * */
+    public JsonResult getAllProductManage(Product product,Integer lowProductNumber,Integer hiProductNumber,Double lowProductPrice,Double hiProductPrice,Integer lowSeeNumber,Integer hiSeeNumber){
+        JsonResult jsonResult = new JsonResult();
+        Map<Object, Object> map = new HashMap<Object, Object>(); //执行数据库查询所用Map容器
+        Map<Object,Object> map_product= new HashMap<Object, Object>(); //存放查询所得数据
+
+//        id 序号
+//        productName	商品名称
+//        productNumber	商品库存
+//        productType	所属分类
+//        productPrice	商品价格
+//        school	所属校园
+//        grounding	是否上架
+//        user	发布用户
+//        seeNumber	浏览数量
+
+
+        //对product进行非空验证，如不为空则存进map集合传到dao层进行数据库查询
+        if (product != null){
+            if (product.getId() != 0 && product.getId() > 0) map.put("id",product.getId()); //eq
+            if (product.getProductName() != null && product.getProductName().trim().length() !=0){ //like
+                map.put("productName",product.getProductName());
+            }
+           /*分类*/
+           if (product.getProductType() != null && product.getProductType().getId() !=0 ){//eq
+               //此处应查询此分类代码是否存在 ....
+               map.put("productType",product.getProductType());
+           }
+           //学校
+           if (product.getSchool() != null && product.getSchool().getId() != 0) map.put("school",product.getSchool());//eq
+           //是否上架
+            if (product.getGrounding() != null) map.put("grounding",product.getGrounding());//eq
+            //发布用户
+            if (product.getUser() != null && product.getUser().getId() != 0) map.put("user",product.getUser());//eq
+
+        }
+           /*库存*/
+        if (lowProductNumber != null && lowProductNumber >0) map.put("lowProductNumber",lowProductNumber);
+        if (hiProductNumber != null && hiProductNumber >0) map.put("hiProductNumber",hiProductNumber);
+        //价格区间
+        if (lowProductPrice != null && lowProductNumber > 0.00) map.put("lowProductPrice",lowProductNumber);
+        if (hiProductPrice != null && hiProductPrice > 0.00) map.put("hiProductPrice",hiProductPrice);
+        //浏览量
+        if (lowSeeNumber != null && lowSeeNumber >0) map.put("lowSeeNumber",lowSeeNumber);
+        if (hiSeeNumber != null && hiSeeNumber >0) map.put("hiSeeNumber",hiSeeNumber);
+
+        List<Product> list = productDao.getProductList(Product.class,map);
+
+        if (list.size() > 0){
+            map_product.put("product",list);
+
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("查询成功.");
+            jsonResult.setItem(map_product);
+        }else {
+            jsonResult.setMessage("500");
+            jsonResult.setMessage("查询失败:无数据或出错.");
+        }
+
+        return  jsonResult;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

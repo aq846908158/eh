@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author @wuruibao
@@ -24,6 +26,56 @@ public class ProductTypeService {
     @Autowired
     private AdminPermissionsDao adminPermissionsDao;
 
+    /*
+   * 产品类型管理
+   * @param productType 产品类型对象
+   * @return json
+   * */
+    public  JsonResult getProductType(ProductType productType){
+        JsonResult jsonResult = new JsonResult();
+        Map<Object, Object> map = new HashMap<Object, Object>(); //查询所用Map容器
+        Map<Object,Object> map_productType= new HashMap<Object, Object>(); //存放查询所得数据
+
+        if (productType != null){
+            //产品类型名称 like
+            if (productType.getProductTypeName() !=null && productType.getProductTypeName().trim().length() != 0){
+                map.put("productTypeName",productType.getProductTypeName());
+            }
+            //产品类型分类等级 eq
+            if (productType.getProductTypeRank() != null && productType.getProductTypeRank() > 0 && productType.getProductTypeRank() < 4){
+                map.put("productTypeRank",productType.getProductTypeRank());
+            }
+            //产品类型分类代码 eq
+            if (productType.getProductTypeCode() != null && productType.getProductTypeCode().trim().length() == 6){
+                map.put("productTypeCode",productType.getProductTypeCode());
+            }
+            //产品类型父级分类代码 eq
+            if (productType.getSuperType() != null && productType.getSuperType().trim().length() == 6){
+                map.put("superType",productType.getSuperType());
+            }
+        }
+
+        List<ProductType> list = productTypeDao.getProductTypeList(ProductType.class,map);
+
+        if (list.size() > 0){
+            map_productType.put("productTypeList",list);
+
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("查询成功.");
+            jsonResult.setItem(map_productType);
+        }else {
+            jsonResult.setMessage("500");
+            jsonResult.setMessage("查询失败:无数据.");
+        }
+
+        return  jsonResult;
+    }
+
+    /*
+     * 添加产品类型
+     * @param productType 产品类型对象
+     * @return json
+     * */
     public JsonResult registerProductType(ProductType productType){
         JsonResult jsonResult = new JsonResult();
 
@@ -78,7 +130,8 @@ public class ProductTypeService {
         }
 
 
-        int code = (int)(Math.random()*(9999-1000+1))+1000;//随机生成1000-9999的4为数字
+        int code = (int)(Math.random()*(999999-100000+1))+100000;//随机生成100000-999999的6为数字
+        //code重复判断
 
         productType.setProductTypeCode(String.valueOf(code));
 
@@ -89,6 +142,12 @@ public class ProductTypeService {
         return  jsonResult;
     }
 
+
+    /*
+     * 删除产品类型
+     * @param typeId 产品类型ID
+     * @return json
+     * */
     public  JsonResult deleteProductType(Integer typeId){
         JsonResult  jsonResult = new JsonResult();
 
