@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.tree.Tree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Author @wuruibao
  * @Date 2017/12/920:11
@@ -65,12 +68,15 @@ public class ProductTypeService {
         if (productType.getSuperType() == null) productType.setSuperType("0");
 
         //判断分类代码是否存在数据库
-        ProductType getSuperTypeCode = productTypeDao.getProductTypeBy_OneColumn("productTypeCode",productType.getSuperType());
-        if (getSuperTypeCode == null){
-            jsonResult.setErrorCode("500");
-            jsonResult.setMessage("该父类不存在!! 请刷新页面后重试.");
-            return  jsonResult;
+        if(productType.getProductTypeRank() != 1){
+            ProductType getSuperTypeCode = productTypeDao.getProductTypeBy_OneColumn("productTypeCode",productType.getSuperType());
+            if (getSuperTypeCode == null){
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("该父类不存在!! 请刷新页面后重试.");
+                return  jsonResult;
+            }
         }
+
 
         int code = (int)(Math.random()*(9999-1000+1))+1000;//随机生成1000-9999的4为数字
 
@@ -79,6 +85,42 @@ public class ProductTypeService {
         productTypeDao.addProductType(productType);
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("添加成功.");
+
+        return  jsonResult;
+    }
+
+    public  JsonResult deleteProductType(Integer typeId){
+        JsonResult  jsonResult = new JsonResult();
+
+        if (typeId != null){
+            //根据此id查询,并判断该id索引的对象是否存在数据库中
+            ProductType productType = productTypeDao.getProductType(typeId);
+            if (productType != null){
+
+                List<ProductType> list=new ArrayList<ProductType>();
+                if (productType.getProductTypeRank() !=3){
+                    list = productTypeDao.getProductTypeByList_OneColumn("superType",productType.getProductTypeCode());
+                }
+
+                    if (list.size() > 0){
+                        jsonResult.setErrorCode("500");
+                        jsonResult.setMessage("删除失败:该产品类型下有父级分类,如需删除该分类请先删除所有所属父级分类产品类型.");
+                    }else {
+                        productTypeDao.deleteProductType(productType);
+                        jsonResult.setErrorCode("500");
+                        jsonResult.setMessage("服务端:删除成功.");
+                    }
+
+
+            }else{
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("删除失败:该产品类型不存在.");
+            }
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("删除失败:请刷新页面后重试.");
+        }
+
 
         return  jsonResult;
     }

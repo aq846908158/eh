@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Author @wuruibao
  * @Date 2017/12/921:31
  */
-public class registerProductTypeTest extends BaseJunit {
+public class ProductTypeServiceTest extends BaseJunit {
 
     @Autowired
     private ProductTypeService productTypeService;
@@ -18,10 +18,19 @@ public class registerProductTypeTest extends BaseJunit {
     @Test
     public void registerProductTypeTest(){
         ProductType  productType =new ProductType();
-        productType.setProductTypeName("老人机");
+        productType.setProductTypeName("座机");
         productType.setProductTypeRank(3);
-        productType.setSuperType("4477");
+        productType.setSuperType("9334");
         JsonResult jsonResult = productTypeService.registerProductType(productType);
+
+        System.out.println(jsonResult.getMessage());
+
+    }
+
+    /*删除产品类型*/
+    @Test
+    public void  deleteProductTypeTest(){
+        JsonResult jsonResult =productTypeService.deleteProductType(1);
 
         System.out.println(jsonResult.getMessage());
 

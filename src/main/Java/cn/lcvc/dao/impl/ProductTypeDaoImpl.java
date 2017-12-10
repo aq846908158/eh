@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,6 +62,19 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
         }
 
         return null;
+    }
+
+    public List<ProductType> getProductTypeByList_OneColumn(String column, Object value) {
+        List<ProductType> list = new ArrayList<ProductType>();
+        Criteria criteria=getSession().createCriteria(ProductType.class);
+        criteria.add(Restrictions.eq(column,value));
+        list=criteria.list();
+        if(list.size()!=0)
+        {
+            return list;
+        }
+
+        return list;
     }
 
     public ProductType getProductTypeBy_TowColumn(String column1, Object value1, String column2, Object value2) {

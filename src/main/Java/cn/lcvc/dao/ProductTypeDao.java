@@ -19,6 +19,17 @@ public interface ProductTypeDao {
      * @return 一个ProductType对象，null表示没查到
      */
     public ProductType getProductTypeBy_OneColumn(String column, Object value);
+
+    /**
+     * @author huanghaibin
+     * @date 2017-11-29 16:35:15
+     * @param_column需要查询的字段
+     * @param_value需要查询的字段的值
+     * @return 一个List对象，size==0表示没查到
+     */
+    public List<ProductType> getProductTypeByList_OneColumn(String column, Object value);
+
+
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
