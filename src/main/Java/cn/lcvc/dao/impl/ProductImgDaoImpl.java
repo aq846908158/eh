@@ -33,13 +33,6 @@ public class ProductImgDaoImpl implements ProductImgDao {
         getSession().delete(productImg);
     }
 
-    public void deleteProductImgByProduct(Product product) {
-        String hql = "delete from ProductImg  where product=?";
-        Query query=getSession().createQuery(hql);
-        query.setInteger(0,product.getId());
-
-    }
-
     public void updateProductImg(ProductImg productImg) {
         getSession().update(productImg);
     }

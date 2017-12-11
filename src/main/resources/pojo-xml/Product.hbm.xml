@@ -18,6 +18,7 @@
         <property name="expire" column="expire"/>
         <property name="seeNumber" column="seeNumber"/>
         <property name="criateTime" column="criateTime"/>
+        <property name="state" column="state"/>
         <many-to-one name="productType" class="cn.lcvc.POJO.ProductType" lazy="false">
             <column name="productType"/>
         </many-to-one>

@@ -148,10 +148,9 @@ public class ProductDaoImpl implements ProductDao {
                 }
                 continue;
             }
-
-
             criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
         }
+        criteria.add(Restrictions.ne("state",true));//把虚拟删除标识符的商品筛除
         try{
             list=criteria.list();
         }catch (Exception e){

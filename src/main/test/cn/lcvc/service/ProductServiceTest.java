@@ -65,7 +65,7 @@ public class ProductServiceTest extends BaseJunit{
 
 
 
-        JsonResult jsonResult=productService.getAllProductManage(product,-1,-22,-1000.00,-5000.00,-1,-5);
+        JsonResult jsonResult=productService.getAllProductManage(product,-1,-22,-1000.00,5000.00,-1,-5);
         List<Product> list= (List<Product>) jsonResult.getItem().get("product");
 
         for (int i=0;i<list.size();i++){
@@ -80,7 +80,7 @@ public class ProductServiceTest extends BaseJunit{
     @Test
     public  void  deleteProductTest(){
         Product  product=new Product();
-        product.setId(4);
+        product.setId(-42);
 
         JsonResult jsonResult = productService.deleteProduct(product);
 

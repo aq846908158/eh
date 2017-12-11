@@ -19,6 +19,7 @@ public class Product {
     private School school;
     private User user;
     private Timestamp criateTime;
+    private Boolean state;
 
     @Id
     @Column(name = "id")
@@ -128,6 +129,16 @@ public class Product {
 
     public void setCriateTime(Timestamp criateTime) {
         this.criateTime = criateTime;
+    }
+
+    @Basic
+    @Column(name = "state")
+    public Boolean getState() {
+        return state;
+    }
+
+    public void setState(Boolean state) {
+        this.state = state;
     }
 
     @Override

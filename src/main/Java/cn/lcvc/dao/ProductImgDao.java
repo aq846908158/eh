@@ -9,7 +9,6 @@ public interface ProductImgDao {
 
     public void addProductImg(ProductImg productImg);
     public void deleteProductImg(ProductImg productImg);
-    void deleteProductImgByProduct(Product product);
     public void updateProductImg(ProductImg productImg);
     public ProductImg getProductImg(Integer id);
     public List<ProductImg> getProductImgList();
