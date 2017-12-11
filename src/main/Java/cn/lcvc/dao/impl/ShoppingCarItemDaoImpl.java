@@ -32,7 +32,11 @@ public class ShoppingCarItemDaoImpl implements ShoppingCartItemDao {
     }
 
     public void updateShoppingCartItem(ShoppingCartItem shoppingCartItem) {
-        getSession().update(shoppingCartItem);
+        ShoppingCartItem oldShoppingCartItem= (ShoppingCartItem) getSession().load(ShoppingCartItem.class,shoppingCartItem.getId());
+        oldShoppingCartItem.setNumber(shoppingCartItem.getNumber());
+        oldShoppingCartItem.setUser(shoppingCartItem.getUser());
+        oldShoppingCartItem.setProduct(shoppingCartItem.getProduct());
+        getSession().update(oldShoppingCartItem);
     }
 
     public ShoppingCartItem getShoppingCartItem(Integer id) {
@@ -74,6 +78,23 @@ public class ShoppingCarItemDaoImpl implements ShoppingCartItemDao {
         }
         return null;
     }
+
+    public List<ShoppingCartItem> getShoppingCartItemsBy_OneColumn(String column, Object value) {
+        Criteria criteria=getSession().createCriteria(ShoppingCartItem.class);
+        criteria.add(Restrictions.eq(column,value));
+        return criteria.list();
+
+    }
+
+    public List<ShoppingCartItem> getShoppingCartItemsBy_TowColumn(String column1, Object value1, String column2, Object value2) {
+        Criteria criteria=getSession().createCriteria(ShoppingCartItem.class);
+        criteria.add(Restrictions.eq(column1,value1));
+        criteria.add(Restrictions.eq(column2,value2));
+        return criteria.list();
+
+
+    }
+
 
     public List<ShoppingCartItem> getShoppingCartItemListOrderBy(String column, String orderBy) {
         Criteria criteria=getSession().createCriteria(ShoppingCartItem.class);

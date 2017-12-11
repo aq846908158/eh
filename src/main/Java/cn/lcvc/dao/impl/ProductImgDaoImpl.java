@@ -88,4 +88,20 @@ public class ProductImgDaoImpl implements ProductImgDao {
         }
         return null;
     }
+
+    public List<ProductImg> getProductImgsBy_OneColumn(String column, Object value) {
+        Criteria criteria=getSession().createCriteria(ProductImg.class);
+        criteria.add(Restrictions.eq(column,value));
+        List list=criteria.list();
+        return (List<ProductImg>) list;
+
+    }
+
+    public List<ProductImg> getProductImgsBy_TowColumn_List(String column1, Object value1, String column2, Object value2) {
+        Criteria criteria=getSession().createCriteria(ProductImg.class);
+        criteria.add(Restrictions.eq(column1,value1));
+        criteria.add(Restrictions.eq(column2,value2));
+        List list=criteria.list();
+        return (List<ProductImg>) list;
+    }
 }

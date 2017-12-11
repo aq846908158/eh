@@ -58,26 +58,4 @@ public class ProductServiceTest extends BaseJunit{
         List<Product> users= (List<Product>) jsonResult.getItem().get("products");
         System.out.println(users.size());
     }//通过
-
-    @Test
-    public  void getAllProductManageTest(){
-        Product  product=null;
-
-
-
-        JsonResult jsonResult=productService.getAllProductManage(product,-1,22,1000.00,5000.00,-1,-5);
-        List<Product> list= (List<Product>) jsonResult.getItem().get("product");
-
-        for (int i=0;i<list.size();i++){
-            System.out.print(list.get(i).getProductName()+"  ");
-            System.out.print(list.get(i).getProductNumber()+"  ");
-            System.out.print(list.get(i).getProductType().getProductTypeName()+"  ");
-            System.out.print(list.get(i).getUser().getTrueName()+"  ");
-            System.out.println(list.get(i).getProductIntroduce());
-        }
-    }//通过
-
-
-
-
 }
