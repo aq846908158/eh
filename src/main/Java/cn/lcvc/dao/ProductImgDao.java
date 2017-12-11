@@ -50,4 +50,23 @@ public interface ProductImgDao {
      * @return 一个有序List<ProductImg>集合，null表示没查到
      */
     public List<ProductImg> getProductImgListOrderBy(String column, String orderBy);
+
+    /**
+     * @author huanghaibin
+     * @date 2017-12-8 09:06:16
+     * @param_column需要查询的字段
+     * @param_value需要查询的字段的值
+     * @return 一个ProductImg集合，null表示没查到
+     */
+    public List<ProductImg> getProductImgsBy_OneColumn(String column, Object value);
+    /**
+     * @author huanghaibin
+     * @date 2017-12-8 09:06:13
+     * @param_ column1需要查询的第一个字段
+     * @param_ value1需要查询的第一个字段的值
+     * @param_ column1需要查询的第二个字段
+     * @param_ value1需要查询的第二个字段的值
+     * @return 一个ProductImg集合，null表示没查到
+     */
+    public List<ProductImg> getProductImgsBy_TowColumn_List(String column1, Object value1, String column2, Object value2);
 }
