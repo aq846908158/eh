@@ -4,6 +4,7 @@ import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.ProductImg;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.ProductDao;
+import cn.lcvc.dao.ProductImgDao;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
 import javafx.scene.chart.PieChart;
@@ -22,6 +23,8 @@ public class ProductService {
     private ProductDao productDao;
     @Autowired
     private ProductImgService productImgService;
+    @Autowired
+    private ProductImgDao productImgDao;
     @Autowired
     private UserDao userDao;
     /**
@@ -139,8 +142,9 @@ public class ProductService {
     /**********************************    @wurubiao  2017-12-10 15:42:24   *************************************/
 
      /*
-    * 全站点商品管理
+    * 全站点商品管理,由于外键约束，删除商品需先删除productimg表中的'product'外键
     * @param product:指的是商品对象  lowProductNumber,hiProductNumber：最低库存,最高库存  , lowProductPrice,hiProductPrice: 最低价，最高价，lowSeeNumber,hiSeeNumber: 最低浏览量，最高浏览量
+    * 注意:如果传入的对象的值或其他值为空，则不存进map。否则就存进map集合中,然后传到dao层对应方法根据map集合的Key,Value进行对应的查询
     * @return 返回查询结果
     * */
     public JsonResult getAllProductManage(Product product,Integer lowProductNumber,Integer hiProductNumber,Double lowProductPrice,Double hiProductPrice,Integer lowSeeNumber,Integer hiSeeNumber){
@@ -212,7 +216,42 @@ public class ProductService {
     }
 
 
+    /*
+    * 全站点商品删除，此功能为全站点商品的删除，涉及到用户的个人利益以及企业信誉，故该功能在一般情况下不可使用，如许使用该功能，则需有高级管理员权限
+    * @param product:指的是需要删除商品的对象
+    * @return 如拥有高级管理员权限，则执行操作并返回删除结果、如无权限删除则提示无权限；不管是否有权删除，执行该功能完毕后，把操作该功能的管理员记录，利于日后查询。
+    * */
+    public  JsonResult deleteProduct(Product product){
+        JsonResult jsonResult = new JsonResult();
 
+        if (product != null && product.getId() != null){
+            Product productOld= productDao.getProduct(product.getId());
+            if (productOld != null){
+                List<ProductImg> productImg = productImgDao.getProductImgList("product",productOld);//查询productimg表中是否存在此商品图片
+                if (productImg.size() >0)  productImgDao.deleteProductImgByProduct(productOld);//删除productimg表中对应的图片
+                productDao.deleteProduct(productOld);
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("服务端:删除失败，该商品不存在.");
+                return  jsonResult;
+            }
+
+            if (productDao.getProduct(product.getId()) == null){
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("服务端:删除成功.");
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("服务端:删除失败.请重试.");
+            }
+
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端:删除异常，请刷新该页面后重试!!.");
+            return  jsonResult;
+        }
+        //xxxxx
+        return  jsonResult;
+    }
 
 
 

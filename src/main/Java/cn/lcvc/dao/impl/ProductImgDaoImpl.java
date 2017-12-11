@@ -1,8 +1,10 @@
 package cn.lcvc.dao.impl;
 
+import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.ProductImg;
 import cn.lcvc.dao.ProductImgDao;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -29,6 +31,13 @@ public class ProductImgDaoImpl implements ProductImgDao {
 
     public void deleteProductImg(ProductImg productImg) {
         getSession().delete(productImg);
+    }
+
+    public void deleteProductImgByProduct(Product product) {
+        String hql = "delete from ProductImg  where product=?";
+        Query query=getSession().createQuery(hql);
+        query.setInteger(0,product.getId());
+
     }
 
     public void updateProductImg(ProductImg productImg) {
@@ -58,6 +67,18 @@ public class ProductImgDaoImpl implements ProductImgDao {
         if(list.size()!=0)
         {
             return (ProductImg)list.get(0);
+        }
+
+        return null;
+    }
+
+    public List<ProductImg> getProductImgList(String column, Object value) {
+        Criteria criteria=getSession().createCriteria(ProductImg.class);
+        criteria.add(Restrictions.eq(column,value));
+        List<ProductImg> list=criteria.list();
+        if(list.size()!=0)
+        {
+            return list;
         }
 
         return null;

@@ -1,5 +1,6 @@
 package cn.lcvc.dao;
 
+import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.ProductImg;
 
 import java.util.List;
@@ -8,6 +9,7 @@ public interface ProductImgDao {
 
     public void addProductImg(ProductImg productImg);
     public void deleteProductImg(ProductImg productImg);
+    void deleteProductImgByProduct(Product product);
     public void updateProductImg(ProductImg productImg);
     public ProductImg getProductImg(Integer id);
     public List<ProductImg> getProductImgList();
@@ -19,6 +21,16 @@ public interface ProductImgDao {
      * @return 一个ProductImg对象，null表示没查到
      */
     public ProductImg getProductImgBy_OneColumn(String column, Object value);
+
+    /**
+     * @author wurubiao
+     * @date 2017-12-11 19:40:13
+     * @param_column需要查询的字段
+     * @param_value需要查询的字段的值
+     * @return 一个List集合的ProductImg对象，null表示没查到
+     */
+     List<ProductImg> getProductImgList(String column, Object value);
+
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
