@@ -100,6 +100,42 @@ public class ProductDaoImpl implements ProductDao {
                criteria.add(Restrictions.like((String) entry.getKey(),"%"+entry.getValue()+"%"));
                continue;
            }
+           //库存SQL操作
+           if (entry.getKey().equals("lowProductNumber") || entry.getKey().equals("hiProductNumber")){
+               if (map.get("lowProductNumber") != null && map.get("hiProductNumber") != null){// 如果两个变量都不为空的情况下，执行SQL between语句
+                    criteria.add(Restrictions.between("productNumber",map.get("lowProductNumber"),map.get("hiProductNumber")));
+               }else if (map.get("lowProductNumber") != null && map.get("hiProductNumber") == null){//最低
+                    criteria.add(Restrictions.ge("productNumber",map.get("lowProductNumber")));
+               }else if (map.get("lowProductNumber") == null && map.get("hiProductNumber") != null){
+                   criteria.add(Restrictions.le("productNumber",map.get("hiProductNumber")));
+               }
+               continue;
+           }
+
+           //价格区间操作
+           if (entry.getKey().equals("lowProductPrice") || entry.getKey().equals("hiProductPrice")){
+               if (map.get("lowProductPrice") != null && map.get("hiProductPrice") != null){
+                   criteria.add(Restrictions.between("productPrice",map.get("lowProductPrice"),map.get("hiProductPrice")));
+               }else  if (map.get("lowProductPrice") != null && map.get("hiProductPrice") == null){
+                   criteria.add(Restrictions.ge("productPrice",map.get("lowProductPrice")));
+               }else  if (map.get("lowProductPrice") == null && map.get("hiProductPrice") != null) {
+                   criteria.add(Restrictions.le("productPrice",map.get("hiProductPrice")));
+               }
+               continue;
+           }
+           //浏览量
+            if (entry.getKey().equals("lowSeeNumber") || entry.getKey().equals("hiSeeNumber")){
+                if (map.get("lowSeeNumber") != null && map.get("hiSeeNumber") != null){
+                    criteria.add(Restrictions.between("seeNumber",map.get("lowSeeNumber"),map.get("hiSeeNumber")));
+                }else  if (map.get("lowSeeNumber") != null && map.get("hiSeeNumber") == null){
+                    criteria.add(Restrictions.ge("seeNumber",map.get("lowSeeNumber")));
+                }else  if (map.get("lowSeeNumber") == null && map.get("hiSeeNumber") != null) {
+                    criteria.add(Restrictions.le("seeNumber",map.get("hiSeeNumber")));
+                }
+                continue;
+            }
+
+
             criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
         }
         try{

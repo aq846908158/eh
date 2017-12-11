@@ -4,6 +4,7 @@ import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.ProductImg;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.ProductDao;
+import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
 import javafx.scene.chart.PieChart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class ProductService {
     private ProductDao productDao;
     @Autowired
     private ProductImgService productImgService;
+    @Autowired
+    private UserDao userDao;
     /**
      * 商品发布
      * @param product 一个商品实体
@@ -158,7 +161,7 @@ public class ProductService {
 
         //对product进行非空验证，如不为空则存进map集合传到dao层进行数据库查询
         if (product != null){
-            if (product.getId() != 0 && product.getId() > 0) map.put("id",product.getId()); //eq
+            if (product.getId() != null && product.getId() > 0) map.put("id",product.getId()); //eq
             if (product.getProductName() != null && product.getProductName().trim().length() !=0){ //like
                 map.put("productName",product.getProductName());
             }
@@ -172,14 +175,21 @@ public class ProductService {
            //是否上架
             if (product.getGrounding() != null) map.put("grounding",product.getGrounding());//eq
             //发布用户
-            if (product.getUser() != null && product.getUser().getId() != 0) map.put("user",product.getUser());//eq
+            if (product.getUser() != null){
+                if (product.getUser().getId() != null && product.getUser().getId() >0){
+                    map.put("user",product.getUser());//eq
+                }else if (product.getUser().getUserName() != null && product.getUser().getUserName().trim().length() !=0){
+                    User user = userDao.getUserBy_OneColumn("userName",product.getUser().getUserName());//eq
+                    if (user != null) map.put("user",user);
+                }
+            }
 
         }
            /*库存*/
         if (lowProductNumber != null && lowProductNumber >0) map.put("lowProductNumber",lowProductNumber);
         if (hiProductNumber != null && hiProductNumber >0) map.put("hiProductNumber",hiProductNumber);
         //价格区间
-        if (lowProductPrice != null && lowProductNumber > 0.00) map.put("lowProductPrice",lowProductNumber);
+        if (lowProductPrice != null && lowProductPrice > 0.00) map.put("lowProductPrice",lowProductPrice);
         if (hiProductPrice != null && hiProductPrice > 0.00) map.put("hiProductPrice",hiProductPrice);
         //浏览量
         if (lowSeeNumber != null && lowSeeNumber >0) map.put("lowSeeNumber",lowSeeNumber);
