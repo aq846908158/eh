@@ -267,7 +267,6 @@ public class ShoppingCartItemService {
     }
 
 //--------------------------------------------------------------------------------------------
-
     /**
      * 未登录用户登陆后购物车同步到账号
      * @param sessionShoppingCart 未登录时的购物车信息
@@ -291,7 +290,12 @@ public class ShoppingCartItemService {
         return jsonResult;
     }
 
+    public JsonResult shoppingCartSettle()
+    {
+        JsonResult jsonResult=new JsonResult();
 
+        return  jsonResult;
+    }
 
 
 
