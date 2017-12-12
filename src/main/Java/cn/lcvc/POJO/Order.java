@@ -9,11 +9,11 @@ public class Order {
     private String orderCode;
     private Integer number;
     private Double orderPrice;
-    private Boolean chalkUp;
     private Timestamp createTime;
     private String message;
     private User buyUser;
-    private User sellUser;
+    private Product product;
+    private String orderState;
 
     @Id
     @Column(name = "id")
@@ -55,15 +55,6 @@ public class Order {
         this.orderPrice = orderPrice;
     }
 
-    @Basic
-    @Column(name = "chalkUp")
-    public Boolean getChalkUp() {
-        return chalkUp;
-    }
-
-    public void setChalkUp(Boolean chalkUp) {
-        this.chalkUp = chalkUp;
-    }
 
     @Basic
     @Column(name = "createTime")
@@ -85,6 +76,15 @@ public class Order {
         this.message = message;
     }
 
+    public String getOrderState() {
+        return orderState;
+    }
+    @Basic
+    @Column(name = "orderState")
+    public void setOrderState(String orderState) {
+        this.orderState = orderState;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,7 +96,6 @@ public class Order {
         if (orderCode != null ? !orderCode.equals(order.orderCode) : order.orderCode != null) return false;
         if (number != null ? !number.equals(order.number) : order.number != null) return false;
         if (orderPrice != null ? !orderPrice.equals(order.orderPrice) : order.orderPrice != null) return false;
-        if (chalkUp != null ? !chalkUp.equals(order.chalkUp) : order.chalkUp != null) return false;
         if (createTime != null ? !createTime.equals(order.createTime) : order.createTime != null) return false;
         if (message != null ? !message.equals(order.message) : order.message != null) return false;
 
@@ -109,7 +108,6 @@ public class Order {
         result = 31 * result + (orderCode != null ? orderCode.hashCode() : 0);
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (orderPrice != null ? orderPrice.hashCode() : 0);
-        result = 31 * result + (chalkUp != null ? chalkUp.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
@@ -126,12 +124,12 @@ public class Order {
     }
 
     @ManyToOne
-    @JoinColumn(name = "sellUser", referencedColumnName = "id", nullable = false)
-    public User getSellUser() {
-        return sellUser;
+    @JoinColumn(name = "product", referencedColumnName = "id", nullable = false)
+    public Product getProduct() {
+        return product;
     }
 
-    public void setSellUser(User sellUser) {
-        this.sellUser = sellUser;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

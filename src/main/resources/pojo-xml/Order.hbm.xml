@@ -11,14 +11,14 @@
         <property name="orderCode" column="orderCode"/>
         <property name="number" column="number"/>
         <property name="orderPrice" column="orderPrice"/>
-        <property name="chalkUp" column="chalkUp"/>
         <property name="createTime" column="createTime"/>
         <property name="message" column="message"/>
+        <property name="orderState" column="orderState"/>
         <many-to-one name="buyUser" class="cn.lcvc.POJO.User" lazy="false">
             <column name="buyUser"/>
         </many-to-one>
-        <many-to-one name="sellUser" class="cn.lcvc.POJO.User" lazy="false">
-            <column name="sellUser"/>
+        <many-to-one name="product" class="cn.lcvc.POJO.Product" lazy="false">
+            <column name="product"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

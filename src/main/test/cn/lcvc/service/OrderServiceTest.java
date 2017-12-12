@@ -1,6 +1,7 @@
 package cn.lcvc.service;
 
 import cn.lcvc.POJO.Order;
+import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
@@ -38,9 +39,9 @@ public class OrderServiceTest extends BaseJunit {
 
         for (int i = 0; i < orders.size(); i++) {
             System.out.println("订单号 " + orders.get(i).getOrderCode());
-            System.out.println("出售人 " + orders.get(i).getSellUser().getTrueName());
+            System.out.println("商品 " + orders.get(i).getProduct().getProductName());
             System.out.println("购买人 " + orders.get(i).getBuyUser().getTrueName());
-            System.out.println("是否收获 " + orders.get(i).getChalkUp());
+            System.out.println("订单状态 " + orders.get(i).getOrderState());
         }
 
     }
@@ -54,5 +55,17 @@ public class OrderServiceTest extends BaseJunit {
 
     }
 
+    @Test
+    public void createOrder()
+    {
+        JsonResult jsonResult=orderService.createOrder(2,2,8,"明天中午");
+        System.out.println(jsonResult.getMessage());
+    }
+    @Test
+    public void orderPay()
+    {
+        JsonResult jsonResult=orderService.orderPay(1);
+        System.out.println(jsonResult.getMessage());
+    }
 
 }

@@ -33,7 +33,16 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     public void updateOrder(Order order) {
-        getSession().update(order);
+        Order oldOrder= (Order) getSession().load(Order.class,order.getId());
+        oldOrder.setOrderCode(order.getOrderCode());
+        oldOrder.setNumber(order.getNumber());
+        oldOrder.setProduct(order.getProduct());
+        oldOrder.setBuyUser(oldOrder.getBuyUser());
+        oldOrder.setOrderPrice(order.getOrderPrice());
+        oldOrder.setOrderState(order.getOrderState());
+        oldOrder.setCreateTime(order.getCreateTime());
+        oldOrder.setMessage(order.getMessage());
+        getSession().update(oldOrder);
     }
 
     public Order getOrder(Integer id) {

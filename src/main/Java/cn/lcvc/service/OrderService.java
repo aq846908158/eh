@@ -1,14 +1,19 @@
 package cn.lcvc.service;
 
 import cn.lcvc.POJO.Order;
+import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.OrderDao;
+import cn.lcvc.dao.ProductDao;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +30,90 @@ public class OrderService {
     private OrderDao orderDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private ProductDao productDao;
 
+    /**
+     * 创建订单
+     * @param productId 商品Id
+     * @param number 购买数量
+     * @param buyUserId session中登录信息
+     * @param orderMessage 订单备注
+     * @return JsonResult信息
+     */
+    public JsonResult createOrder(Integer productId,Integer number,Integer buyUserId,String orderMessage)
+    {
+        JsonResult jsonResult=new JsonResult();
+        Order order=new Order();
+        Product product=productDao.getProduct(productId);
+        User user=userDao.getUser(buyUserId);
 
+        if(product==null)
+        {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("商品不存在");
+            return  jsonResult;
+        }
+        if(user==null)
+        {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("用户不存在");
+            return  jsonResult;
+        }
 
+        product.setId(productId);
+        order.setProduct(product);
+        order.setNumber(number);
+        order.setBuyUser(user);
+        order.setOrderState("0");
+        order.setOrderPrice(number*product.getProductPrice());
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        Date date=new Date();
+        String orderCode=dateFormater.format(date)+product.getId()+user.getId();
+        order.setOrderCode(orderCode);
+        order.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        order.setMessage(orderMessage);
+        orderDao.addOrder(order);
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("创建成功");
+        return jsonResult;
+    }
+
+    /**
+     * 订单支付
+     * @param orderId 订单Id
+     * @return JsonResult信息
+     */
+    public JsonResult orderPay(Integer orderId)
+    {
+        JsonResult jsonResult=new JsonResult();
+        Order order=orderDao.getOrder(orderId);
+        if(order==null){
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("订单不存在");
+            return  jsonResult;
+        }
+        order.setOrderState("1");
+        orderDao.updateOrder(order);
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("付款成功");
+        return jsonResult;
+    }
+
+    public JsonResult orderMargePay(List<Order> orders)
+    {
+        JsonResult jsonResult=new JsonResult();
+        for (int i = 0; i < orders.size(); i++) {
+            Order order =  orders.get(i);
+            order.setOrderState("1");
+            if(order!=null&&order.getId()!=0) {
+                orderDao.updateOrder(order);
+            }
+        }
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("支付成功");
+        return  jsonResult;
+    }//!!!!!!!!!!!!!!!!!!!!库存问题未解决
     /**
      * 全站点订单管理,
      *@Author @wuruibao
@@ -45,10 +131,10 @@ public class OrderService {
             if(order.getOrderCode() != null && order.getOrderCode().trim().length() != 0) map.put("orderCode",order.getOrderCode().trim());
 
 
-            if (order.getSellUser() != null){
-                if(order.getSellUser().getUserName() != null && order.getSellUser().getUserName().trim().length() != 0){
-                    User sellUserId=userDao.getUserBy_OneColumn("userName",order.getSellUser().getUserName());
-                   if (sellUserId != null) map.put("sellUser",sellUserId);
+            if (order.getProduct() != null){
+                if(order.getProduct().getProductName() != null && order.getProduct().getProductName().trim().length() != 0){
+                    Product productId=productDao.getProductBy_OneColumn("productName",order.getProduct().getProductName());
+                   if (productId != null) map.put("product",productId);
                 }
             }
 
@@ -61,7 +147,7 @@ public class OrderService {
 
 
 
-            if(order.getChalkUp() != null) map.put("chalkUp",order.getChalkUp());
+            if(order.getOrderState() != null) map.put("orderState",order.getOrderState());
         }
 
 
