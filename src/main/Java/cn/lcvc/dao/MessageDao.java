@@ -18,7 +18,7 @@ public interface MessageDao {
      * @param_value需要查询的字段的值
      * @return 一个Message对象，null表示没查到
      */
-    public Message getMessageBy_OneColumn(String column, Object value);
+     Message getMessageBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -28,7 +28,7 @@ public interface MessageDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Message对象，null表示没查到
      */
-    public Message getMessageBy_TowColumn(String column1, Object value1, String column2, Object value2);
+     Message getMessageBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -37,5 +37,5 @@ public interface MessageDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<Message>集合，null表示没查到
      */
-    public List<Message> getMessageListOrderBy(String column, String orderBy);
+     List<Message> getMessageListOrderBy(String column, String orderBy);
 }

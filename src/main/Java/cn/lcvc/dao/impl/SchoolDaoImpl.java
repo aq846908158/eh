@@ -88,4 +88,16 @@ public class SchoolDaoImpl implements SchoolDao {
         }
         return null;
     }
+
+    public List<School> getSchoolBy_OneColumnLike(String column, String value) {
+        Criteria criteria=getSession().createCriteria(School.class);
+        criteria.add(Restrictions.like(column,"%"+value+"%"));
+        List<School> list=criteria.list();
+        if(list.size()!=0)
+        {
+            return list;
+        }
+
+        return null;
+    }
 }
