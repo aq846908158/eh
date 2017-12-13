@@ -67,7 +67,7 @@ public class UserServiceTest extends BaseJunit{
         System.out.println("Redis中存储的token是："+jedis.get( jsonResult.getItem().get("userId")+""));
         System.out.println(jsonResult.getErrorCode());
         System.out.println(jsonResult.getMessage());
-    }//通过
+    }//通过x
 
     @Test
     public void updateUserPassWord() throws Exception {
