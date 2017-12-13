@@ -18,7 +18,8 @@ public class MessageServiceTest extends  BaseJunit {
         User user=new User();
         product.setId(3);
         user.setId(4);
-        message.setText("信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批.!!!!!!!!!!!!!!!这个显卡可以wo是真的强，信号6的一批");
+        message.setText("完全OBJK");
+        message.setSuperCode("790930");
         message.setProduct(product);
         message.setUser(user);
         JsonResult jsonResult=messageService.registerMessage(message);
