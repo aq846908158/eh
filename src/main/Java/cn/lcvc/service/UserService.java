@@ -10,8 +10,11 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.util.ObjectIdMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,6 +209,14 @@ public class UserService{
 
             if(user.getUserPassword().equals(userPassword))
             {
+                Map<Object,Object> map=new HashMap<Object,Object>();
+                String token=creatToken(user);
+                map.put("token",token);
+                map.put("userId",user.getId());
+                Jedis jedis=new Jedis("localhost");
+                jedis.set(user.getId()+"",token);
+
+                jsonResult.setItem(map);
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("登录成功");
                 //修改最后登录时间
@@ -510,7 +521,13 @@ public class UserService{
         return  jsonResult;
     }
 
-
+    public String creatToken(User user)
+    {
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String token=dateFormater.format(new Date())+user.getId()+user.getSalt();
+        token=Md5.MD5(token);
+        return token;
+    }
 
 
 

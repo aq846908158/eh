@@ -8,6 +8,7 @@ import cn.lcvc.uitl.JsonResult;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,4 +69,13 @@ public class OrderServiceTest extends BaseJunit {
         System.out.println(jsonResult.getMessage());
     }
 
+    @Test
+    public void orderPayMerge()
+    {
+
+        JsonResult jsonResult=orderService.getAllOrderList();
+        List<Order> orders=jsonResult.getList();
+        JsonResult jsonResult1=orderService.orderMargePay(orders);
+        System.out.println(jsonResult1.getMessage());
+    }
 }

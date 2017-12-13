@@ -7,6 +7,7 @@ import cn.lcvc.dao.OrderDao;
 import cn.lcvc.dao.ProductDao;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
+import com.alibaba.fastjson.JSON;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,8 @@ public class OrderService {
     private UserDao userDao;
     @Autowired
     private ProductDao productDao;
-
+    @Autowired
+    private ShoppingCartItemService shoppingCartItemService;
     /**
      * 创建订单
      * @param productId 商品Id
@@ -93,6 +95,19 @@ public class OrderService {
             jsonResult.setMessage("订单不存在");
             return  jsonResult;
         }
+        if(!shoppingCartItemService.productNumberIs(order.getProduct().getId(),order.getNumber()))
+        {
+            jsonResult.setMessage("商品库存不足");
+            jsonResult.setErrorCode("500");
+            return jsonResult;
+        }
+
+        if(!order.getOrderState().equals("0"))
+        {
+            jsonResult.setMessage("商品【"+order.getProduct().getProductName()+"】已经支付,不可以再次支付");
+            jsonResult.setErrorCode("500");
+            return jsonResult;
+        }
         order.setOrderState("1");
         orderDao.updateOrder(order);
         jsonResult.setErrorCode("200");
@@ -100,9 +115,31 @@ public class OrderService {
         return jsonResult;
     }
 
+    /**
+     * 订单合并支付
+     * @param orders 订单List集合
+     * @return JsonResult信息
+     */
     public JsonResult orderMargePay(List<Order> orders)
     {
         JsonResult jsonResult=new JsonResult();
+
+        for (int i = 0; i < orders.size(); i++) {
+            Order order =  orders.get(i);
+            if(!shoppingCartItemService.productNumberIs(order.getProduct().getId(),order.getNumber()))
+            {
+                jsonResult.setMessage("商品【"+order.getProduct().getProductName()+"】库存不足,请修改购买数量或者删除订单再支付");
+                jsonResult.setErrorCode("500");
+                return jsonResult;
+            }
+            if(!order.getOrderState().equals("0"))
+            {
+                jsonResult.setMessage("商品【"+order.getProduct().getProductName()+"】已经支付,不可以再次支付");
+                jsonResult.setErrorCode("500");
+                return jsonResult;
+            }
+        }
+
         for (int i = 0; i < orders.size(); i++) {
             Order order =  orders.get(i);
             order.setOrderState("1");
@@ -113,7 +150,7 @@ public class OrderService {
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("支付成功");
         return  jsonResult;
-    }//!!!!!!!!!!!!!!!!!!!!库存问题未解决
+    }
     /**
      * 全站点订单管理,
      *@Author @wuruibao
@@ -171,6 +208,12 @@ public class OrderService {
         return  jsonResult;
     }
 
+    public  JsonResult getAllOrderList()
+    {
+        JsonResult jsonResult=new JsonResult();
+        jsonResult.setList(orderDao.getOrderList());
+        return jsonResult;
+    }
 
     /**
      *删除订单

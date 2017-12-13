@@ -20,6 +20,8 @@ public class ShoppingCartItemService {
     private ProductDao productDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private OrderService orderService;
 //--------------------------------------------------------------------------------------------
     /**
      * 已登录用户       购物车商品添加
@@ -290,10 +292,13 @@ public class ShoppingCartItemService {
         return jsonResult;
     }
 
-    public JsonResult shoppingCartSettle()
+    public JsonResult shoppingCartSettle(List<ShoppingCartItem> shoppingCartItems,String orderMessage)
     {
         JsonResult jsonResult=new JsonResult();
-
+        for (int i = 0; i < shoppingCartItems.size(); i++) {
+            ShoppingCartItem shoppingCartItem =  shoppingCartItems.get(i);
+            orderService.createOrder(shoppingCartItem.getId(),shoppingCartItem.getNumber(),shoppingCartItem.getUser().getId(),orderMessage);
+        }
         return  jsonResult;
     }
 

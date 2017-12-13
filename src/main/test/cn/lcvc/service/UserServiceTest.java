@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import redis.clients.jedis.Jedis;
 import sun.nio.cs.US_ASCII;
 
 import java.sql.Timestamp;
@@ -60,7 +61,10 @@ public class UserServiceTest extends BaseJunit{
 
     @Test
     public void login() throws Exception {
+        Jedis jedis=new Jedis("localhost");
         JsonResult jsonResult=userService.login("user1111","12345678");
+        System.out.println("传递到前台的token是："+jsonResult.getItem().get("token"));
+        System.out.println("Redis中存储的token是："+jedis.get( jsonResult.getItem().get("userId")+""));
         System.out.println(jsonResult.getErrorCode());
         System.out.println(jsonResult.getMessage());
     }//通过
@@ -102,6 +106,7 @@ public class UserServiceTest extends BaseJunit{
         JsonResult jsonResult=userService.getAllUser();
         List<User> users= (List<User>) jsonResult.getItem().get("users");
         System.out.println(users.size());
+
     }//通过
 
     @Test
