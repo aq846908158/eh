@@ -38,7 +38,7 @@ public class MessageService {
                 return  jsonResult;
             }
             if (message.getSuperCode() != null && message.getSuperCode().trim().length() ==6){ //如果父级留言代号不为空,则判断父级代号是否存在与message表中
-                Message message_SuperCode = messageDao.getMessageBy_OneColumn("superCode",message.getSuperCode());
+                Message message_SuperCode = messageDao.getMessageBy_OneColumn("code",message.getSuperCode());
                 if (message_SuperCode ==null){
                     jsonResult.setErrorCode("500");
                     jsonResult.setMessage("服务端:留言失败,请刷新页面后重试");
