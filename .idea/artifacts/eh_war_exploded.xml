@@ -7,6 +7,9 @@
           <element id="module-output" name="eh" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.auth0:java-jwt:3.2.0" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.10" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15on:1.55" />
           <element id="library" level="project" name="Maven: redis.clients:jedis:2.9.0" />
           <element id="library" level="project" name="Maven: org.apache.commons:commons-pool2:2.4.2" />
           <element id="library" level="project" name="Maven: org.springframework:spring-test:4.1.6.RELEASE" />

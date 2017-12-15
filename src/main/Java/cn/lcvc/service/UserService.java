@@ -4,6 +4,7 @@ import cn.lcvc.POJO.User;
 import cn.lcvc.dao.SchoolDao;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.DataCheck;
+import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
 import cn.lcvc.uitl.Md5;
 import com.alibaba.fastjson.JSON;
@@ -210,12 +211,17 @@ public class UserService{
             if(user.getUserPassword().equals(userPassword))
             {
                 Map<Object,Object> map=new HashMap<Object,Object>();
-                String token=creatToken(user);
+                String token="";
+                try {
+                     token= JWT.cretaToken(user);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
                 map.put("token",token);
                 map.put("userId",user.getId());
                 Jedis jedis=new Jedis("localhost");
-                jedis.set(user.getId()+"",token);
-
+                jedis.set(user.getId()+"_token",token);
                 jsonResult.setItem(map);
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("登录成功");

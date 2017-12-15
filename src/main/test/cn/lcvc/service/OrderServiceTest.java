@@ -78,4 +78,6 @@ public class OrderServiceTest extends BaseJunit {
         JsonResult jsonResult1=orderService.orderMargePay(orders);
         System.out.println(jsonResult1.getMessage());
     }
+
+
 }

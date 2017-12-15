@@ -2,6 +2,7 @@ package cn.lcvc.service;
 
 import cn.lcvc.POJO.School;
 import cn.lcvc.POJO.User;
+import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
 import cn.lcvc.uitl.Md5;
 import com.alibaba.fastjson.JSON;
@@ -63,10 +64,10 @@ public class UserServiceTest extends BaseJunit{
     public void login() throws Exception {
         Jedis jedis=new Jedis("localhost");
         JsonResult jsonResult=userService.login("user1111","12345678");
-        System.out.println("传递到前台的token是："+jsonResult.getItem().get("token"));
-        System.out.println("Redis中存储的token是："+jedis.get( jsonResult.getItem().get("userId")+""));
-        System.out.println(jsonResult.getErrorCode());
-        System.out.println(jsonResult.getMessage());
+        String userId=jsonResult.getItem().get("userId")+"";
+        String token=jedis.get(userId+"_token");
+        System.out.println(token);
+        System.out.println(JWT.verifyJwt(token));
     }//通过x
 
     @Test
