@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 
+/*
+ *@Author @wuruibao
+ *@Date 2017-12-13 14:17:52
+*/
 @Service
 public class MessageService {
 

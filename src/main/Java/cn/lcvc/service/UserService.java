@@ -213,16 +213,17 @@ public class UserService{
                 Map<Object,Object> map=new HashMap<Object,Object>();
                 String token="";
                 try {
-                     token= JWT.cretaToken(user);
+                     token= JWT.cretaToken(user); //签发Token
                 }catch (Exception e)
                 {
                     e.printStackTrace();
                 }
-                map.put("token",token);
-                map.put("userId",user.getId());
-                Jedis jedis=new Jedis("localhost");
-                jedis.set(user.getId()+"_token",token);
-                jsonResult.setItem(map);
+                map.put("token",token);//将Token放到map存进json中
+                map.put("userId",user.getId()); //将UserID 存到mao，然后通过json传到前台
+                Jedis jedis=new Jedis("localhost"); //连接本地的 Redis 服务
+                //System.out.println("服务正在运行: "+jedis.ping()); //查看服务是否运行
+                jedis.set(user.getId()+"_token",token); //将key = (id_token) value = (token) 键值对存入redis
+                jsonResult.setItem(map);//存入map集合
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("登录成功");
                 //修改最后登录时间

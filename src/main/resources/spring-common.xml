@@ -22,8 +22,8 @@
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
         <!-- 换成自己的数据库路径 -->
-        <!--<property name="url" value="jdbc:mysql://localhost:3306/eh"></property>-->
-        <property name="url" value="jdbc:mysql://192.168.23.123:3306/eh"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/eh"></property>
+        <!--<property name="url" value="jdbc:mysql://192.168.23.123:3306/eh"></property>-->
         <property name="username" value="root"></property>
         <property name="password" value="123456"></property>
     </bean>

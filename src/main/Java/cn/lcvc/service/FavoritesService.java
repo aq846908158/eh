@@ -6,6 +6,10 @@ import cn.lcvc.uitl.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/*
+ *@Author @wuruibao
+ *@Date 2017-12-13 14:18:00
+*/
 @Service
 public class FavoritesService {
     @Autowired
@@ -18,7 +22,7 @@ public class FavoritesService {
      * @param favorites
      * @return
      */
-    public JsonResult registerOrDeleteFavorites(Favorites favorites){
+    public JsonResult registerOrCancelFavorites(Favorites favorites){
         JsonResult jsonResult = new JsonResult();
 
         if (favorites != null){

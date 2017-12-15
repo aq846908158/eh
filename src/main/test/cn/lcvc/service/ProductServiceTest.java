@@ -80,7 +80,7 @@ public class ProductServiceTest extends BaseJunit{
     @Test
     public  void  deleteProductTest(){
         Product  product=new Product();
-        product.setId(-42);
+        product.setId(3);
 
         JsonResult jsonResult = productService.deleteProduct(product);
 

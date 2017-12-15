@@ -1,9 +1,11 @@
 package cn.lcvc.service;
 
 import cn.lcvc.POJO.Admin;
+import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -29,10 +31,16 @@ public class AdminServiceTest extends  BaseJunit {
     /*管理员登录功能测试成功*/
     @Test
     public  void loginAdminTest() throws  Exception{
-        JsonResult jsonResult=adminService.login("admin_wu","admin_wu");
-        Admin admin= (Admin) jsonResult.getItem().get("admin");
-        System.out.println(admin.getTrueName());
-        System.out.println(jsonResult.getMessage());
+        Jedis jedis = new Jedis("localhost");
+      //  JsonResult jsonResult=adminService.login("admin_wu","admin_wu");
+      //  String admiId=jsonResult.getItem().get("adminId")+"";
+      //  String  admin_token= (String) jsonResult.getItem().get("token");//前台token
+        String token=jedis.get(7+"_token");//redis的token
+
+      //  if (admin_token.equals(token)) System.out.println("验证成功");
+        System.out.println(JWT.verifyJwt(token));
+       // System.out.println(jsonResult.getMessage());
+        System.out.println(token);
 
     }
 

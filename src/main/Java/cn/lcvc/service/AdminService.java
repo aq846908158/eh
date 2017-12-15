@@ -3,19 +3,17 @@ package cn.lcvc.service;
 import cn.lcvc.POJO.Admin;
 import cn.lcvc.dao.AdminDao;
 import cn.lcvc.uitl.DataCheck;
+import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.security.provider.MD2;
-import sun.security.provider.MD5;
 import cn.lcvc.uitl.Md5;
+import redis.clients.jedis.Jedis;
 
 import javax.swing.*;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /*
  *@Author @wuruibao
@@ -55,9 +53,21 @@ public class AdminService {
             String loginPassword = password.concat(salt);
             String  md5PasswordOfLogin = Md5.MD5(loginPassword.trim());
             if (md5PasswordOfLogin.equals(admin.getUserPassword()) && username.equals(admin.getUserName())){//验证密码
+
+                String token = "";  //存token
+                try {
+                    token = JWT.cretaTokenOfAdmin(admin);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                map.put("token",token);
+                map.put("adminId",admin.getId());
+                Jedis jedis = new Jedis("localhost");//链接本地Redis
+                jedis.set(admin.getId()+"_token",token);//tonken存入Redis
+                jsonResult.setItem(map);
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("登录成功!");
-                map.put("admin",admin);
                 jsonResult.setItem(map);
             }else{
                 jsonResult.setErrorCode("500");
@@ -80,6 +90,7 @@ public class AdminService {
  * */
     public JsonResult  registerAdmin(Admin admin) {
         JsonResult jsonResult = new JsonResult();
+
         Admin admin_username=new Admin();
         if (admin.getUserName() != null && admin.getUserName().trim().length() !=0){
              admin_username=adminDao.getAdminByUserName(admin.getUserName().trim());

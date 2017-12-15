@@ -18,12 +18,12 @@ public class FavoritesServiceTest extends  BaseJunit {
         Favorites favorites=new Favorites();
         Product product = new Product();
         User user = new User();
-        product.setId(3);
-        user.setId(4);
+        product.setId(2);
+        user.setId(3);
         favorites.setProduct(product);
         favorites.setUser(user);
 
-        JsonResult jsonResult=favoritesService.registerOrDeleteFavorites(favorites);
+        JsonResult jsonResult=favoritesService.registerOrCancelFavorites(favorites);
 
         System.out.println(jsonResult.getMessage());
 
