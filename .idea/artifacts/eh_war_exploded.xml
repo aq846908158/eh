@@ -7,6 +7,7 @@
           <element id="module-output" name="eh" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.7" />
           <element id="library" level="project" name="Maven: com.auth0:java-jwt:3.2.0" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.10" />
           <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15on:1.55" />
