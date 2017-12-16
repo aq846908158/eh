@@ -309,7 +309,7 @@ public class ShoppingCartItemService {
             jsonResult.setMessage("结算失败,未选择任何商品");
             return  jsonResult;
         }
-        //判断库存
+        //判断库存s
         for (int i = 0; i < shoppingCartItems.size(); i++) {
             ShoppingCartItem shoppingCartItem =  shoppingCartItems.get(i);
             if(!productNumberIs(shoppingCartItem.getProduct().getId(),shoppingCartItem.getNumber()))
