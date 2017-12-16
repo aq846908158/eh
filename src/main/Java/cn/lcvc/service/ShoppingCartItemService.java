@@ -350,7 +350,7 @@ public class ShoppingCartItemService {
         if(ordersJson==null){
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("支付失败,未结算过任何商品");
-            return jsonResult;
+            return  jsonResult;
         }
         System.out.println(ordersJson);
         Gson gson=new Gson();
