@@ -63,7 +63,7 @@ public class UserServiceTest extends BaseJunit{
     @Test
     public void login() throws Exception {
         Jedis jedis=new Jedis("localhost");
-        JsonResult jsonResult=userService.login("user1111","12345678");
+        JsonResult jsonResult=userService.login("user111","12345678");
         String userId=jsonResult.getItem().get("userId")+"";
         String token=jedis.get(userId+"_token");
         System.out.println(token);

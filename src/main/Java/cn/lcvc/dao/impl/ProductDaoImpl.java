@@ -59,6 +59,7 @@ public class ProductDaoImpl implements ProductDao {
         {
             return (Product)list.get(0);
         }
+        System.out.println("查询失败"+id);
         return null;
     }
 

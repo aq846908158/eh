@@ -1,11 +1,16 @@
 package cn.lcvc.service;
 
+import cn.lcvc.POJO.Order;
 import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.ShoppingCartItem;
 import cn.lcvc.POJO.User;
 import cn.lcvc.uitl.JsonResult;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.aspectj.weaver.ast.Or;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,6 +152,23 @@ public class ShoppingCartServiceTest extends BaseJunit {
         User user=new User();
         user.setId(8);
         JsonResult jsonResult=shoppingCartItemService.sessionShoppingCartToShoppingCart(sessionShoppingCart,user);
+        System.out.println(jsonResult.getMessage());
+    }
+
+    @Test
+    public void shoppingCartSettle()
+    {
+        User user=new User();
+        user.setId(7);
+        List<ShoppingCartItem> shoppingCartItems=shoppingCartItemService.getShoppingCartItemList(user).getList();
+        JsonResult jsonResult=shoppingCartItemService.shoppingCartSettle(shoppingCartItems,"我草草");
+        System.out.println(jsonResult.getMessage());
+    }
+
+    @Test
+    public  void shoppingCartPay()
+    {
+        JsonResult jsonResult=shoppingCartItemService.shoppingCartSettleAndPay("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTExIiwiaXNzIjoiY29tLmVoIiwiZXhwIjoxNTEzNjgzMDY3LCJ1c2VySWQiOjcsImlhdCI6MTUxMzQyMzg2N30.5AVu3EtoqFXw2yMzJSljKW_HgeaSTnqVpXK5m_8jMfk");
         System.out.println(jsonResult.getMessage());
     }
 }

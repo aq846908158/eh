@@ -111,10 +111,14 @@ public class OrderService {
             jsonResult.setErrorCode("500");
             return jsonResult;
         }
+        Product product=order.getProduct();
+        product.setProductNumber(product.getProductNumber()-order.getNumber());
+        productDao.updateProduct(product);
         order.setOrderState("1");
         orderDao.updateOrder(order);
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("付款成功");
+
         return jsonResult;
     }
 
@@ -147,6 +151,9 @@ public class OrderService {
             Order order =  orders.get(i);
             order.setOrderState("1");
             if(order!=null&&order.getId()!=0) {
+                Product product=order.getProduct();
+                product.setProductNumber(product.getProductNumber()-order.getNumber());
+                productDao.updateProduct(product);
                 orderDao.updateOrder(order);
             }
         }
@@ -211,6 +218,10 @@ public class OrderService {
         return  jsonResult;
     }
 
+    /**
+     * 获取所有订单
+     * @return 获取到的List存在 JsonResult.list中
+     */
     public  JsonResult getAllOrderList()
     {
         JsonResult jsonResult=new JsonResult();

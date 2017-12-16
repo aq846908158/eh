@@ -1,16 +1,19 @@
 package cn.lcvc.service;
 
-import cn.lcvc.POJO.Product;
-import cn.lcvc.POJO.ShoppingCartItem;
-import cn.lcvc.POJO.User;
+import cn.lcvc.POJO.*;
 import cn.lcvc.dao.ProductDao;
 import cn.lcvc.dao.ShoppingCartItemDao;
 import cn.lcvc.dao.UserDao;
+import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -293,17 +296,83 @@ public class ShoppingCartItemService {
         return jsonResult;
     }
 
+
     public JsonResult shoppingCartSettle(List<ShoppingCartItem> shoppingCartItems,String orderMessage)
     {
         JsonResult jsonResult=new JsonResult();
+        Jedis jedis=new Jedis("localhost");
+        Gson gson=new Gson();
+        List<Order> orders=new ArrayList<>();
+        if(shoppingCartItems.size()==0)
+        {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("结算失败,未选择任何商品");
+            return  jsonResult;
+        }
+        //判断库存
         for (int i = 0; i < shoppingCartItems.size(); i++) {
             ShoppingCartItem shoppingCartItem =  shoppingCartItems.get(i);
-            orderService.createOrder(shoppingCartItem.getId(),shoppingCartItem.getNumber(),shoppingCartItem.getUser().getId(),orderMessage);
+            if(!productNumberIs(shoppingCartItem.getProduct().getId(),shoppingCartItem.getNumber()))
+            {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("结算失败,商品【"+shoppingCartItem.getProduct().getProductName()+"】库存不足");
+                return  jsonResult;
+            }
         }
+
+        for (int i = 0; i < shoppingCartItems.size(); i++) {
+            ShoppingCartItem shoppingCartItem =  shoppingCartItems.get(i);
+            JsonResult orderResult=orderService.createOrder(shoppingCartItem.getProduct().getId(),shoppingCartItem.getNumber(),shoppingCartItem.getUser().getId(),orderMessage);
+            orders.add((Order) orderResult.getItem().get("order"));
+            shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);
+        }
+        String ordersJson=gson.toJson(orders);
+        jedis.set(orders.get(0).getBuyUser().getId()+"_shoppingCartSettle",ordersJson);
+
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("结算成功，订单已生成");
+
         return  jsonResult;
     }
 
-
+    /**
+     * 购物车结算后 订单合并支付
+     * @param JWT 用户Token
+     * @return 支付信息
+     */
+    public JsonResult shoppingCartSettleAndPay(String JWT)
+    {
+        Jedis jedis=new Jedis("localhost");
+        JsonResult jsonResult=new JsonResult();
+        TokenMessage t= cn.lcvc.uitl.JWT.getPayloadDecoder(JWT);
+        System.out.println(t.getUserId());
+        String ordersJson=jedis.get(t.getUserId()+"_shoppingCartSettle");
+        if(ordersJson==null){
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("支付失败,未结算过任何商品");
+            return jsonResult;
+        }
+        System.out.println(ordersJson);
+        Gson gson=new Gson();
+        List<Order> orders=gson.fromJson(ordersJson,new TypeToken<List<Order>>(){}.getType());
+        for (int i = 0; i < orders.size(); i++) {
+            Order order =  orders.get(i);
+            if(!productNumberIs(order.getProduct().getId(),order.getNumber()))
+            {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("支付失败,商品【"+order.getProduct().getProductName()+"】库存不足");
+                return jsonResult;
+            }
+        }
+        if (orders.size()!=0)
+        {
+            orderService.orderMargePay(orders);
+        }
+        jedis.del(t.getUserId()+"_shoppingCartSettle");
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("支付成功");
+        return jsonResult;
+    }
 
 
 
