@@ -7,6 +7,7 @@ import cn.lcvc.dao.ProductDao;
 import cn.lcvc.dao.ShoppingCartItemDao;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -301,6 +302,7 @@ public class ShoppingCartItemService {
         }
         return  jsonResult;
     }
+
 
 
 

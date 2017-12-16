@@ -76,6 +76,9 @@ public class OrderService {
         order.setCreateTime(new Timestamp(System.currentTimeMillis()));
         order.setMessage(orderMessage);
         orderDao.addOrder(order);
+        Map<Object,Object> temp=new HashMap<>();
+        temp.put("order",order);
+        jsonResult.setItem(temp);
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("创建成功");
         return jsonResult;
