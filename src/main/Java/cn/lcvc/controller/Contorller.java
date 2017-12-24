@@ -15,7 +15,13 @@ public class Contorller {
 
     @RequestMapping("/getAllUser")
     public String getAllUser(HttpServletRequest request) {
+        System.out.println("111111--------------------------");
+        return "/index";
+    }
 
+    @RequestMapping("/getAllUser1")
+    public String getAllUser1(HttpServletRequest request) {
+        System.out.println("22222--------------------------");
         return "/index";
     }
 }
