@@ -25,6 +25,17 @@ public class AdminService {
     @Autowired
     private AdminDao adminDao;
 
+
+    public Admin getAdmin(Integer id)
+    {
+        Admin admin=null;
+        if(id!=null&&id!=0) {
+          admin  = adminDao.getAdmin(id);
+        }
+        return  admin;
+    }
+
+
     /*
     * 管理员登录
     * @param username 账户名
@@ -37,13 +48,13 @@ public class AdminService {
 
         if (username == null || username.trim().length() == 0){
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("请输入账户名.");
+            jsonResult.setMessage("请输入账户名");
             return  jsonResult;
         }
 
         if(password == null || password.trim().length() == 0){
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("请输入密码.");
+            jsonResult.setMessage("请输入密码");
             return  jsonResult;
         }
         //获取登录对象
@@ -67,16 +78,16 @@ public class AdminService {
                 jedis.set(admin.getId()+"_token",token);//tonken存入Redis
                 jsonResult.setItem(map);
                 jsonResult.setErrorCode("200");
-                jsonResult.setMessage("登录成功!");
+                jsonResult.setMessage("登录成功");
                 jsonResult.setItem(map);
             }else{
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("密码错误，请重试.");
+                jsonResult.setMessage("密码错误，请重试");
             }
 
         }else{
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("账户不存在，请重试.");
+            jsonResult.setMessage("账户不存在，请重试");
         }
 
 
@@ -97,18 +108,18 @@ public class AdminService {
         }
         if (admin_username != null){
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("账户名已存在.请重试.");
+            jsonResult.setMessage("账户名已存在.请重试");
             return jsonResult;
         }
         if (admin.getUserName() != null) {
             if (admin.getUserName().trim().length() < 6 || admin.getUserName().trim().length() > 32) {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("账户名长度在6-32位之间.");
+                jsonResult.setMessage("账户名长度在6-32位之间");
                 return jsonResult;
             }
         } else {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("请输入账户名.");
+            jsonResult.setMessage("请输入账户名");
             return jsonResult;
         }
       /*  if (admin.getUserPassword() != null) {

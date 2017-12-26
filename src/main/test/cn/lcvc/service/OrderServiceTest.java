@@ -50,7 +50,7 @@ public class OrderServiceTest extends BaseJunit {
     /*订单删除 100%*/
     @Test
     public void deleteOrderTest() {
-    JsonResult jsonResult=orderService.deleteOrder(1);
+    JsonResult jsonResult=orderService.deleteOrder(4);
 
     System.out.println("删除结果: "+jsonResult.getMessage());
 

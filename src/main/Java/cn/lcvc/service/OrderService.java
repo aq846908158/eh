@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /*
@@ -177,42 +174,49 @@ public class OrderService {
             //对执行数据库操作的SQL语句 ，String类型要执行trim(),以免出现异常
             if(order.getOrderCode() != null && order.getOrderCode().trim().length() != 0) map.put("orderCode",order.getOrderCode().trim());
 
-
+            //添加根据商品查询条件
             if (order.getProduct() != null){
                 if(order.getProduct().getProductName() != null && order.getProduct().getProductName().trim().length() != 0){
                     Product productId=productDao.getProductBy_OneColumn("productName",order.getProduct().getProductName());
                    if (productId != null) map.put("product",productId);
+
                 }
             }
-
+            //添加根据购买者查询条件
           if (order.getBuyUser() != null){
                if(order.getBuyUser().getUserName() != null && order.getBuyUser().getUserName().trim().length() != 0){
                    User buyUserId=userDao.getUserBy_OneColumn("userName",order.getBuyUser().getUserName());
-                   if (buyUserId != null) map.put("buyUser",buyUserId);
+                   map.put("buyUser",buyUserId);
                }
            }
+            //添加根据订单状态查询条件
+            if(order.getOrderState() != null&& order.getOrderState().trim().length()!=0) map.put("orderState",order.getOrderState());
 
-
-
-            if(order.getOrderState() != null) map.put("orderState",order.getOrderState());
+            //添加根据订单号查询条件
+            if (order.getOrderCode() != null && order.getOrderCode().trim().length()!=0){
+                map.put("orderCode",order.getOrderCode());
+            }
         }
 
 
         if(lowOrderPrice != null && lowOrderPrice > 0.00) map.put("lowOrderPrice",lowOrderPrice);
         if(heightOrderPrice != null && heightOrderPrice > 0.00) map.put("heightOrderPrice",heightOrderPrice);
+        List<Order> orders=new ArrayList<>();
 
-        List<Order> orders=orderDao.getOrder(Order.class,map);
+//        for (Map.Entry<String,Object> entry: map.entrySet()) {
+//            System.out.println("key:"+entry.getKey());
+//            System.out.println("value:"+entry.getValue());
+//        }
 
+            orders = orderDao.getOrder(Order.class, map,0,0);
 
         if (orders.size() > 0){
-            map_order.put("order",orders);
-
             jsonResult.setErrorCode("200");
-            jsonResult.setMessage("查询成功.");
-            jsonResult.setItem(map_order);
+            jsonResult.setMessage("查询成功");
+            jsonResult.setList(orders);
         }else {
-            jsonResult.setMessage("500");
-            jsonResult.setMessage("无数据或出错.");
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("无数据或出错");
         }
 
         return  jsonResult;
@@ -238,8 +242,6 @@ public class OrderService {
     */
     public  JsonResult deleteOrder(Integer id){
         JsonResult jsonResult = new JsonResult();
-
-
         if (id != null) {
             Order  order=orderDao.getOrder(id);
             if (order != null) {
@@ -252,22 +254,18 @@ public class OrderService {
             if (orderDao.getOrder(id) == null){
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("删除成功.");
+                return  jsonResult;
             }else {
                 jsonResult.setErrorCode("500");
                 jsonResult.setMessage("删除失败.");
+                return  jsonResult;
             }
         }else {
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("删除异常.");
+            return  jsonResult;
         }
 
-
-
-
-
-
-
-        return  jsonResult;
     }
 
 

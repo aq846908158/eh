@@ -7,7 +7,7 @@
 <body>
 <h2>Hello World!</h2>
 
-<form action="<%=basePath%>user/login/" method="get">
+<form action="<%=basePath%>user/login/" method="post">
     <input name="name">
 
     <input type="submit" value="提交">

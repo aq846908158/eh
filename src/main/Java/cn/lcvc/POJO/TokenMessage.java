@@ -4,7 +4,8 @@ public class TokenMessage {
     private String sub;//主题
     private String iss;//发行者
     private String exp;//过期时间
-    private String userId;//userId
+    private Integer userId;//userId
+    private Integer adminId;//adminId
     private String iat ;//发行时间
     public String getSub() {
         return sub;
@@ -30,11 +31,12 @@ public class TokenMessage {
         this.exp = exp;
     }
 
-    public String getUserId() {
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserid(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -44,5 +46,13 @@ public class TokenMessage {
 
     public void setIat(String iat) {
         this.iat = iat;
+    }
+
+    public Integer getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
     }
 }

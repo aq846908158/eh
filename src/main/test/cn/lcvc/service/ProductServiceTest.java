@@ -19,11 +19,11 @@ public class ProductServiceTest extends BaseJunit{
     public void issueProduct()
     {
         ProductType productType=new ProductType();
-        productType.setId(3);
+        productType.setId(1);
         School school=new School();
         school.setId(1);
         User user=new User();
-        user.setId(8);
+        user.setId(2);
         Product product =new Product();
         product.setProductName("显卡");
         product.setProductType(productType);

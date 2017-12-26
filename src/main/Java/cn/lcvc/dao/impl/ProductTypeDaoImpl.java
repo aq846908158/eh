@@ -66,13 +66,11 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
             }
             criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
         }
-
         try {
             productTypeArrayList = criteria.list();
         }catch (Exception e){
             e.getStackTrace();
         }
-
         return productTypeArrayList;
     }
 

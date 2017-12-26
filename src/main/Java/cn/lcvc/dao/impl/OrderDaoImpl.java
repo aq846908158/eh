@@ -29,7 +29,9 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     public void deleteOrder(Order order) {
-        getSession().delete(order);
+        getSession().delete(getSession().load(Order.class,order.getId()));
+        getSession().flush();
+
     }
 
     public void updateOrder(Order order) {
@@ -99,7 +101,7 @@ public class OrderDaoImpl implements OrderDao {
         return null;
     }
 
-    public List<Order> getOrder(Object object, Map<String, Object> map) {
+    public List<Order> getOrder(Object object, Map<String, Object> map,int firstResult,int pageSize) {
         List<Order> list =new ArrayList<Order>();
         Criteria criteria=getSession().createCriteria((Class) object);
 
@@ -112,10 +114,13 @@ public class OrderDaoImpl implements OrderDao {
                 criteria.add(Restrictions.like((String) entry.getKey(), "%"+entry.getValue()+"%")); //订单号模糊查询
                 continue;
             }
+
                 criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
 
         }
         try{
+            criteria.setFirstResult(firstResult);
+            criteria.setMaxResults(pageSize);
             list=criteria.list();
         }catch (Exception e){
             e.printStackTrace();
