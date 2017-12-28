@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.lcvc.POJO.Admin" table="admin" schema="eh">
+        <id name="id" column="id">
+            <generator class="native" />
+        </id>
+        <property name="userName" column="userName"/>
+        <property name="userPassword" column="userPassword"/>
+        <property name="salt" column="salt"/>
+        <property name="trueName" column="trueName"/>
+        <property name="phone" column="phone"/>
+        <property name="email" column="email"/>
+        <property name="createTime" column="createTime"/>
+        <property name="lastTime" column="lastTime"/>
+        <property name="loginState" column="loginState"/>
+        <property name="loginNum" column="loginNum"/>
+        <property name="title" column="title"/>
+    </class>
+</hibernate-mapping>

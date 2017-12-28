@@ -101,7 +101,7 @@ public class OrderDaoImpl implements OrderDao {
         return null;
     }
 
-    public List<Order> getOrder(Object object, Map<String, Object> map,int firstResult,int pageSize) {
+    public List<Order> getOrder(Object object, Map<String, Object> map) {
         List<Order> list =new ArrayList<Order>();
         Criteria criteria=getSession().createCriteria((Class) object);
 
@@ -119,8 +119,6 @@ public class OrderDaoImpl implements OrderDao {
 
         }
         try{
-            criteria.setFirstResult(firstResult);
-            criteria.setMaxResults(pageSize);
             list=criteria.list();
         }catch (Exception e){
             e.printStackTrace();

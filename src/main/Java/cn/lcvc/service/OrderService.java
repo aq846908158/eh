@@ -208,7 +208,7 @@ public class OrderService {
 //            System.out.println("value:"+entry.getValue());
 //        }
 
-            orders = orderDao.getOrder(Order.class, map,0,0);
+            orders = orderDao.getOrder(Order.class, map);
 
         if (orders.size() > 0){
             jsonResult.setErrorCode("200");

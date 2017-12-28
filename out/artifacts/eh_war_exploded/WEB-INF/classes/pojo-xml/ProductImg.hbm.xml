@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.lcvc.POJO.ProductImg" table="productimg" schema="eh">
+        <id name="id" column="id">
+            <generator class="native" />
+        </id>
+        <property name="imgUrl" column="imgUrl"/>
+        <many-to-one name="product" class="cn.lcvc.POJO.Product" lazy="false">
+            <column name="product"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.lcvc.POJO.Product" table="product" schema="eh">
+        <id name="id" column="id">
+            <generator class="native" />
+        </id>
+        <property name="productName" column="productName"/>
+        <property name="productNumber" column="productNumber"/>
+        <property name="productPrice" column="productPrice"/>
+        <property name="productIntroduce" column="productIntroduce"/>
+        <property name="degree" column="degree"/>
+        <property name="grounding" column="grounding"/>
+        <property name="buyTime" column="buyTime"/>
+        <property name="expire" column="expire"/>
+        <property name="seeNumber" column="seeNumber"/>
+        <property name="criateTime" column="criateTime"/>
+        <property name="state" column="state"/>
+        <many-to-one name="productType" class="cn.lcvc.POJO.ProductType" lazy="false">
+            <column name="productType"/>
+        </many-to-one>
+        <many-to-one name="school" class="cn.lcvc.POJO.School" lazy="false">
+            <column name="school" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="user" class="cn.lcvc.POJO.User" lazy="false">
+            <column name="user"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>
