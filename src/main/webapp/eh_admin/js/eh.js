@@ -16,6 +16,10 @@ function getheaderMessage() {
                 $("#adminTitle").html(data.item.title);
 
             }
+            if (data.errorCode == "501"){
+                layer.msg("服务器炸了！！！");
+                window.location.href="login.html";
+            }
         },
         error:function () {
             layer.msg("服务器繁忙,请稍后再试");

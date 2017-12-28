@@ -7,15 +7,15 @@ import java.util.Map;
 
 public interface AdminDao {
 
-    public void addAdmin(Admin admin);
+     void addAdmin(Admin admin);
 
-    public void deleteAdmin(Admin admin);
+     void deleteAdmin(Admin admin);
 
-    public void updateAdmin(Admin admin);
+     void updateAdmin(Admin admin);
 
-    public Admin getAdmin(Integer id);
+     Admin getAdmin(Integer id);
 
-    public List<Admin> getAdminList();
+     List<Admin> getAdminList();
 
     /**
      * @return 一个Admin对象，null表示没查到
@@ -24,7 +24,7 @@ public interface AdminDao {
      * @param_column需要查询的字段
      * @param_value需要查询的字段的值
      */
-    public Admin getAdminBy_OneColumn(String column, Object value);
+     Admin getAdminBy_OneColumn(String column, Object value);
 
     /**
      * @return 一个Admin对象，null表示没查到
@@ -35,7 +35,7 @@ public interface AdminDao {
      * @param_ column1需要查询的第二个字段
      * @param_ value1需要查询的第二个字段的值
      */
-    public Admin getAdminBy_TowColumn(String column1, Object value1, String column2, Object value2);
+    Admin getAdminBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @return 一个有序List<Admin>集合，null表示没查到
@@ -44,7 +44,7 @@ public interface AdminDao {
      * @param_column排序所依据的字段
      * @param_orderBy排序规则 如"asc","desc"
      */
-    public List<Admin> getAdminListOrderBy(String column, String orderBy);
+     List<Admin> getAdminListOrderBy(String column, String orderBy);
 
     /**
      * @param username 账户名，数据库唯一值
@@ -53,7 +53,7 @@ public interface AdminDao {
      * 获取管理员登录信息 ，获取对象中的salt和userpassword属性，用于登录验证；亦或可以判断username是否存在
      * @
      */
-    public Admin getAdminByUserName(String username);
+     Admin getAdminByUserName(String username);
 
     /**
      * 获取数据库admin表中userName=admin.userName && id=admin.id的实体
@@ -63,7 +63,7 @@ public interface AdminDao {
      * @Author @wuruibao
      * @Date 2017/12/2 23:00
      */
-    public List<Admin> getAdminByUserNameInId(Admin admin);
+     List<Admin> getAdminByUserNameInId(Admin admin);
 
 
     /**
@@ -73,6 +73,7 @@ public interface AdminDao {
      *@params
      *@return
     */
-    public List<Admin> queryAllAdminManage(Object object, Map<String, String> map);
+     List<Admin> queryAllAdminManage(Object object, Map<String, Object> map);
 
+    Admin getAdminInfo(String sql);
 }

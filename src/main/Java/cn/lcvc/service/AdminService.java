@@ -1,19 +1,22 @@
 package cn.lcvc.service;
 
 import cn.lcvc.POJO.Admin;
+import cn.lcvc.POJO.AdminPermissions;
 import cn.lcvc.dao.AdminDao;
+import cn.lcvc.dao.AdminPermissionsDao;
 import cn.lcvc.uitl.DataCheck;
 import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
+import cn.lcvc.uitl.Md5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.lcvc.uitl.Md5;
 import redis.clients.jedis.Jedis;
 
-import javax.swing.*;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*
  *@Author @wuruibao
@@ -24,7 +27,8 @@ public class AdminService {
 
     @Autowired
     private AdminDao adminDao;
-
+    @Autowired
+    private AdminPermissionsDao adminPermissionsDao;
 
     public Admin getAdmin(Integer id)
     {
@@ -41,7 +45,7 @@ public class AdminService {
     * @param username 账户名
     * @param pasword 密码
     * */
-    public JsonResult login(String username,String password ){
+    public JsonResult login(String username, String password ){
 
         JsonResult jsonResult=new JsonResult();
         Map<Object,Object> map= new HashMap<Object, Object>();
@@ -58,7 +62,7 @@ public class AdminService {
             return  jsonResult;
         }
         //获取登录对象
-        Admin  admin=adminDao.getAdminByUserName(username.trim());
+        Admin admin=adminDao.getAdminByUserName(username.trim());
         if (admin != null){
             String salt=admin.getSalt();
             String loginPassword = password.concat(salt);
@@ -99,29 +103,31 @@ public class AdminService {
  * @param admin 管理员实体
  *
  * */
-    public JsonResult  registerAdmin(Admin admin) {
+    public JsonResult registerAdmin(Admin admin) {
         JsonResult jsonResult = new JsonResult();
 
         Admin admin_username=new Admin();
-        if (admin.getUserName() != null && admin.getUserName().trim().length() !=0){
+        if (admin.getUserName() != null || admin.getUserName().trim().length() !=0){
              admin_username=adminDao.getAdminByUserName(admin.getUserName().trim());
         }
+
         if (admin_username != null){
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("账户名已存在.请重试");
+            jsonResult.setMessage("服务端：账户名已存在.请重试");
             return jsonResult;
         }
-        if (admin.getUserName() != null) {
-            if (admin.getUserName().trim().length() < 6 || admin.getUserName().trim().length() > 32) {
-                jsonResult.setErrorCode("500");
-                jsonResult.setMessage("账户名长度在6-32位之间");
-                return jsonResult;
-            }
-        } else {
+
+        if (admin.getUserName() == null || admin.getUserName().length() == 0) {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("请输入账户名");
+            jsonResult.setMessage("服务端：请输入账户名");
+            return jsonResult;
+
+        } else if (admin.getUserName().trim().length() < 6 || admin.getUserName().trim().length() > 32) {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：账户名长度在6-32位之间");
             return jsonResult;
         }
+
       /*  if (admin.getUserPassword() != null) {
             if (admin.getUserPassword().length() <= 8 || admin.getUserPassword().length() >= 32) {
                 jsonResult.setErrorCode("500");
@@ -138,52 +144,56 @@ public class AdminService {
             if (DataCheck.isTrueName(admin.getTrueName())){
                 if (admin.getTrueName().trim().length() <  2 || admin.getTrueName().trim().length() > 4) {
                     jsonResult.setErrorCode("500");
-                    jsonResult.setMessage("真实姓名长度在1-4位之间.");
+                    jsonResult.setMessage("服务端：真实姓名长度在1-4位之间.");
                     return jsonResult;
                 }
             }else {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("请输入真实姓名.");
+                jsonResult.setMessage("服务端：请输入真实姓名.");
                 return jsonResult;
             }
 
         } else {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("请输入真实姓名.");
+            jsonResult.setMessage("服务端：请输入真实姓名.");
             return jsonResult;
         }
 
-        if (admin.getEmail() != null) {
+      /*  if (admin.getEmail() != null) {
 
             if (DataCheck.isEmailNO(admin.getEmail())) {
                 if (admin.getEmail().trim().length() < 8 || admin.getEmail().trim().length() > 30) {
                     jsonResult.setErrorCode("500");
-                    jsonResult.setMessage("邮箱长度8-30位之间.");
+                    jsonResult.setMessage("服务端：邮箱长度8-30位之间.");
                     return jsonResult;
                 }
             } else {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("请输入正确Email格式.");
+                jsonResult.setMessage("服务端：请输入正确Email格式.");
                 return jsonResult;
             }
 
         } else {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("请输入Email.");
+            jsonResult.setMessage("服务端：请输入Email.");
             return jsonResult;
-        }
+        }*/
 
-        String salt=Md5.getRandomString(32);//盐值
+        String salt= Md5.getRandomString(32);//盐值
         String password=admin.getUserName().concat(salt);
-        String md5password=Md5.MD5(password);//默认密码为登录账户名.
+        String md5password= Md5.MD5(password);//默认密码为登录账户名.
 
         admin.setSalt(salt);//添加盐值
         admin.setUserPassword(md5password);//默认密码
         admin.setCreateTime(new Timestamp(System.currentTimeMillis()));//创建时间
+        admin.setLastTime(new Timestamp(System.currentTimeMillis()));//最后登录时间
+        admin.setLoginState(0);
+        admin.setLoginNum(0);
+        admin.setTitle(null);
 
         adminDao.addAdmin(admin);
         jsonResult.setErrorCode("200");
-        jsonResult.setMessage("添加成功.");
+        jsonResult.setMessage("服务端：添加成功.");
             return jsonResult;
 
     }
@@ -195,12 +205,12 @@ public class AdminService {
      * @param newPassword 新密码
      *@return
     */
-    public JsonResult updateAdminPassword(Admin admin,String oldPassword,String newPassword){
+    public JsonResult updateAdminPassword(Admin admin, String oldPassword, String newPassword){
         JsonResult jsonResult = new JsonResult();
 
         Admin admin1=adminDao.getAdmin(admin.getId());
 
-         oldPassword=Md5.MD5(oldPassword.concat(admin1.getSalt()));//旧密码+盐值
+         oldPassword= Md5.MD5(oldPassword.concat(admin1.getSalt()));//旧密码+盐值
 
         if (!admin1.getUserPassword().equals(oldPassword)) {
             jsonResult.setErrorCode("500");
@@ -208,9 +218,9 @@ public class AdminService {
             return jsonResult;
         }
 
-        String salt=Md5.getRandomString(32);//盐值
+        String salt= Md5.getRandomString(32);//盐值
         String password=newPassword.concat(salt);
-        String md5password=Md5.MD5(password);
+        String md5password= Md5.MD5(password);
 
         admin1.setSalt(salt);
         admin1.setUserPassword(md5password);
@@ -218,6 +228,30 @@ public class AdminService {
         adminDao.updateAdmin(admin1);
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("修改成功.");
+        return  jsonResult;
+    }
+
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public JsonResult getAdminInfo(Integer id){
+       JsonResult jsonResult = new JsonResult();
+        Map<Object,Object> map_admin= new HashMap<Object, Object>(); //存放查询所得数据
+        String sql="SELECT id,userName,trueName,phone,email FROM Admin  WHERE id="+id;//使用SQL原生查询
+        Admin admin=adminDao.getAdminInfo(sql);
+        if (admin != null){
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("查询成功.");
+            map_admin.put("admin",admin);
+            jsonResult.setItem(map_admin);
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：无数据.");
+        }
+
         return  jsonResult;
     }
 
@@ -232,14 +266,68 @@ public class AdminService {
 
         /*本方法假设所有字段通过验证,验证将在controller实现*/
 
-        if (adminDao.getAdminByUserNameInId(admin).size() >0) {
-            jsonResult.setErrorCode("500");
-            jsonResult.setMessage("账户名已存在.请重试.");
+        if (admin !=null){
+            if (admin.getTrueName() != null) {
+                if (DataCheck.isTrueName(admin.getTrueName())){
+                    if (admin.getTrueName().trim().length() <  2 || admin.getTrueName().trim().length() > 4) {
+                        jsonResult.setErrorCode("500");
+                        jsonResult.setMessage("服务端：真实姓名长度在1-4位之间.");
+                        return jsonResult;
+                    }
+                }else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端：请输入真实姓名.");
+                    return jsonResult;
+                }
+
+            } else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("服务端：请输入真实姓名.");
+                return jsonResult;
+            }
+
+
+            if (admin.getPhone() != null){
+                if (admin.getPhone().trim().length() != 11){
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端：请输入正确的手机号.");
+                    return jsonResult;
+                }
+            }
+
+            if (admin.getEmail() != null) {
+                if (DataCheck.isEmailNO(admin.getEmail())) {
+                    if (admin.getEmail().trim().length() < 8 || admin.getEmail().trim().length() > 30) {
+                        jsonResult.setErrorCode("500");
+                        jsonResult.setMessage("服务端：邮箱长度8-30位之间.");
+                        return jsonResult;
+                    }
+                } else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端：请输入正确Email格式.");
+                    return jsonResult;
+                }
+
+            } else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("服务端：请输入Email.");
+                return jsonResult;
+            }
+
 
         }else {
-            Admin oldadmin = adminDao.getAdmin(admin.getId());
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：无法修改.请刷新后重试.");
+            return  jsonResult;
+        }
 
-            oldadmin.setUserName(admin.getUserName().trim());
+
+        if (adminDao.getAdminByUserNameInId(admin).size() >0) {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：账户名已存在.请重试.");
+        }else {
+            Admin oldadmin = adminDao.getAdmin(admin.getId());
+           // oldadmin.setUserName(admin.getUserName().trim());不允许修改用户名
             oldadmin.setTrueName(admin.getTrueName().trim());
             oldadmin.setPhone(admin.getPhone().trim());
             oldadmin.setEmail(admin.getEmail().trim());
@@ -262,22 +350,22 @@ public class AdminService {
      *@params    userNmae:账户名；truneName：真实姓名,selectType:查询类型,(like:模糊查询,eq:精准查询)
      *@return 将list集合放入jsonResult的Map集合里，返回到前台
     */
-    public  JsonResult selectAllAdminManage(String userNmae,String trueName,String selectType){
+    public JsonResult selectAllAdminManage(String userNmae, String trueName, Integer loginState, String selectType){
      JsonResult jsonResult = new JsonResult();
-     Map<String, String>  map = new HashMap<String, String>(); //查询所用Map容器
+     Map<String,Object>  map = new HashMap<String, Object>(); //查询所用Map容器
      Map<Object,Object> map_admin= new HashMap<Object, Object>(); //存放查询所得数据
 
 
       if(userNmae != null && userNmae.trim().length() != 0) map.put("userName", userNmae.trim());
       if(trueName != null && trueName.trim().length() != 0) map.put("trueName", trueName.trim());
+      if (loginState != null && loginState != -1 && loginState >= 0 && loginState <= 1) map.put("loginState",loginState);
       if (selectType != null && selectType.trim().length() != 0) map.put("seltype",selectType.trim());
 
         List<Admin> list=adminDao.queryAllAdminManage(Admin.class,map);
         if (list.size() > 0) {
             jsonResult.setErrorCode("200");
             jsonResult.setMessage("查询成功.");
-            map_admin.put("admin",list);
-            jsonResult.setItem(map_admin);
+            jsonResult.setList(list);
         }else {
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("无数据.");
@@ -294,15 +382,19 @@ public class AdminService {
      *@params   id:所需删除id
      *@return 删除结果
     */
-    public  JsonResult deleteAdmin(Integer id){
+    public JsonResult deleteAdmin(Integer id){
         JsonResult jsonResult = new JsonResult();
         if (id != null) {
             Admin admin=adminDao.getAdmin(id);
             if (admin != null) {
-                adminDao.deleteAdmin(admin);
+                AdminPermissions adminPermissions =adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",admin); // 查询该admin是否存在于数据库
+                if (adminPermissions != null){
+                    adminPermissionsDao.deleteAdminPermissions(adminPermissions);
+                }
+                adminDao.deleteAdmin(admin);//删除前先清除admin权限表外键
             }else {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("删除异常.");
+                jsonResult.setMessage("服务端：删除异常.没有数据");
                 return  jsonResult;
             }
             if (adminDao.getAdmin(id) == null){
@@ -334,9 +426,9 @@ public class AdminService {
         if (id != null){
             Admin admin=adminDao.getAdmin(id);
             if (admin != null){
-                String salt=Md5.getRandomString(32);//从新生成盐值
+                String salt= Md5.getRandomString(32);//从新生成盐值
                 String password=admin.getUserName().concat(salt);//账户名+盐值 组合成字符串
-                String md5password=Md5.MD5(password);//重置密码为 登录账户名.
+                String md5password= Md5.MD5(password);//重置密码为 登录账户名.
 
                 admin.setSalt(salt);
                 admin.setUserPassword(md5password);

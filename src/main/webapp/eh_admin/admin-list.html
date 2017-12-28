@@ -1,5 +1,4 @@
-﻿<!--_meta 作为公共模版分离出去-->
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -23,18 +22,25 @@
 	<script>DD_belatedPNG.fix('*');</script><![endif]-->
 	<!--/meta 作为公共模版分离出去-->
 
-	<title>商品列表 - 商品管理 - H-ui.admin v3.0</title>
-	<meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
-	<meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+	<title>二货·后台管理系统</title>
+
+    <style>
+
+        th{
+            overflow: hidden;/*内容超出后隐藏*/
+
+            text-overflow: ellipsis;/* 超出内容显示为省略号*/
+
+            white-space: nowrap;/*文本不进行换行*/
+        }
+    </style>
 </head>
 <body>
 <!--_header 作为公共模版分离出去-->
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
 		<div class="container-fluid cl">
-			<a class="logo navbar-logo f-l mr-10 hidden-xs"href="/aboutHui.shtml" style="font-size:1.1em;">二货-后台管理系统</a>
-			<a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/aboutHui.shtml">H-ui</a>
-			<span class="logo navbar-slogan f-l mr-10 hidden-xs">v3.0</span>
+			<a class="logo navbar-logo f-l mr-10 hidden-xs"href="/aboutHui.shtml" style="font-size:1.1em;">二货·后台管理系统</a>
 			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
@@ -174,39 +180,48 @@
 	<div class="Hui-article">
 		<article class="cl pd-20">
 			<div class="text-c" style="width: 700px; margin: 0px auto;">
+                <form id="myform">
+                    <input type="text" class="input-text" style="width:150px;" placeholder="管理员用户名" id="username" name="userName">
+                    <input type="text" class="input-text" style="width:150px;" placeholder="真实姓名" id="true" name="trueName">
+                    <span class="select-box inline">
+                        <select name="loginState" class="select" id="loginState">
+                            <option value="-1">登录状态</option>
+                            <option value="0">允许登录</option>
+                            <option value="1">禁止登录</option>
+                        </select>
+                    </span>
+                    <span class="select-box inline">
+                        <select name="selectType" class="select" id="selectType">
+                            <option value="like">模糊查询</option>
+                            <option value="eq">精准查询</option>
+                        </select>
+                    </span>
+                    <button type="submit" class="btn btn-success" id="selectBtn"  ><i class="Hui-iconfont">&#xe665;</i>查询</button>
+                    <button type="button" class="btn btn-success" id="resetBtn" >重置条件并查询</button>
+                </form>
 
-				<input type="text" class="input-text" style="width:250px;" placeholder="输入管理员用户名查询" id="" name="">
-				<button type="submit" class="btn btn-success" id="" name="" ><i class="Hui-iconfont">&#xe665;</i> 查管理员</button>
 
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
-				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加管理员','admin-add.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a> </span>
-				<span class="r">共有数据：<strong>54</strong> 条</span>
+				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;"  id="addBtn" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a> </span>
+				<span class="r">共有数据：<strong id="dataNumber">54</strong> 条</span>
 			</div>
 			<div class="mt-20">
 				<table class="table table-border table-bordered table-bg table-hover table-sort">
 					<thead>
 					<tr class="text-c">
-						<th width="25"><input type="checkbox" name="" value=""></th>
-						<th width="40">用户名</th>
-						<th width="165">真实姓名</th>
-						<th width="100">手机号码</th>
-						<th width="100">电子邮箱</th>
-						<th width="100">最后登录时间</th>
-						<th width="100">操作</th>
+						<th width="5%"><input type="checkbox" name="" value=""></th>
+						<th  width="15%">用户名</th>
+						<th width="10%">真实姓名</th>
+						<th width="15%">手机号码</th>
+						<th width="15%">电子邮箱</th>
+						<th width="15%">最后登录时间</th>
+                        <th width="5%">登录次数</th>
+                        <th width="6%">登录状态</th>
+						<th width="10%">操作</th>
 					</tr>
 					</thead>
-					<tbody>
-					<tr class="text-c">
-						<td><input type="checkbox" value="1" name=""></td>
-						<td>user</td>
-						<td>哈哈哈</td>
-						<td>13888888888</td>
-						<td>5555@qq.com</td>
-						<td>2017-8-8 20:22:33</td>
-						<td class="td-manage"><a title="编辑" href="javascript:;" onclick="admin_edit('管理员编辑','user-edit.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-					</tr>
-
+					<tbody id="show">
 					</tbody>
 				</table>
 			</div>
@@ -225,66 +240,149 @@
 <script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="js/eh.js"></script>
 <script type="text/javascript">
-    $('.table-sort').dataTable({
-        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
-        "bStateSave": true,//状态保存
-        "aoColumnDefs": [
-            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-            {"orderable":false,"aTargets":[0,6]}// 不参与排序的列
-        ]
+
+	$(function () {
+
+		$('.loginStateType').change(function () {
+			alert('xcasdas');
+		});
+
+		//判断是否登录
+	getheaderMessage();
+	selectAdmin();
+	});
+
+$('#selectBtn').click(function (){
+
+
+    if($('#loginState').val() == 1 || $('#loginState').val() == 0){
+        $("#selectType").find("option:contains('精准查询')").attr("selected",true);
+        $("#selectType").find("option:contains('模糊查询')").attr("selected",false);
+    }
+    /*else if($('#loginState').val() == -1) {
+        $("#selectType").find("option:contains('精准查询')").attr("selected",false);
+        $("#selectType").find("option:contains('模糊查询')").attr("selected",true);
+    }*/
+    selectAdmin();
+    return false;
+});
+
+    $('#resetBtn').click(function () {
+
+       $('#myform').resetForm();//重置表单
+        selectAdmin();
     });
 
-    /*商品-添加*/
-    function admin_add(title,url,w,h){
-        layer_show(title,url,w,h);
+    function getLocalTime(nS) {
+        return new Date(parseInt(nS) * 1000).toLocaleString().substring(0,18);
     }
-    /*商品-编辑*/
-    function admin_edit(title,url,id,w,h){
-        layer_show(title,url,w,h);
-    }
-    /*商品-删除*/
-    function article_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            $.ajax({
-                type: 'POST',
-                url: '',
-                dataType: 'json',
-                success: function(data){
-                    $(obj).parents("tr").remove();
-                    layer.msg('已删除!',{icon:1,time:1000});
-                },
-                error:function(data) {
-                    console.log(data.msg);
-                },
-            });
-        });
-    }
-    /*商品-下架*/
-    function article_stop(obj,id){
-        layer.confirm('确认要下架吗？',function(index){
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
-            $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
-            $(obj).remove();
-            layer.msg('已下架!',{icon: 5,time:1000});
+
+	function selectAdmin() {
+		$.ajax({
+			type:'GET',
+            url:'http://localhost:8080/admin/admin',
+            data:$('#myform').serialize(),
+            dataType:'json',
+            success:function (data) {
+                if (data.errorCode == "500"){
+                    layer.msg(data.message);
+                    $('#show').html('');
+                    $('#dataNumber').text(0);
+                }
+
+                if (data.errorCode == "200"){
+                    var adminlist=data.list;
+                    $('#dataNumber').text(adminlist.length);
+
+                    $('#show').html('');
+                    $.each(adminlist,function (index,admins) {
+
+
+						if(admins.loginState =="0") {
+							var ioc="<select class=\"select loginStateType\"  name=\"city\" style='color: green;'>"+
+									"<option value=\"0\" selected  >允许登录</option>"+
+									"<option value=\"1\">禁止登录</option>"+
+									"</select>";
+						}
+						if(admins.loginState =="1") {
+							var ioc="<select class='select loginStateType'  name=\"city\" style='color: red;' >"+
+									"<option value=\"0\"  >允许登录</option>"+
+									"<option value=\"1\" selected >禁止登录</option>"+
+									"</select>";
+						}
+
+
+
+                        if (admins.phone == null){
+                        	var phone ="待完善";
+						}else {
+							var phone=admins.phone;
+						}
+						if (admins.email == null){
+							var email ="待完善";
+						}else {
+							var email=admins.email;
+						}
+
+                        var time =getLocalTime(admins.lastTime/1000);
+
+                        $('#show').append(
+                        '<tr class="text-c">'+
+                                '<td><input type="checkbox" value="1" name=""></td>'+
+                                '<td>'+admins.userName+'</td>'+
+                                '<td>'+admins.trueName+'</td>'+
+                                '<td>'+phone+'</td>'+
+                                 '<td>'+email+'</td>'+
+                                 '<td>'+time+'</td>'+
+                                 '<td>'+admins.loginNum+'</td>'+
+						   		'<td>'+ioc+'</td>'+
+                       "<td class=\"td-manage\"><a title=\"编辑\" href=\"javascript:void(0);\" onclick=\"adminUpdate("+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> <a title=\"删除\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a></td>"+
+                       ' </tr>'
+                        );
+                    });
+                }
+            },
+            error:function (data) {
+                layer.msg("服务器繁忙，请稍后重试")
+            }
+
+		});
+		
+	}
+
+    //删除
+    function adminDelete(obj,adminId) {
+        layer.confirm('删除该管理员会删除该管理员权限,确认要删除吗？',function(index){
+
+            var url="http://localhost:8080/admin/admin?id="+adminId;
+             funModel(obj,url,'DELETE');
+
+            layer.close(index);
         });
     }
 
-    /*商品-发布*/
-    function article_start(obj,id){
-        layer.confirm('确认要发布吗？',function(index){
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
-            $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
-            $(obj).remove();
-            layer.msg('已发布!',{icon: 6,time:1000});
-        });
+    //修改
+    function adminUpdate(adminId) {
+        var url="admin-edit.html?id="+adminId;
+        admin_edit("管理员信息修改",url,'800','450');
+
     }
-    /*商品-申请上线*/
-    function article_shenqing(obj,id){
-        $(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">待审核</span>');
-        $(obj).parents("tr").find(".td-manage").html("");
-        layer.msg('已提交申请，耐心等待审核!', {icon: 1,time:2000});
+
+    //添加管理员
+	$('#addBtn').click(function () {
+		admin_edit("管理员添加",'admin-add.html','800','500')
+	});
+
+    /*编辑或添加统一模板*/
+    function admin_edit(title,url,w,h){
+        layer_show(title,url,w,h);
     }
+
+
+
+
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

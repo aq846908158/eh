@@ -31,11 +31,13 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     public void deleteAdmin(Admin admin) {
-        getSession().delete(admin);
+        getSession().delete(getSession().load(Admin.class,admin.getId()));
+        getSession().flush();
     }
 
     public void updateAdmin(Admin admin) {
         getSession().update(admin);
+        getSession().flush();
     }
 
     public Admin getAdmin(Integer id) {
@@ -111,7 +113,7 @@ public class AdminDaoImpl implements AdminDao {
         return  list;
     }
 
-    public List<Admin> queryAllAdminManage(Object object, Map<String, String> map) {
+    public List<Admin> queryAllAdminManage(Object object, Map<String, Object> map) {
         List<Admin> list = new ArrayList<Admin>();
         Criteria criteria=getSession().createCriteria((Class) object);
         if (map.get("seltype") != null && map.get("seltype").equals("like")  ){
@@ -139,6 +141,25 @@ public class AdminDaoImpl implements AdminDao {
 
         }
         return list;
+    }
+
+    @Override
+    public Admin getAdminInfo(String sql) {
+        Admin admin = new Admin();
+        Query query=getSession().createQuery(sql);
+//默认查询出来的list里存放的是一个Object数组，还需要转换成对应的javaBean。
+        List<Object[]> admins = query.list();
+        if (admins.size() != 0){
+            for(Object[] adminObj : admins){
+                admin.setId((Integer) adminObj[0]);
+               admin.setUserName((String) adminObj[1]);
+                admin.setTrueName((String) adminObj[2]);
+                admin.setPhone((String) adminObj[3]);
+                admin.setEmail((String) adminObj[4]);
+            }
+            return  admin;
+        }
+        return null;
     }
 
 
