@@ -110,6 +110,13 @@ public class AdminContorller {
         JsonResult jsonResult = adminService.registerAdmin(admin);
         return  jsonResult;
     }
+    @ResponseBody
+    @RequestMapping(value = "updateAdminLoginState",method = RequestMethod.GET)
+    public  JsonResult updateAdminLoginState(Admin admin,@RequestParam(value = "stateCode") Integer stateCode){
+        JsonResult jsonResult=adminService.updateAdminLoginState(admin.getId(),stateCode);
+
+        return  jsonResult;
+    }
 
 
 }

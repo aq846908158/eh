@@ -244,18 +244,12 @@
 <script type="text/javascript">
 
 	$(function () {
-
-		$('.loginStateType').change(function () {
-			alert('xcasdas');
-		});
-
 		//判断是否登录
 	getheaderMessage();
 	selectAdmin();
 	});
 
 $('#selectBtn').click(function (){
-
 
     if($('#loginState').val() == 1 || $('#loginState').val() == 0){
         $("#selectType").find("option:contains('精准查询')").attr("selected",true);
@@ -301,13 +295,13 @@ $('#selectBtn').click(function (){
 
 
 						if(admins.loginState =="0") {
-							var ioc="<select class=\"select loginStateType\"  name=\"city\" style='color: green;'>"+
+							var ioc="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;' onchange='loginStateType(this,"+admins.id+")'>"+
 									"<option value=\"0\" selected  >允许登录</option>"+
 									"<option value=\"1\">禁止登录</option>"+
 									"</select>";
 						}
 						if(admins.loginState =="1") {
-							var ioc="<select class='select loginStateType'  name=\"city\" style='color: red;' >"+
+							var ioc="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;' onchange='loginStateType(this,"+admins.id+")'>"+
 									"<option value=\"0\"  >允许登录</option>"+
 									"<option value=\"1\" selected >禁止登录</option>"+
 									"</select>";
@@ -380,7 +374,38 @@ $('#selectBtn').click(function (){
         layer_show(title,url,w,h);
     }
 
+    function loginStateType(obj,adminId) {
+		var stateCode=$(obj).val();
+		$.ajax({
+			type:'GET',
+			url:'http://localhost:8080/admin/updateAdminLoginState?id='+adminId+'&stateCode='+stateCode,
+			dataType:'json',
+			success:function (data) {
+				if (data.errorCode == "500"){
+					layer.msg(data.message);
+				}
 
+				if(data.errorCode == "200"){
+
+					layer.msg(data.message);
+					if (stateCode == 0){
+						$(obj).css("color","green");
+						$(obj).find("option:contains('允许登录')").attr("selected",true);
+					}
+					if (stateCode == 1){
+					//	alert($(obj).parent("select").html());
+						$(obj).css("color","red");
+						$(obj).find("option:contains('禁止登录')").attr("selected",true);
+					}
+
+				}
+			},
+			error:function (data) {
+				layer.msg("服务器繁忙，请稍后重试")
+			}
+
+		});
+	}
 
 
 </script>

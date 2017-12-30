@@ -63,7 +63,12 @@ public class AdminService {
         }
         //获取登录对象
         Admin admin=adminDao.getAdminByUserName(username.trim());
-        if (admin != null){
+        if (admin != null ){
+            if (admin.getLoginState() == 1){
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("服务端：对不起，您被禁止登录");
+                return jsonResult;
+            }
             String salt=admin.getSalt();
             String loginPassword = password.concat(salt);
             String  md5PasswordOfLogin = Md5.MD5(loginPassword.trim());
@@ -452,7 +457,44 @@ public class AdminService {
         return  jsonResult;
     }
 
+    public JsonResult updateAdminLoginState(Integer id,Integer stateCode){
+        JsonResult jsonResult =new JsonResult();
+        Admin admin=null;
+        if (stateCode >= 0 || stateCode <= 1){
+             admin =adminDao.getAdmin(id);
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：修改失败，请刷新后重试");
+            return  jsonResult;
+        }
+        if (admin !=null){
+            if (admin.getLoginState() == stateCode){
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("服务端：修改成功");
+                return  jsonResult;
+            }else {
+                admin.setLoginState(stateCode);
+                adminDao.updateAdmin(admin);
+                Admin adminNew=adminDao.getAdmin(admin.getId());
+                if (adminNew.getLoginState() == stateCode){
+                    jsonResult.setErrorCode("200");
+                    jsonResult.setMessage("服务端：修改成功");
+                    return  jsonResult;
+                }else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端：修改失败，请刷新后重试");
+                    return  jsonResult;
+                }
 
+            }
+
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：修改状态失败，请重试");
+            return  jsonResult;
+        }
+
+    }
 
 
 
