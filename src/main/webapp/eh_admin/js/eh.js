@@ -102,3 +102,11 @@ $(".sortName").click(function () {
     $(this).next()[0].checked=true;
     select();
 });
+
+
+
+//管理员退出
+function adminExit() {
+    localStorage.removeItem("eh_token");
+    window.location.href="login.html";
+}

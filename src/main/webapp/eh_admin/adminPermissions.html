@@ -130,7 +130,7 @@
 			<dd style="display:block">
 				<ul>
 					<li  class="current"><a href="admin-list.html" title="管理员管理">管理员管理</a></li>
-					<li  class="current"><a href="adminPermissions.html" title="管理员权限管理">管理员权限管理</a></li>
+					<li ><a href="adminPermissions.html" title="管理员权限管理">管理员权限管理</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -199,7 +199,7 @@
 
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
-				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;"  id="addBtn" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a> </span>
+				<span class="l"> <a href="javascript:void(0);"  id="addBtn" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加权限</a> </span>
 				<span class="r">共有数据：<strong id="dataNumber">54</strong> 条</span>
 			</div>
 			<div class="mt-20">
@@ -207,13 +207,9 @@
 					<thead>
 					<tr class="text-c">
 						<th width="5%"><input type="checkbox" name="" value=""></th>
-						<th  width="15%">用户名</th>
-						<th width="10%">真实姓名</th>
-						<th width="15%">手机号码</th>
-						<th width="15%">电子邮箱</th>
-						<th width="15%">最后登录时间</th>
-                        <th width="5%">登录次数</th>
-                        <th width="6%">登录状态</th>
+						<th  width="20%">管理员</th>
+						<th width="20%">真实姓名</th>
+						<th width="25%">权限</th>
 						<th width="10%">操作</th>
 					</tr>
 					</thead>
@@ -242,37 +238,15 @@
 	$(function () {
 		//判断是否登录
 	getheaderMessage();
-	selectAdmin();
+	selectAdminPermissions();
 	});
 
-$('#selectBtn').click(function (){
-
-    if($('#loginState').val() == 1 || $('#loginState').val() == 0){
-        $("#selectType").find("option:contains('精准查询')").attr("selected",true);
-        $("#selectType").find("option:contains('模糊查询')").attr("selected",false);
-    }
-
-    selectAdmin();
-    return false;
-});
-
-    //重置表单
-    $('#resetBtn').click(function () {
-
-       $('#myform').resetForm();
-        selectAdmin();
-    });
-
-    //时间转换
-    function getLocalTime(nS) {
-        return new Date(parseInt(nS) * 1000).toLocaleString().substring(0,18);
-    }
-
-	function selectAdmin() {
-		$.ajax({
-			type:'GET',
-            url:'http://localhost:8080/admin/admin',
-            data:$('#myform').serialize(),
+   //查询
+	function selectAdminPermissions() {
+        $.ajax({
+            type:'GET',
+            url:'http://localhost:8080/adminPermissions/adminPermissions',
+           // data:$('#myform').serialize(),
             dataType:'json',
             success:function (data) {
                 if (data.errorCode == "500"){
@@ -282,55 +256,55 @@ $('#selectBtn').click(function (){
                 }
 
                 if (data.errorCode == "200"){
-                    var adminlist=data.list;
-                    $('#dataNumber').text(adminlist.length);
-
+                    var adminPermissionslist=data.list;
+                    $('#dataNumber').text(adminPermissionslist.length);
                     $('#show').html('');
-                    $.each(adminlist,function (index,admins) {
+                    $.each(adminPermissionslist,function (index,permissions) {
+
+                        if (permissions.low == true &&  permissions.middle == false && permissions.height == false){
+                            var level="<select class=\"select loginStateType\"  name=\"city\" style='color: orange;border: 0px;width: 100px;' >"+
+                                "<option value=\"low\" selected  >初级管理员</option>"+
+                                "<option value=\"middle\">中级管理员</option>"+
+                                "<option value=\"height\">高级管理员</option>"+
+                                "</select>";
+                        }
+                        if (permissions.low == true &&  permissions.middle == true && permissions.height == false){
+                            var level="<select class=\"select loginStateType\"  name=\"city\" style='color: orange;border: 0px;width: 100px;' >"+
+                                "<option value=\"low\" >初级管理员</option>"+
+                                "<option value=\"middle\" selected>中级管理员</option>"+
+                                "<option value=\"height\">高级管理员</option>"+
+                                "</select>";
+                        }
+                        if (permissions.low == true &&  permissions.middle == true && permissions.height == true){
+                            var level="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;width: 100px;' >"+
+                                "<option value=\"low\" >初级管理员</option>"+
+                                "<option value=\"middle\">中级管理员</option>"+
+                                "<option value=\"height\" selected>高级管理员</option>"+
+                                "</select>";
+                        }
+
+                   /*  if (permissions.low == true ){
+                            var level="初级管理员";
+					 }
+
+					 if (permissions.middle == true ){
+                            var level="中级管理员";
+					 }
+
+                     if (permissions.height == true ){
+                            var level="高级管理员";
+					 }*/
 
 
-						if(admins.loginState =="0") {
-							var ioc="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;' onchange='loginStateType(this,"+admins.id+")'>"+
-									"<option value=\"0\" selected  >允许登录</option>"+
-									"<option value=\"1\">禁止登录</option>"+
-									"</select>";
-						}
-						if(admins.loginState =="1") {
-							var ioc="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;' onchange='loginStateType(this,"+admins.id+")'>"+
-									"<option value=\"0\"  >允许登录</option>"+
-									"<option value=\"1\" selected >禁止登录</option>"+
-									"</select>";
-						}
-
-
-
-                        if (admins.phone == null){
-                        	var phone ="待完善";
-						}else {
-							var phone=admins.phone;
-						}
-						if (admins.email == null){
-							var email ="待完善";
-						}else {
-							var email=admins.email;
-						}
-
-                        var time =getLocalTime(admins.lastTime/1000);
 
                         $('#show').append(
-                        '<tr class="text-c">'+
-                                '<td><input type="checkbox" value="1" name=""></td>'+
-                                '<td>'+admins.userName+'</td>'+
-                                '<td>'+admins.trueName+'</td>'+
-                                '<td>'+phone+'</td>'+
-                                 '<td>'+email+'</td>'+
-                                 '<td>'+time+'</td>'+
-                                 '<td>'+admins.loginNum+'</td>'+
-						   		'<td>'+ioc+'</td>'+
-                       "<td class=\"td-manage\"><a title=\"编辑\" href=\"javascript:void(0);\" onclick=\"adminUpdate("+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> <a title=\"删除\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
-							"" +
-							"<a href=\"javascript:void(0);\"  class=\"ml-5\" title=\"重置密码\" onclick='resetPassord("+admins.id+")' ><img  src=\"temp/password.png\" /></a></td>"+
-                       ' </tr>'
+                            '<tr class="text-c">'+
+                            '<td><input type="checkbox" value="1" name=""></td>'+
+                            '<td>'+permissions.admin.userName+'</td>'+
+                            '<td>'+permissions.admin.trueName+'</td>'+
+                            '<td>'+level+'</td>'+
+                            '<td class=\"td-manage\"><a title=\"删除\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>'+
+                            ' </tr>'
                         );
                     });
                 }
@@ -339,126 +313,10 @@ $('#selectBtn').click(function (){
                 layer.msg("服务器繁忙，请稍后重试")
             }
 
-		});
-		
-	}
-
-    //删除
-    function adminDelete(obj,adminId) {
-        layer.confirm('删除该管理员会删除该管理员权限,确认要删除吗？',function(index){
-
-            var url="http://localhost:8080/admin/admin?id="+adminId;
-             funModel(obj,url,'DELETE');
-
-            layer.close(index);
         });
     }
 
 
-    //删除
-    function funModel(obj,url,subType) {
-        $.ajax({
-            type: subType,
-            url:url,
-            dataType: 'json',
-            success: function(data){
-                if(data.errorCode=="200")
-                {
-                    code="200";
-                    $(obj).parents("tr").remove();
-                    layer.msg('已删除!',{icon:1,time:1000});
-                }
-
-                if(data.errorCode=="500")
-                {
-                    layer.msg(data.message);
-                }
-
-            },
-            error:function(data) {
-                layer.msg("服务器繁忙,请稍后再试");
-            }
-        });
-
-    }
-
-    //修改
-    function adminUpdate(adminId) {
-        var url="admin-edit.html?id="+adminId;
-        admin_edit("管理员信息修改",url,'800','450');
-
-    }
-
-    //添加管理员
-	$('#addBtn').click(function () {
-		admin_edit("管理员添加",'admin-add.html','800','500')
-	});
-
-    /*编辑或添加统一模板*/
-    function admin_edit(title,url,w,h){
-        layer_show(title,url,w,h);
-    }
-
-
-    /*修改登录状态*/
-    function loginStateType(obj,adminId) {
-		var stateCode=$(obj).val();
-		$.ajax({
-			type:'GET',
-			url:'http://localhost:8080/admin/updateAdminLoginState?id='+adminId+'&stateCode='+stateCode,
-			dataType:'json',
-			success:function (data) {
-				if (data.errorCode == "500"){
-					layer.msg(data.message);
-				}
-
-				if(data.errorCode == "200"){
-
-					layer.msg(data.message);
-					if (stateCode == 0){
-						$(obj).css("color","green");
-						$(obj).find("option:contains('允许登录')").attr("selected",true);
-					}
-					if (stateCode == 1){
-					//	alert($(obj).parent("select").html());
-						$(obj).css("color","red");
-						$(obj).find("option:contains('禁止登录')").attr("selected",true);
-					}
-
-				}
-			},
-			error:function (data) {
-				layer.msg("服务器繁忙，请稍后重试")
-			}
-
-		});
-	}
-
-	//重置密码
-	function resetPassord(adminId) {
-        layer.confirm('确定要重置该管理员密码嘛？',function(index){
-			$.ajax({
-            type:'GET',
-            url:'http://localhost:8080/admin/resetPassord?id='+adminId,
-            dataType:'json',
-            success:function (data) {
-                if (data.errorCode == "500"){
-                    layer.msg(data.message);
-                }
-
-                if(data.errorCode == "200"){
-                    layer.msg(data.message);
-                }
-            },
-            error:function (data) {
-                layer.msg("服务器繁忙，请稍后重试")
-            }
-
-        });
-            layer.close(index);
-        });
-
-    }
 
 	</script>
 <!--/请在上方写此页面业务相关的脚本-->

@@ -441,18 +441,17 @@ public class AdminService {
                 adminDao.updateAdmin(admin);
 
                 jsonResult.setErrorCode("200");
-                jsonResult.setMessage("重置成功,重置密码为您的账户名.");
+                jsonResult.setMessage("重置成功,新密码为该账户名.");
             }else{
                 jsonResult.setErrorCode("500");
                 jsonResult.setMessage("重置失败,账户不存在");
+                return  jsonResult;
             }
 
         }else{
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("重置失败,账户为空");
         }
-
-
 
         return  jsonResult;
     }

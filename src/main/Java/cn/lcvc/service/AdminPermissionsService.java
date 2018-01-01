@@ -65,7 +65,7 @@ public class AdminPermissionsService {
 
             jsonResult.setErrorCode("200");
             jsonResult.setMessage("查询成功.");
-            jsonResult.setItem(map_adminPermissions);
+            jsonResult.setList(adminPermissionsList);
         }else {
             jsonResult.setMessage("500");
             jsonResult.setMessage("无数据.");

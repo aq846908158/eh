@@ -5,6 +5,7 @@ import cn.lcvc.POJO.TokenMessage;
 import cn.lcvc.service.AdminService;
 import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,6 +111,7 @@ public class AdminContorller {
         JsonResult jsonResult = adminService.registerAdmin(admin);
         return  jsonResult;
     }
+
     @ResponseBody
     @RequestMapping(value = "updateAdminLoginState",method = RequestMethod.GET)
     public  JsonResult updateAdminLoginState(Admin admin,@RequestParam(value = "stateCode") Integer stateCode){
@@ -118,6 +120,13 @@ public class AdminContorller {
         return  jsonResult;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "resetPassord",method = RequestMethod.GET)
+    public JsonResult resetPassord(Admin admin){
+        JsonResult jsonResult =adminService.resetAdminPassword(admin.getId());
+
+        return  jsonResult;
+    }
 
 }
 
