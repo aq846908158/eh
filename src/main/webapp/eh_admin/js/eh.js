@@ -1,8 +1,13 @@
+//全局变量定义（必须引用此文件）---------------------------------------------------------------------------------
+var serverURL="http://localhost:8080";
+// var serverURL="http://www.jgdmhlg.xin/eh";
+//end全局变量定义（必须引用此文件）---------------------------------------------------------------------------------
+
 //获取网页头部 Admin登录信息
 function getheaderMessage() {
     $.ajax({
         type: "GET",
-        url: "http://localhost:8080/admin/getLoginMessage",
+        url: serverURL+"/admin/getLoginMessage",
         data:{"token":localStorage.getItem("eh_token")},
         dataType:"json",
         success: function(data){
@@ -32,3 +37,68 @@ function adminExit() {
     localStorage.removeItem("eh_token");
     window.location.href="login.html";
 }
+/**
+ * 时间戳转时间
+ */
+function getLocalTime(nS) {
+    ns= new Date(parseInt(nS));
+    return formatDate(ns);
+}
+/**
+ * 格式化Date类型
+ */
+function formatDate(now) {
+    var year=now.getYear();
+    var month=now.getMonth()+1;
+    var date=now.getDate();
+    var hour=now.getHours();
+    var minute=now.getMinutes();
+    var second=now.getSeconds();
+    return "20"+(year-100)+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+}
+
+/**
+ * 下一页
+ */
+function   pageNext()   {
+    pageIndex>pageCount?pageIndex=pageCount:pageIndex++;
+    select();
+}
+
+/**
+ * 上一页
+ */
+function   pageBack()   {
+    pageIndex<=1?pageIndex=1:pageIndex--;
+    select();
+}
+
+/**
+ * 排序类型切换
+ */
+function   sortType()   {
+    var val=$('input:radio[name="sortType"]:checked').val();
+    if(val=="desc")
+    {
+        $("#sortIoc").removeClass("triangle-down");
+        $("#sortIoc").addClass("triangle-up");
+        $( "#asc" )[ 0 ].checked = true;
+        select();
+    }
+    else {
+        $("#sortIoc").removeClass("triangle-up");
+        $("#sortIoc").addClass("triangle-down");
+        $( "#desc" )[ 0 ].checked = true;
+        select();
+    }
+}
+
+/**
+ * 排序字段切换
+ */
+$(".sortName").click(function () {
+    $(".sortName").removeClass("pageNum");
+   $(this).addClass("pageNum");
+    $(this).next()[0].checked=true;
+    select();
+});

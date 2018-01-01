@@ -47,5 +47,5 @@ public interface OrderDao {
      *@params
      *@return
      */
-    List<Order> getOrder(Object  object, Map<String, Object> map);
+    List<Order> getOrder(Object  object, Map<String, Object> map,String column,String orderBy);
 }

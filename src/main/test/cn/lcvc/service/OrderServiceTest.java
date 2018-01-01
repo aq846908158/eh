@@ -35,7 +35,7 @@ public class OrderServiceTest extends BaseJunit {
 //        order.setSellUser(user);
         order.setBuyUser(user);
         //  order.setChalkUp(true);
-        JsonResult jsonResult = orderService.getAllOrderManage(order, -92.07, -450.01);
+        JsonResult jsonResult = orderService.getAllOrderManage(order, -92.07, -450.01,"","");
         List<Order> orders = (List<Order>) jsonResult.getItem().get("order");
 
         for (int i = 0; i < orders.size(); i++) {

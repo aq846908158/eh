@@ -18,10 +18,9 @@ public class OrderContorller {
 
     @ResponseBody
     @RequestMapping(value = "/order",method =  RequestMethod.GET,produces = "application/json;charset=UTF-8")
-    public JsonResult slectOrder(Order order)
+    public JsonResult slectOrder(Order order,@RequestParam(value = "sort") String sortName,@RequestParam(value = "sortType") String sortType)
     {
-
-        JsonResult jsonResult=orderService.getAllOrderManage(order,null,null);
+        JsonResult jsonResult=orderService.getAllOrderManage(order,null,null,sortName,sortType);
         return jsonResult;
     }
 

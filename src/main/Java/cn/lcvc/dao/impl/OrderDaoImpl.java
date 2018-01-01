@@ -101,7 +101,7 @@ public class OrderDaoImpl implements OrderDao {
         return null;
     }
 
-    public List<Order> getOrder(Object object, Map<String, Object> map) {
+    public List<Order> getOrder(Object object, Map<String, Object> map,String column,String orderBy) {
         List<Order> list =new ArrayList<Order>();
         Criteria criteria=getSession().createCriteria((Class) object);
 
@@ -117,7 +117,14 @@ public class OrderDaoImpl implements OrderDao {
 
                 criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
 
+
         }
+        if(orderBy.equals("asc"))
+            criteria.addOrder(org.hibernate.criterion.Order.asc(column));
+        else if (orderBy.equals("desc"))
+            criteria.addOrder(org.hibernate.criterion.Order.desc(column));
+
+        System.out.println("代码已经更新");
         try{
             list=criteria.list();
         }catch (Exception e){

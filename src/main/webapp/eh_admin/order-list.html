@@ -39,7 +39,29 @@
 		.pageNum{
 			background: #00a0e9;
 			color: #fff;
+			border:1px solid #00a0e9;
+		}
 
+		.triangle-up {
+			width:0px;
+			height:0px;
+			border-left:6px solid transparent;
+			border-right:6px solid transparent;
+			border-bottom:9px solid #999;
+			display: inline;
+			position: relative;
+			top: -12px;
+		}
+
+		.triangle-down {
+			width:0;
+			height:0;
+			border-left:6px solid transparent;
+			border-right:6px solid transparent;
+			border-top:9px solid #999;
+			display: inline;
+			position: relative;
+			top: 17px;
 		}
 	</style>
 </head>
@@ -220,14 +242,32 @@
 					<input type="text" name="orderCode"  placeholder="订单号" style="width:150px" class="input-text">
 					<button name="" id="mit" class="btn btn-success" type="submit" ><i class="Hui-iconfont">&#xe665;</i> 查订单</button>
 				</div>
+				<div class="cl pd-5 bg-1 bk-gray mt-20">
+					<span class="l">
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+					</span>
+					<span class="r">共有数据：<strong>54</strong> 条</span>
+				</div>
+				<div style="width: 98%; height: 30px;margin: 10px;"><!--排序组件-->
+					排序：
+					<div class="btn size-S radius pageNum sortName" >默认</div>
+					<input type="radio" name="sort" value="id" checked="true" style="display: none;"/>
+					<div class="btn size-S radius sortName">订单号</div>
+					<input type="radio" name="sort" value="orderCode" style="display: none;"/>
+					<div class="btn size-S radius sortName">订单时间</div>
+					<input type="radio" name="sort" value="createTime" style="display: none;"/>
+					<div class="btn size-S radius sortName">订单状态</div>
+					<input type="radio" name="sort" value="orderState" style="display: none;"/>
+					<div style=" line-height: 30px; display: inline; position: relative; " onclick="sortType()">
+						<div class="triangle-down" id="sortIoc">    <!--向上的三角-->   </div>
+						<input type="radio" name="sortType" value="desc" id="desc" checked="true" style="display: none;"/>
+						<input type="radio" name="sortType" value="asc" id="asc"  style="display: none;"/>
+
+					</div>
+				</div>
 			</form>
-			<div class="cl pd-5 bg-1 bk-gray mt-20">
-				<span class="l">
-				<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-				</span>
-				<span class="r">共有数据：<strong>54</strong> 条</span>
-			</div>
-			<div class="mt-20" style="position: relative; height: 752px;">
+			<div class="mt-20" style="position: relative; margin-top: 0px;">
+
 				<table class="table table-border table-bordered table-bg table-hover table-sort">
 					<thead>
 						<tr class="text-c">
@@ -238,8 +278,8 @@
 							<th width="10%">购买者</th>
 							<th width="15%">订单时间</th>
 							<th width="15%">备注</th>
-							<th width="5%">订单状态</th>
-							<th width="10%">操作</th>
+							<th width="10%">订单状态</th>
+							<th width="5%">操作</th>
 						</tr>
 					</thead>
 					<tbody id="show">
@@ -247,15 +287,15 @@
 
 					</tbody>
 				</table>
-				<div style="width: 100%; margin-top: 20px; position: absolute; bottom: 100px;" >
+				<div style="width: 100%; margin-top: 20px; " >
 					<div style="width: 100%; text-align: right;">
-						<button class="btn btn-default" style="width: 70px; background: none;" id="page_back">上一页</button>
+						<button class="btn btn-default" style="width: 70px; background: none;" id="page_back" onclick="pageBack()">上一页</button>
 
 						<div id="pageNumber" style="display: inline;">
 
 						</div>
 
-						<button class="btn btn-default" style="width: 70px; background: none;" id="page_next">下一页</button>
+						<button class="btn btn-default" style="width: 70px; background: none;" onclick="pageNext()">下一页</button>
 					</div>
 				</div>
 			</div>
@@ -286,13 +326,14 @@ function orderDelete(obj,orderId){
 
 		$.ajax({
 			type: 'delete',
-            url: 'http://localhost:8080/admin/order?id='+orderId,
+            url: serverURL+'/admin/order?id='+orderId,
 			dataType: 'json',
 			success: function(data){
 			    if(data.errorCode=="200")
 				{
-                    $(obj).parents("tr").remove();
+                   	select();
                     layer.msg('已删除!',{icon:1,time:1000});
+
 				}
 
 				if(data.errorCode=="500")
@@ -314,16 +355,16 @@ function orderDelete(obj,orderId){
 getheaderMessage();
 //查询订单信息  初始化数据
 var pageIndex=1;
-var pageSize=15;
+var pageSize=3;
 var pageCount;
-selectOrder();//进入页面  默认获取全部order信息；
+select();//进入页面  默认获取全部order信息；
 /**
  * order信息获取   ajax请求方法
  */
-	function selectOrder() {
+	function select() {
         $.ajax({
                     type: 'GET',
-                    url: 'http://localhost:8080/admin/order',
+                    url: serverURL+'/admin/order',
 					async:false,
 					data:$("#myform").serialize(),
                     dataType: 'json',
@@ -373,15 +414,49 @@ selectOrder();//进入页面  默认获取全部order信息；
                                     "</tr>");
 
                             });
+
+               //控制分页标签显示--------------------------------------------
                             $("#pageNumber").html("");
-                            for(var i=1;i<=pageCount;i++){
-                                if(pageIndex==i){
-                                    $("#pageNumber").append("<div  class=\"btn pageNum\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+							var pageCha=pageCount-pageIndex+1;//之后的页数
+							var temp=(5-pageCha);//存放还差多少页足够5页
+							if(pageCount>5)//超过5页
+							{
+
+                                if(pageCha>=5) {//如果总页数减去当前显示页还足够5页
+                                    for(var i=pageIndex;i<pageIndex+5;i++){
+                                        if(pageIndex==i){
+                                            $("#pageNumber").append("<div  class=\"btn pageNum\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+                                        }
+                                        else {
+                                            $("#pageNumber").append("<div  class=\"btn\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+                                        }
+                                    }
+                                    	$('#pageNumber').append("...");
+                                }
+                                else {//总页数减去当前显示页不足5页
+                                    $("#pageNumber").html("");
+                                    for(var i=pageIndex-temp;i<=pageCount	;i++){
+                                        if(pageIndex==i){
+                                            $("#pageNumber").append("<div  class=\"btn pageNum\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+                                        }
+                                        else {
+                                            $("#pageNumber").append("<div  class=\"btn\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+                                        }
+                                    }
 								}
-								else {
-                                    $("#pageNumber").append("<div  class=\"btn\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+
+							}else{//未超过5页
+                                for(var i=1;i<=pageCount;i++){
+                                    if(pageIndex==i){
+                                        $("#pageNumber").append("<div  class=\"btn pageNum\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+                                    }
+                                    else {
+                                        $("#pageNumber").append("<div  class=\"btn\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
+                                    }
                                 }
 							}
+				//end控制分页标签显示--------------------------------------------
+
 
                         }
 
@@ -401,7 +476,7 @@ selectOrder();//进入页面  默认获取全部order信息；
  */
 $('#mit').click(function () {
 
-    selectOrder();
+    select();
     return false;
 })
 

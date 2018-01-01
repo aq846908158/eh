@@ -165,7 +165,7 @@ public class OrderService {
      *@params    order:产品对象. lowOrderPrice:订单最低价 , heightOrderPrice:订单最高价
      *@return 根据条件查询结果 将list集合放入jsonResult的Map集合里，返回到前台
      */
-    public JsonResult getAllOrderManage(Order order, Double lowOrderPrice, Double heightOrderPrice){
+    public JsonResult getAllOrderManage(Order order, Double lowOrderPrice, Double heightOrderPrice,String column,String orderBy){
         JsonResult jsonResult = new JsonResult();
         Map<String, Object> map = new HashMap<String, Object>(); //查询所用Map容器
         Map<Object,Object> map_order= new HashMap<Object, Object>(); //存放查询所得数据
@@ -208,7 +208,7 @@ public class OrderService {
 //            System.out.println("value:"+entry.getValue());
 //        }
 
-            orders = orderDao.getOrder(Order.class, map);
+            orders = orderDao.getOrder(Order.class, map,column,orderBy);
 
         if (orders.size() > 0){
             jsonResult.setErrorCode("200");

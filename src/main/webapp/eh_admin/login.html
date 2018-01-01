@@ -51,6 +51,7 @@
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
 <script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
+<script type="text/javascript" src="js/eh.js"></script>
 
 <!--此乃百度统计代码，请自行删除-->
 <script>
@@ -67,7 +68,7 @@ $(function(){
     $('#mit').click(function(){
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/admin/login",
+            url: serverURL+"/admin/login",
             data:$('#myform').serialize(),
             dataType:"json",
             success: function(data){
@@ -78,7 +79,11 @@ $(function(){
                     localStorage.setItem("eh_token",data.item.token);
                     window.location.href="index.html";
                 }
-            }
+            },
+            error:function(data) {
+                layer.msg("服务器繁忙,请稍后再试");
+                return null;
+            },
         });
         return false;
     })
