@@ -52,6 +52,16 @@
 				<input type="text" class="input-text txt-style "   id="trueName" name="trueName" minlength="2" maxlength="4" required>
 			</div>
 		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"> 管理权限：</label>
+			<span class="select-box inline" style="margin-left: 15px;border-radius: 3px;">
+				 <select name="permissions" class="select">
+						<option value="low">初级管理员</option>
+						<option value="middle">中级管理员</option>
+						 <option value="height">高级管理员</option>
+				  </select>
+			</span>
+		</div>
 		<p style="color: #ccc;margin-left: 130px;">此功能只添加基础字段,请尽快通知该管理员完善个人信息。</p>
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
@@ -72,15 +82,16 @@
 <script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
-<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="js/eh.js"></script>
 <script type="text/javascript">
 
 
 	$('#addBtn').click(function () {
 		$.ajax({
 			type: "POST",
-			url: "http://localhost:8080/admin/toAddAdmin",
-			data:$('#myform').serialize(),
+			url: serverURL+"/admin/toAddAdmin",
+			data:$('#myform').serialize()+'&token='+localStorage.getItem("eh_token"),
 			dataType:"json",
 			success: function(data){
 				if(data.errorCode=="500") {

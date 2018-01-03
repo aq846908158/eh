@@ -199,7 +199,7 @@ public class AdminService {
         adminDao.addAdmin(admin);
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("服务端：添加成功.");
-            return jsonResult;
+        return jsonResult;
 
     }
 

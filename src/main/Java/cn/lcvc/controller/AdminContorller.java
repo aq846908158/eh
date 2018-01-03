@@ -2,6 +2,7 @@ package cn.lcvc.controller;
 
 import cn.lcvc.POJO.Admin;
 import cn.lcvc.POJO.TokenMessage;
+import cn.lcvc.service.AdminPermissionsService;
 import cn.lcvc.service.AdminService;
 import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import redis.clients.jedis.Jedis;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminContorller {
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private AdminPermissionsService adminPermissionsService;
 
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST)
@@ -106,9 +111,45 @@ public class AdminContorller {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/toAddAdmin",method = RequestMethod.POST)
-    public JsonResult addAdmin(Admin admin){
+    @RequestMapping(value = "/toAddAdmin",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
+    public JsonResult addAdmin(Admin admin,@RequestParam(value = "permissions") String permissions,@RequestParam(value = "token") String token){
         JsonResult jsonResult = adminService.registerAdmin(admin);
+        Map<Object,Object> map=new HashMap<Object, Object>();
+
+
+        //如添加成功
+        if (jsonResult.getErrorCode() == "200"){
+
+            //获取admin登录信息
+            if (JWT.verifyJwt(token)) {
+                TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
+                Admin adminlogin=adminService.getAdmin(tokenMessage.getAdminId());
+                String  jedisToken="";
+                try {
+                    Jedis jedis = new Jedis("localhost");
+                    jedisToken= jedis.get(adminlogin.getId()+"_token");
+                }catch (Exception e){
+                    jsonResult.setErrorCode("501");
+                    jsonResult.setMessage("服务端：添加异常,请重新登录.");
+                    return  jsonResult;
+                }
+
+                if (jedisToken.equals(token)){
+
+                    if (permissions.equals("low")) map.put("low",true);
+                    if (permissions.equals("middle")) map.put("middle",true);
+                    if (permissions.equals("height")) map.put("height",true);
+
+                    jsonResult = adminPermissionsService.registerAdminPermissions(admin,adminlogin,map);
+                }else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端:登录信息异常,请重新登录.");
+                    return  jsonResult;
+                }
+            }
+
+        }
+
         return  jsonResult;
     }
 

@@ -170,7 +170,7 @@
 		<span class="c-gray en">&gt;</span>
 		管理员管理
 		<span class="c-gray en">&gt;</span>
-		管理员管理
+		管理员权限管理
 		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 	</nav>
 	<div class="Hui-article">
@@ -178,28 +178,23 @@
 			<div class="text-c" style="width: 700px; margin: 0px auto;">
                 <form id="myform">
                     <input type="text" class="input-text" style="width:150px;" placeholder="管理员用户名" id="username" name="userName">
-                    <input type="text" class="input-text" style="width:150px;" placeholder="真实姓名" id="true" name="trueName">
+                    <input type="text" class="input-text" style="width:150px;" placeholder="真实姓名" id="trueName" name="trueName">
                     <span class="select-box inline">
-                        <select name="loginState" class="select" id="loginState">
-                            <option value="-1">登录状态</option>
-                            <option value="0">允许登录</option>
-                            <option value="1">禁止登录</option>
+                        <select name="adminPermissons" class="select" id="adminPermissons">
+                            <option value="null">管理员权限</option>
+                            <option value="low">初级管理员</option>
+                            <option value="middle">中级管理员</option>
+                            <option value="height">高级管理员</option>
                         </select>
                     </span>
-                    <span class="select-box inline">
-                        <select name="selectType" class="select" id="selectType">
-                            <option value="like">模糊查询</option>
-                            <option value="eq">精准查询</option>
-                        </select>
-                    </span>
-                    <button type="submit" class="btn btn-success" id="selectBtn"  ><i class="Hui-iconfont">&#xe665;</i>查询</button>
+                    <button type="submit" class="btn btn-success" id="selectBtn"  ><i class="Hui-iconfont">&#xe665;</i>精确查询</button>
                     <button type="button" class="btn btn-success" id="resetBtn" >重置条件并查询</button>
                 </form>
 
 
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
-				<span class="l"> <a href="javascript:void(0);"  id="addBtn" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加权限</a> </span>
+
 				<span class="r">共有数据：<strong id="dataNumber">54</strong> 条</span>
 			</div>
 			<div class="mt-20">
@@ -241,12 +236,25 @@
 	selectAdminPermissions();
 	});
 
+
+	//条件查询
+	$('#selectBtn').click(function (){
+		selectAdminPermissions();
+		return false;
+	});
+
+	//重置表单
+	$('#resetBtn').click(function () {
+		$('#myform').resetForm();
+		selectAdminPermissions();
+	});
+
    //查询
 	function selectAdminPermissions() {
         $.ajax({
             type:'GET',
-            url:'http://localhost:8080/adminPermissions/adminPermissions',
-           // data:$('#myform').serialize(),
+            url:serverURL+'/adminPermissions/adminPermissions',
+           data:$('#myform').serialize(),
             dataType:'json',
             success:function (data) {
                 if (data.errorCode == "500"){
@@ -261,40 +269,18 @@
                     $('#show').html('');
                     $.each(adminPermissionslist,function (index,permissions) {
 
-                        if (permissions.low == true &&  permissions.middle == false && permissions.height == false){
-                            var level="<select class=\"select loginStateType\"  name=\"city\" style='color: orange;border: 0px;width: 100px;' >"+
-                                "<option value=\"low\" selected  >初级管理员</option>"+
-                                "<option value=\"middle\">中级管理员</option>"+
-                                "<option value=\"height\">高级管理员</option>"+
-                                "</select>";
-                        }
-                        if (permissions.low == true &&  permissions.middle == true && permissions.height == false){
-                            var level="<select class=\"select loginStateType\"  name=\"city\" style='color: orange;border: 0px;width: 100px;' >"+
-                                "<option value=\"low\" >初级管理员</option>"+
-                                "<option value=\"middle\" selected>中级管理员</option>"+
-                                "<option value=\"height\">高级管理员</option>"+
-                                "</select>";
-                        }
-                        if (permissions.low == true &&  permissions.middle == true && permissions.height == true){
-                            var level="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;width: 100px;' >"+
-                                "<option value=\"low\" >初级管理员</option>"+
-                                "<option value=\"middle\">中级管理员</option>"+
-                                "<option value=\"height\" selected>高级管理员</option>"+
-                                "</select>";
-                        }
 
-                   /*  if (permissions.low == true ){
-                            var level="初级管理员";
-					 }
-
-					 if (permissions.middle == true ){
-                            var level="中级管理员";
-					 }
-
-                     if (permissions.height == true ){
-                            var level="高级管理员";
-					 }*/
-
+                    	if(permissions.low == true){
+                    		if(permissions.middle ==true){
+                    			if (permissions.height == true){
+									var level="<td style='color: green;'>高级管理员</td>";
+								}else {
+                                    var level="<td style='color: orange;'>中级管理员</td>";
+								}
+							}else {
+                                var level="<td style='color: red;'>初级管理员</td>";
+							}
+						}
 
 
                         $('#show').append(
@@ -302,8 +288,8 @@
                             '<td><input type="checkbox" value="1" name=""></td>'+
                             '<td>'+permissions.admin.userName+'</td>'+
                             '<td>'+permissions.admin.trueName+'</td>'+
-                            '<td>'+level+'</td>'+
-                            '<td class=\"td-manage\"><a title=\"删除\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>'+
+                            level+
+                            '<td class=\"td-manage\"><a title=\"修改权限\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a>'+
                             ' </tr>'
                         );
                     });

@@ -2,12 +2,15 @@ package cn.lcvc.service;
 
 import cn.lcvc.POJO.Admin;
 import cn.lcvc.POJO.AdminPermissions;
+import cn.lcvc.POJO.TokenMessage;
 import cn.lcvc.dao.AdminDao;
 import cn.lcvc.dao.AdminPermissionsDao;
+import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,8 @@ public class AdminPermissionsService {
     private AdminPermissionsDao adminPermissionsDao;
     @Autowired
     private AdminDao adminDao;
+    @Autowired
+    private  AdminService adminService;
 
     /*
    * 管理员权限管理
@@ -38,9 +43,9 @@ public class AdminPermissionsService {
         Map<Object,Object> map_adminPermissions= new HashMap<Object, Object>(); //存放查询所得数据
 
         if (adminPermissions != null){
-           if (adminPermissions.getLow() != null) map.put("low",adminPermissions.getLow());
-           if (adminPermissions.getMiddle() != null) map.put("middle",adminPermissions.getMiddle());
-           if (adminPermissions.getHeight() != null) map.put("height",adminPermissions.getHeight());
+           if (adminPermissions.getLow() != null) map.put("low",true);
+           if (adminPermissions.getMiddle() != null) map.put("middle",true);
+           if (adminPermissions.getHeight() != null) map.put("height",true);
 
         }
 
@@ -67,8 +72,8 @@ public class AdminPermissionsService {
             jsonResult.setMessage("查询成功.");
             jsonResult.setList(adminPermissionsList);
         }else {
-            jsonResult.setMessage("500");
-            jsonResult.setMessage("无数据.");
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端:无数据.");
         }
         return  jsonResult;
     }
@@ -84,6 +89,9 @@ public class AdminPermissionsService {
         JsonResult jsonResult= new JsonResult();
         AdminPermissions adminPermissions = new AdminPermissions();
 
+
+
+
         //判断是否有权限执行该操作
         if (loginAdmin != null && loginAdmin.getId() != null){
             //是否存在admin表
@@ -91,15 +99,15 @@ public class AdminPermissionsService {
             if (loginAdminPermissions != null){
                 AdminPermissions getAdminPermissions = adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",loginAdmin);
 
-                if (!getAdminPermissions.getHeight().equals(true)){
+                if (!getAdminPermissions.getHeight()){
                     jsonResult.setErrorCode("500");
-                    jsonResult.setMessage("您没有权限执行该操作!!");
+                    jsonResult.setMessage("服务端:您没有权限执行该操作!!");
                     return jsonResult;
                 }
 
             }else {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("账户不存在，请重新登录.");
+                jsonResult.setMessage("服务端:账户不存在，请重新登录.");
                 return  jsonResult;
             }
 
@@ -117,9 +125,9 @@ public class AdminPermissionsService {
             }
 
             AdminPermissions old = adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",admin);
-            if ( old !=null){ // 判断权限表唯一是否存在该amdin
+            if ( old !=null){ // 判断是否已经添加权限
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("权限已存在,请勿重复添加！");
+                jsonResult.setMessage("服务端:权限已存在,请勿重复添加！");
                 return  jsonResult;
             }else {
                 adminPermissions.setAdmin(admin);
@@ -163,44 +171,40 @@ public class AdminPermissionsService {
 
         adminPermissionsDao.addAdminPermissions(adminPermissions);
         jsonResult.setErrorCode("200");
-        jsonResult.setMessage("权限添加成功.");
+        jsonResult.setMessage("服务端:添加成功[permissions].");
 
 
         return  jsonResult;
     }
 
+    //判断是否具备高级管理员权限
+    public Boolean getPermissions(String token) {
 
+        //获取admin登录信息
+        if (JWT.verifyJwt(token)) {
+            TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
+            Admin adminlogin=adminService.getAdmin(tokenMessage.getAdminId());
+            String  jedisToken="";
+            try {
+                Jedis jedis = new Jedis("localhost");
+                jedisToken= jedis.get(adminlogin.getId()+"_token");
+            }catch (Exception e){
+                return  false;
+            }
 
+            if (jedisToken.equals(token)){
+                AdminPermissions getAdminPermissions = adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",adminlogin);
+                if (!getAdminPermissions.getHeight()){
+                    return false;
+                }else {
+                    return  true;
+                }
+            }else {
+               return false;
+            }
+        }
 
+        return false;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 }
