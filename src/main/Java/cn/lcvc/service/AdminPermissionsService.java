@@ -207,4 +207,13 @@ public class AdminPermissionsService {
         return false;
 
     }
+
+    /**
+     * 获取一个权限对象，
+     * @param admin 需要获取的admin对象
+     * @return 如果查询则返回一个权限对象，否则返回空
+     */
+    public AdminPermissions getAdminOfPermissions(Admin admin) {
+        return  adminPermissionsDao.getAdminPermissionsBy_OneColumn("admin",admin);
+    }
 }

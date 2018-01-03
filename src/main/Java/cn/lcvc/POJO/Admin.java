@@ -16,7 +16,8 @@ public class Admin {
     private String phone;
     private String email;
     private Timestamp createTime;
-    private Timestamp lastTime;
+    private Timestamp lastTime;//最后登录时间
+    private Timestamp loginLastTime;//上一次登录时间
     private Integer loginState; //登录状态 0表示允许登录 1表示禁止登录
     private Integer loginNum; //登录次数
     private String title;
@@ -113,6 +114,16 @@ public class Admin {
     }
 
     @Basic
+    @Column(name = "loginLastTime")
+    public Timestamp getLoginLastTime() {
+        return loginLastTime;
+    }
+
+    public void setLoginLastTime(Timestamp loginLastTime) {
+        this.loginLastTime = loginLastTime;
+    }
+
+    @Basic
     @Column(name = "title")
     public String getTitle() {
         return title;
@@ -158,9 +169,12 @@ public class Admin {
         if (email != null ? !email.equals(admin.email) : admin.email != null) return false;
         if (createTime != null ? !createTime.equals(admin.createTime) : admin.createTime != null) return false;
         if (lastTime != null ? !lastTime.equals(admin.lastTime) : admin.lastTime != null) return false;
-        if (title != null ? !title.equals(admin.title) : admin.title != null) return false;
+        if (loginLastTime != null ? !loginLastTime.equals(admin.loginLastTime) : admin.loginLastTime != null)
+            return false;
+        if (loginState != null ? !loginState.equals(admin.loginState) : admin.loginState != null) return false;
+        if (loginNum != null ? !loginNum.equals(admin.loginNum) : admin.loginNum != null) return false;
+        return title != null ? title.equals(admin.title) : admin.title == null;
 
-        return true;
     }
 
     @Override
@@ -174,6 +188,9 @@ public class Admin {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (lastTime != null ? lastTime.hashCode() : 0);
+        result = 31 * result + (loginLastTime != null ? loginLastTime.hashCode() : 0);
+        result = 31 * result + (loginState != null ? loginState.hashCode() : 0);
+        result = 31 * result + (loginNum != null ? loginNum.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         return result;
     }

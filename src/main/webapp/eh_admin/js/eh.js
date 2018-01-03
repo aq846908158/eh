@@ -19,7 +19,8 @@ function getheaderMessage() {
                 var item=data.item;
                 $("#adminName").html(data.item.adminName);
                 $("#adminTitle").html(data.item.title);
-
+                $("#loginNumber").html(data.item.loginNum);
+                $('#fast-loginTime').html(getLocalTime(data.item.lastTime));
             }
             if (data.errorCode == "501"){
                 layer.msg("服务器炸了！！！");
@@ -105,8 +106,9 @@ $(".sortName").click(function () {
 
 
 
-//管理员退出
-function adminExit() {
-    localStorage.removeItem("eh_token");
-    window.location.href="login.html";
-}
+/*
+*
+* */
+$('#info').click(function () {
+    layer_show("个人信息","admin-info.html","800","700");
+});

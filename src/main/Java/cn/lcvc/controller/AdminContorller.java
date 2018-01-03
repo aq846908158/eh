@@ -1,6 +1,7 @@
 package cn.lcvc.controller;
 
 import cn.lcvc.POJO.Admin;
+import cn.lcvc.POJO.AdminPermissions;
 import cn.lcvc.POJO.TokenMessage;
 import cn.lcvc.service.AdminPermissionsService;
 import cn.lcvc.service.AdminService;
@@ -40,8 +41,6 @@ public class AdminContorller {
 
         JsonResult jsonResult=new JsonResult();
 
-
-
         if (JWT.verifyJwt(token))
         {
             TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
@@ -59,6 +58,8 @@ public class AdminContorller {
             if (jedisToken.equals(token)){
                 jsonResult.getItem().put("adminName",admin.getTrueName());
                 jsonResult.getItem().put("title",admin.getTitle());
+                jsonResult.getItem().put("loginNum",admin.getLoginNum());
+                jsonResult.getItem().put("lastTime",admin.getLoginLastTime());
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("获取成功");
                 return  jsonResult;
@@ -116,7 +117,6 @@ public class AdminContorller {
         JsonResult jsonResult = adminService.registerAdmin(admin);
         Map<Object,Object> map=new HashMap<Object, Object>();
 
-
         //如添加成功
         if (jsonResult.getErrorCode() == "200"){
 
@@ -165,6 +165,44 @@ public class AdminContorller {
     @RequestMapping(value = "resetPassord",method = RequestMethod.GET)
     public JsonResult resetPassord(Admin admin){
         JsonResult jsonResult =adminService.resetAdminPassword(admin.getId());
+
+        return  jsonResult;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getAdminInfo",method = RequestMethod.GET)
+    public  JsonResult getAdminInfo(@RequestParam(value = "token") String token){
+        JsonResult jsonResult=new JsonResult();
+        Map<Object,Object> map_admin= new HashMap<Object, Object>();
+
+            //验证admin登录信息
+            if (JWT.verifyJwt(token)) {
+                TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
+                Admin adminlogin=adminService.getAdmin(tokenMessage.getAdminId());
+                String  jedisToken="";
+                try {
+                    Jedis jedis = new Jedis("localhost");
+                    jedisToken= jedis.get(adminlogin.getId()+"_token");
+                }catch (Exception e){
+                    jsonResult.setErrorCode("501");
+                    jsonResult.setMessage("服务端：操作异常,请重新登录.");
+                    return  jsonResult;
+                }
+
+                if (jedisToken.equals(token)){
+                    map_admin.put("admin",adminlogin);
+                    AdminPermissions adminPermissions = adminPermissionsService.getAdminOfPermissions(adminlogin);
+                    map_admin.put("permissions",adminPermissions);
+                    jsonResult.setItem(map_admin);
+                    jsonResult.setErrorCode("200");
+
+                }else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端:登录信息异常,请重新登录.");
+                    return  jsonResult;
+                }
+            }
+
 
         return  jsonResult;
     }

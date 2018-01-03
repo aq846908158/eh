@@ -16,6 +16,7 @@
         <property name="email" column="email"/>
         <property name="createTime" column="createTime"/>
         <property name="lastTime" column="lastTime"/>
+        <property name="loginLastTime" column="loginLastTime" />
         <property name="loginState" column="loginState"/>
         <property name="loginNum" column="loginNum"/>
         <property name="title" column="title"/>

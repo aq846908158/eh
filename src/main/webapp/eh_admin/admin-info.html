@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="favicon.ico" >
+<link rel="Shortcut Icon" href="favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script><![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>管理员信息修改</title>
+	<style>
+
+		.txt-style{
+			width: 380px;
+			border-radius: 3px;
+		}
+
+		#main{
+			width: 450px;
+			overflow: hidden;
+			margin: 50px auto;
+		}
+
+
+		</style>
+</head>
+<body>
+<article class="cl pd-20" id="main">
+	<form class="form form-horizontal" id="myform">
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3" style="text-align: left;" > 用户名：</label>
+			<span id="userName">user</span>
+		</div>
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3"style="text-align: left;"> 真实姓名：</label>
+			<span id="trueName">user</span>
+		</div>
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3" style="text-align: left;">手机号码：</label>
+			<span id="phone">user</span>
+		</div>
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3"style="text-align: left;"> 电子邮箱：</label>
+			<span id="email">user</span>
+		</div>
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3"style="text-align: left;"> 创建时间：</label>
+			<span id="createTime">user</span>
+		</div>
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3" style="text-align: left;box-sizing: content-box;" > 上一次登录时间：</label>
+			<span id="loginLastTime">user</span>
+		</div>
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3" style="text-align: left;box-sizing: content-box;"> 最后登录时间：</label>
+			<span id="lastTime">user</span>
+		</div>
+		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
+			<label class="form-label col-xs-4 col-sm-3"style="text-align: left;"> 管理员权限：</label>
+			<span id="permissions">user</span>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" id="addBtn" value="我要修改">
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.page.js"></script>
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="js/eh.js"></script>
+<script type="text/javascript">
+
+$(function () {
+
+	$.ajax({
+		type: "GET",
+		url: serverURL+"/admin/getAdminInfo",
+		data:{"token":localStorage.getItem("eh_token")},
+		dataType:"json",
+		success: function(data){
+			if(data.errorCode=="500") {
+				layer.msg(data.message);
+				window.location.href="login.html";
+			}
+			if(data.errorCode=="501") {
+				layer.msg(data.message);
+				window.location.href="login.html";
+			}
+			if(data.errorCode=="200") {
+				//alert(data.item.admin.trueName);
+
+				$('#userName').html(data.item.admin.userName);
+				$("#trueName").html(data.item.admin.trueName);
+				var phone=data.item.admin.phone,email=data.item.admin.email;
+				if (phone == null){
+					$('#phone').html("待完善").css("color","#999")
+				}  else {
+					$('#phone').html(phone);
+				}
+				if (email == null ){
+					$('#email').html("待完善").css("color","#999")
+				} else {
+					$('#email').html(email);
+				}
+
+				$('#createTime').html(getLocalTime(data.item.admin.createTime));
+				$('#loginLastTime').html(getLocalTime(data.item.admin.loginLastTime));
+				$('#lastTime').html(getLocalTime(data.item.admin.lastTime));
+				if(data.item.permissions == null){
+					$('#permissions').html('未设置权限');
+				}
+				if(data.item.permissions.low == true){
+					if(data.item.permissions.middle ==true){
+						if (data.item.permissions.height == true){
+							$('#permissions').html('高级级管理员');
+						}else {
+							$('#permissions').html('中级管理员');
+						}
+					}else {
+						$('#permissions').html('初级管理员');
+					}
+				}
+
+
+
+			}
+		}
+	});
+
+});
+
+	$('#addBtn').click(function () {
+		$.ajax({
+			type: "POST",
+			url: serverURL+"/admin/toAddAdmin",
+			data:$('#myform').serialize()+'&token='+localStorage.getItem("eh_token"),
+			dataType:"json",
+			success: function(data){
+				if(data.errorCode=="500") {
+					layer.msg(data.message);
+
+				}
+				if(data.errorCode=="200") {
+					layer.msg(data.message);
+					window.setTimeout(function () {
+						$('#myform').resetForm();//重置表单
+						top.location.href="admin-list.html";
+					},1000);
+				}
+			}
+		});
+		return false;
+	})
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

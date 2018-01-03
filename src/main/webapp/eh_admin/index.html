@@ -24,15 +24,13 @@
 <![endif]-->
 <!--/meta 作为公共模版分离出去-->
 
-<title>H-ui.admin v3.0</title>
-<meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
-<meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+<title>二货-后台管理系统 </title>
 </head>
 <body>
 <!--_header 作为公共模版分离出去-->
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
-		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/aboutHui.shtml" style="font-size:1.1em;">二货-后台管理系统</a> <a style="font-size:1.1em;" class="logo navbar-logo-m f-l mr-10 visible-xs" href="/aboutHui.shtml">二货</a> 
+		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="index.html" style="font-size:1.1em;">二货-后台管理系统</a> <a style="font-size:1.1em;" class="logo navbar-logo-m f-l mr-10 visible-xs" href="/aboutHui.shtml">二货</a>
 			<span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.0</span> 
 			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 			<nav class="nav navbar-nav">
@@ -50,9 +48,9 @@
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 			 	<ul class="cl">
 					<li id="adminTitle">    </li>
-					<li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A"  id="adminName">  <i class="Hui-iconfont">&#xe6d5;</i></a>
+					<li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A"  id="adminName">您好，请登录<i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
-							<li><a href="javascript:;" onClick="myselfinfo()">个人信息</a></li>
+							<li><a href="javascript:void(0);" id="info" >个人信息</a></li>
 							<li><a href="#" onclick="adminExit()">切换账户</a></li>
 							<li><a href="#" onclick="adminExit()" >退出</a></li>
 				</ul>
@@ -155,17 +153,15 @@
 <!--/_menu 作为公共模版分离出去-->
 
 <section class="Hui-article-box">
-	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a> 
+	<nav class="breadcrumb"><i class="Hui-iconfont">  </i> <a href="/" class="maincolor">首页</a>
 		<span class="c-999 en">&gt;</span>
 		<span class="c-666">我的桌面</span> 
 		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="Hui-article">
 		<article class="cl pd-20">
-			<p class="f-20 text-success">欢迎使用H-ui.admin
-				<span class="f-14">v2.3</span>
-				后台模版！</p>
-			<p>登录次数：18 </p>
-			<p>上次登录IP：222.35.131.79.1  上次登录时间：2014-6-14 11:19:55</p>
+			<p class="f-20 text-success">欢迎进入二货后台管理系统</p>
+			<p >登录次数：<span id="loginNumber">0</span> 次</p>
+			<p>上次登录IP：222.35.131.79.1  上次登录时间：<span id="fast-loginTime">14点33分</span></p>
 			<table class="table table-border table-bordered table-bg">
 				<thead>
 					<tr>
@@ -347,24 +343,17 @@
 
 <!--此乃百度统计代码，请自行删除-->
 <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
 
-})();
 
 $(function () {
     //获取登录信息
 	getheaderMessage();
 
-
-
 });
 
+
+
 </script>
-<!--/此乃百度统计代码，请自行删除-->
+
 </body>
 </html>
