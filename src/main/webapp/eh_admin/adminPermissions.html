@@ -16,7 +16,7 @@
 	<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
 	<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
 	<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
-	<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" /><link href="plug/layui/css/layui.css">
 	<!--[if IE 6]>
 	<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 	<script>DD_belatedPNG.fix('*');</script><![endif]-->
@@ -195,7 +195,7 @@
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
 
-				<span class="r">共有数据：<strong id="dataNumber">54</strong> 条</span>
+				<span class="r">共有数据：<strong id="dataNumber">0</strong> 条</span>
 			</div>
 			<div class="mt-20">
 				<table class="table table-border table-bordered table-bg table-hover table-sort">
@@ -228,25 +228,37 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript" src="js/eh.js"></script>
+<script src="plug/layui/layui.js"></script>
 <script type="text/javascript">
 
 	$(function () {
 		//判断是否登录
 	getheaderMessage();
-	selectAdminPermissions();
+	if (!eh_key){
+        selectAdminPermissions();
+    }
 	});
 
 
 	//条件查询
 	$('#selectBtn').click(function (){
-		selectAdminPermissions();
+        if (!eh_key){
+            selectAdminPermissions();
+        }else {
+            getheaderMessage();
+		}
 		return false;
 	});
 
 	//重置表单
 	$('#resetBtn').click(function () {
-		$('#myform').resetForm();
-		selectAdminPermissions();
+        if (!eh_key){
+            $('#myform').resetForm();
+            selectAdminPermissions();
+        }else {
+            getheaderMessage();
+        }
+
 	});
 
    //查询

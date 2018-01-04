@@ -60,6 +60,8 @@ public class AdminContorller {
                 jsonResult.getItem().put("title",admin.getTitle());
                 jsonResult.getItem().put("loginNum",admin.getLoginNum());
                 jsonResult.getItem().put("lastTime",admin.getLoginLastTime());
+                jsonResult.getItem().put("phone",admin.getPhone());
+                jsonResult.getItem().put("email",admin.getEmail());
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("获取成功");
                 return  jsonResult;
@@ -203,6 +205,43 @@ public class AdminContorller {
                 }
             }
 
+
+        return  jsonResult;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateAdminInfo",method = RequestMethod.POST)
+    public  JsonResult updateAdminInfo(Admin admin,@RequestParam(value = "token") String token){
+        JsonResult jsonResult=new JsonResult();
+
+        jsonResult.setErrorCode("200");
+        //验证admin登录信息
+        if (JWT.verifyJwt(token)) {
+            TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
+            Admin adminlogin=adminService.getAdmin(tokenMessage.getAdminId());
+            String  jedisToken="";
+            try {
+                Jedis jedis = new Jedis("localhost");
+                jedisToken= jedis.get(adminlogin.getId()+"_token");
+            }catch (Exception e){
+                jsonResult.setErrorCode("501");
+                jsonResult.setMessage("服务端：操作异常,请重新登录.");
+                return  jsonResult;
+            }
+
+            if (jedisToken.equals(token)){
+
+                adminlogin.setTrueName(admin.getTrueName());
+                adminlogin.setPhone(admin.getPhone());
+                adminlogin.setEmail(admin.getEmail());
+                jsonResult=adminService.updateAdminInfo(adminlogin);
+
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("服务端:登录信息异常,请重新登录.");
+                return  jsonResult;
+            }
+        }
 
         return  jsonResult;
     }

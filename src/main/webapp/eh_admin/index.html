@@ -18,8 +18,8 @@
 <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
 <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+<link href="plug/layui/css/layui.css">
 <!--[if IE 6]>
-<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <!--/meta 作为公共模版分离出去-->
@@ -322,7 +322,6 @@
 	</table>
 </article>
 		<footer class="footer">
-			<p>感谢jQuery、layer、laypage、Validform、UEditor、My97DatePicker、iconfont、Datatables、WebUploaded、icheck、highcharts、bootstrap-Switch<br> Copyright &copy;2015 H-ui.admin v3.0 All Rights Reserved.<br> 本后台系统由<a href="http://www.h-ui.net/" target="_blank" title="H-ui前端框架">H-ui前端框架</a>提供前端技术支持</p>
 </footer>
 </div>
 </section>
@@ -333,6 +332,7 @@
 <script type="text/javascript" src="static/h-ui/js/H-ui.js"></script> 
 <script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.page.js"></script> 
 <script type="text/javascript" src="js/eh.js"></script>
+<script src="plug/layui/layui.js"></script>
 <!--/_footer /作为公共模版分离出去-->
 
 <!--请在下方写此页面业务相关的脚本-->
@@ -346,10 +346,13 @@
 
 
 $(function () {
-    //获取登录信息
-	getheaderMessage();
+		//var eh_key;
+		//获取登录信息
+		getheaderMessage();
 
 });
+
+
 
 
 

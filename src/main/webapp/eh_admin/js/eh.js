@@ -2,12 +2,13 @@
 var serverURL="http://localhost:8080";
 // var serverURL="http://www.jgdmhlg.xin/eh";
 //end全局变量定义（必须引用此文件）---------------------------------------------------------------------------------
-
+var  eh_key=false;
 //获取网页头部 Admin登录信息
 function getheaderMessage() {
     $.ajax({
         type: "GET",
         url: serverURL+"/admin/getLoginMessage",
+        async:false,//同步请求
         data:{"token":localStorage.getItem("eh_token")},
         dataType:"json",
         success: function(data){
@@ -16,11 +17,26 @@ function getheaderMessage() {
                 window.location.href="login.html";
             }
             if(data.errorCode=="200") {
+
                 var item=data.item;
                 $("#adminName").html(data.item.adminName);
                 $("#adminTitle").html(data.item.title);
                 $("#loginNumber").html(data.item.loginNum);
                 $('#fast-loginTime').html(getLocalTime(data.item.lastTime));
+
+                var msg='';
+                if (item.phone == null || item.email == null){
+                    if(item.phone == null){
+                        msg='联系方式';
+                    }
+                    if (item.email == null){
+                        msg+='、电子邮箱';
+                    }
+                    var infoTitle='您的'+msg+'为空，请添加完善，如不完善，则无法进行相关操作!!';
+                    test(infoTitle);//弹出警告层
+                    eh_key=true;
+                }
+
             }
             if (data.errorCode == "501"){
                 layer.msg("服务器炸了！！！");
@@ -32,6 +48,11 @@ function getheaderMessage() {
         }
     });
 }
+
+
+
+
+
 
 //管理员退出
 function adminExit() {
@@ -112,3 +133,42 @@ $(".sortName").click(function () {
 $('#info').click(function () {
     layer_show("个人信息","admin-info.html","800","700");
 });
+
+
+function  test(txt) {
+    layui.use('layer', function() { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+        var active = {
+            notice: function(){
+                //示范一个公告层
+                layer.open({
+                    type: 1
+                    ,title: false //不显示标题栏
+                    ,closeBtn: false
+                    ,area: '300px;' //宽度
+                    ,shade: 1 //透明度
+                    ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                    ,btn: ['去完善','忽略']
+                    ,btnAlign: 'c'
+                    ,moveType: 1 //拖拽模式，0或者1
+                    ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+txt+'</div>'
+                    ,success: function(layero){
+                        var btn = layero.find('.layui-layer-btn');
+                        btn.find('.layui-layer-btn0').attr({
+                            href: 'admin-info.html'
+                            ,target: '_top'
+                        });
+                    }
+                });
+            }
+        }
+
+        //$('#layerDemo .layui-btn').click( function(){
+        //var othis = $(this), method = 'notice';
+        active['notice'] ? active[ 'notice'].call(this, $(this)) : '';
+        //	});
+
+
+    });
+}

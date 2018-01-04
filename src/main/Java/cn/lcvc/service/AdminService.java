@@ -85,10 +85,14 @@ public class AdminService {
                 map.put("adminId",admin.getId());
                 Jedis jedis = new Jedis("localhost");//链接本地Redis
                 jedis.set(admin.getId()+"_token",token);//tonken存入Redis
+
+                admin.setLoginLastTime(admin.getLastTime());
+                admin.setLastTime(new Timestamp(System.currentTimeMillis()));
+                adminDao.updateAdmin(admin);
+
                 jsonResult.setItem(map);
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("登录成功");
-                jsonResult.setItem(map);
             }else{
                 jsonResult.setErrorCode("500");
                 jsonResult.setMessage("密码错误，请重试");
@@ -191,6 +195,7 @@ public class AdminService {
         admin.setSalt(salt);//添加盐值
         admin.setUserPassword(md5password);//默认密码
         admin.setCreateTime(new Timestamp(System.currentTimeMillis()));//创建时间
+        admin.setLoginLastTime(new Timestamp(System.currentTimeMillis())); //上一次登录时间
         admin.setLastTime(new Timestamp(System.currentTimeMillis()));//最后登录时间
         admin.setLoginState(0);
         admin.setLoginNum(0);
@@ -340,7 +345,7 @@ public class AdminService {
             adminDao.updateAdmin(oldadmin);
 
             jsonResult.setErrorCode("200");
-            jsonResult.setMessage("修改成功.");
+            jsonResult.setMessage("服务端：修改成功.");
 
         }
 
