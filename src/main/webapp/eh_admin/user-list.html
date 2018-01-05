@@ -23,7 +23,7 @@
 	<script>DD_belatedPNG.fix('*');</script><![endif]-->
 	<!--/meta 作为公共模版分离出去-->
 
-	<title>商品列表 - 商品管理 - H-ui.admin v3.0</title>
+	<title>用户管理-二货</title>
 	<meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
 	<meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
 </head>
@@ -128,7 +128,8 @@
 			<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a href="admin-list.html" title="管理员管理">管理员管理</a></li>
+					<li ><a href="admin-list.html" title="管理员管理">管理员管理</a></li>
+					<li ><a href="adminPermissions.html" title="管理员权限管理">管理员权限管理</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -174,14 +175,31 @@
 	<div class="Hui-article">
 		<article class="cl pd-20">
 			<div class="text-c" style="width: 700px; margin: 0px auto;">
+				<form id="myform">
+					<input type="text" class="input-text" style="width:150px;" placeholder="管理员用户名" id="username" name="userName">
+					<input type="text" class="input-text" style="width:150px;" placeholder="真实姓名" id="true" name="trueName">
+					<span class="select-box inline">
+                        <select name="loginState" class="select" id="loginState">
+                            <option value="-1">登录状态</option>
+                            <option value="0">允许登录</option>
+                            <option value="1">禁止登录</option>
+                        </select>
+                    </span>
+					<span class="select-box inline">
+                        <select name="selectType" class="select" id="selectType">
+                            <option value="like">模糊查询</option>
+                            <option value="eq">精准查询</option>
+                        </select>
+                    </span>
+					<button type="submit" class="btn btn-success" id="selectBtn"  ><i class="Hui-iconfont">&#xe665;</i>查询</button>
+					<button type="button" class="btn btn-success" id="resetBtn" >重置条件并查询</button>
+				</form>
 
-				<input type="text" class="input-text" style="width:250px;" placeholder="输入用户名查询" id="" name="">
-				<button type="submit" class="btn btn-success" id="" name="" ><i class="Hui-iconfont">&#xe665;</i> 查用户</button>
 
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
 				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加用户','user-add.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a> </span>
-				<span class="r">共有数据：<strong>54</strong> 条</span>
+				<span class="r">共有数据：<strong id="dataNumber">0</strong> 条</span>
 			</div>
 			<div class="mt-20">
 				<table class="table table-border table-bordered table-bg table-hover table-sort">
@@ -189,23 +207,31 @@
 					<tr class="text-c">
 						<th width="25"><input type="checkbox" name="" value=""></th>
 						<th width="40">用户名</th>
-						<th width="165">真实姓名</th>
+						<th width="45">真实姓名</th>
 						<th width="40">所属校园</th>
 						<th width="100">手机号码</th>
 						<th width="100">电子邮箱</th>
+						<th width="20">在售数量</th>
+						<th width="40">销售成功总数</th>
 						<th width="100">最后登录时间</th>
+						<th width="100">登录状态</th>
+						<th width="100">销售状态</th>
 						<th width="100">操作</th>
 					</tr>
 					</thead>
-					<tbody>
+					<tbody id="show">
 					<tr class="text-c">
 						<td><input type="checkbox" value="1" name=""></td>
 						<td>user</td>
 						<td>哈哈哈</td>
 						<td>城市职业学院</td>
 						<td>13888888888</td>
+						<td>13888888888</td>
+						<td>13888888888</td>
 						<td>5555@qq.com</td>
 						<td>2017-8-8 20:22:33</td>
+						<td>允许登录</td>
+						<td>允许登录</td>
 						<td class="td-manage"><a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','user-edit.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
 					</tr>
 
@@ -227,87 +253,93 @@
 <script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="js/eh.js"></script>
+<script src="plug/layui/layui.js"></script>
 <script type="text/javascript">
-    $('.table-sort').dataTable({
-        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
-        "bStateSave": true,//状态保存
-        "aoColumnDefs": [
-            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-            {"orderable":false,"aTargets":[0,7]}// 不参与排序的列
-        ]
-    });
 
-    /*商品-添加*/
-    function admin_add(title,url,w,h){
-        layer_show(title,url,w,h);
-    }
-    /*商品-编辑*/
-    function admin_edit(title,url,id,w,h){
-        layer_show(title,url,w,h);
-    }
-    /*商品-删除*/
-    function article_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            $.ajax({
-                type: 'POST',
-                url: '',
-                dataType: 'json',
-                success: function(data){
-                    $(obj).parents("tr").remove();
-                    layer.msg('已删除!',{icon:1,time:1000});
-                },
-                error:function(data) {
-                    console.log(data.msg);
-                },
-            });
-        });
-    }
+	$(function () {
 
-    /*商品-审核*/
-    function article_shenhe(obj,id){
-        layer.confirm('审核文章？', {
-                btn: ['通过','不通过','取消'],
-                shade: false,
-                closeBtn: 0
-            },
-            function(){
-                $(obj).parents("tr").find(".td-manage").prepend('<a class="c-primary" onClick="article_start(this,id)" href="javascript:;" title="申请上线">申请上线</a>');
-                $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
-                $(obj).remove();
-                layer.msg('已发布', {icon:6,time:1000});
-            },
-            function(){
-                $(obj).parents("tr").find(".td-manage").prepend('<a class="c-primary" onClick="article_shenqing(this,id)" href="javascript:;" title="申请上线">申请上线</a>');
-                $(obj).parents("tr").find(".td-status").html('<span class="label label-danger radius">未通过</span>');
-                $(obj).remove();
-                layer.msg('未通过', {icon:5,time:1000});
-            });
-    }
-    /*商品-下架*/
-    function article_stop(obj,id){
-        layer.confirm('确认要下架吗？',function(index){
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
-            $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
-            $(obj).remove();
-            layer.msg('已下架!',{icon: 5,time:1000});
-        });
-    }
+		//验证是否登录
+		getheaderMessage();
+		selectUser();
+	});
 
-    /*商品-发布*/
-    function article_start(obj,id){
-        layer.confirm('确认要发布吗？',function(index){
-            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
-            $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
-            $(obj).remove();
-            layer.msg('已发布!',{icon: 6,time:1000});
-        });
-    }
-    /*商品-申请上线*/
-    function article_shenqing(obj,id){
-        $(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">待审核</span>');
-        $(obj).parents("tr").find(".td-manage").html("");
-        layer.msg('已提交申请，耐心等待审核!', {icon: 1,time:2000});
-    }
+	function selectUser() {
+		$.ajax({
+			type:'GET',
+			url:serverURL+'/user/user',
+			//data:$('#myform').serialize(),
+			dataType:'json',
+			success:function (data) {
+				if (data.errorCode == "500"){
+					layer.msg(data.message);
+					$('#show').html('');
+					$('#dataNumber').text(0);
+				}
+
+				if (data.errorCode == "200"){
+					var userList=data.list;
+					$('#dataNumber').text(userList.length);
+
+					$('#show').html('');
+					$.each(userList,function (index,admins) {
+
+						if(!admins.banLogin) {
+							var banLogin="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+									"<option value=\"0\" selected  >允许登录</option>"+
+									"<option value=\"1\">禁止登录</option>"+
+									"</select>";
+						} else {
+							var banLogin="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+									"<option value=\"0\"  >允许登录</option>"+
+									"<option value=\"1\" selected >禁止登录</option>"+
+									"</select>";
+						}
+
+						if(!admins.banSell) {
+							var banSell="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+									"<option value=\"0\" selected  >允许销售</option>"+
+									"<option value=\"1\">禁止销售</option>"+
+									"</select>";
+						} else {
+							var banSell="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+									"<option value=\"0\"  >允许销售</option>"+
+									"<option value=\"1\" selected >禁止销售</option>"+
+									"</select>";
+						}
+
+
+
+						var time =getLocalTime(admins.lastTime);
+
+						$('#show').append(
+						'<tr class="text-c">'+
+								'<td><input type="checkbox" value="1" name=""></td>'+
+								'<td>'+admins.userName+'</td>'+
+								'<td>'+admins.trueName+'</td>'+
+								'<td>'+admins.school.schoolName+'</td>'+
+								'<td>'+admins.phone+'</td>'+
+								'<td>'+admins.email+'</td>'+
+								'<td>'+admins.forSaleNumber+'</td>'+
+								'<td>'+admins.sellNumber+'</td>'+
+								'<td>'+time+'</td>'+
+								'<td>'+banLogin+'</td>'+
+								'<td>'+banSell+'</td>'+
+								"<td class=\"td-manage\"><a title=\"编辑\" href=\"javascript:void(0);\" onclick=\"adminUpdate("+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> <a title=\"删除\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
+						'</tr>'
+						);
+					});
+				}
+			},
+			error:function (data) {
+				layer.msg("服务器繁忙，请稍后重试")
+			}
+
+		});
+
+	}
+
+
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

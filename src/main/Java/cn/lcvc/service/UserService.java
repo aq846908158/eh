@@ -404,7 +404,7 @@ public class UserService{
     /**************************************    @author wuruibao      *************************************** **/
 
     /**
-     *用户管理（后天管理）
+     *用户管理（后台管理）
      *@Author @wuruibao
      *@Date 2017/12/5 19:52
      *@params   user:User对象, lowSellNumber:最低销售成功数，hiSellNumber:最高销售成功数 lowForSaleNumber:最低在售, hiForSaleNumber:最高在售
@@ -442,11 +442,9 @@ public class UserService{
             List<User> users = userDao.getUser(User.class, map);
 
         if (users.size() > 0){
-            map_Users.put("users",users);
-
-            jsonResult.setErrorCode("200");
+             jsonResult.setErrorCode("200");
             jsonResult.setMessage("查询成功.");
-            jsonResult.setItem(map_Users);
+            jsonResult.setList(users);
         }else {
             jsonResult.setMessage("500");
             jsonResult.setMessage("无数据.");

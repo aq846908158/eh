@@ -246,5 +246,37 @@ public class AdminContorller {
         return  jsonResult;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/updateAdminPassword",method = RequestMethod.POST)
+    public  JsonResult updateAdminPassword0(@RequestParam(value = "password") String oldPassword,@RequestParam(value = "token") String token,@RequestParam(value = "newPassword") String newpassword){
+        JsonResult jsonResult=new JsonResult();
+        Admin admin=new Admin();
+
+        //验证admin登录信息
+        if (JWT.verifyJwt(token)) {
+            TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
+            Admin adminlogin=adminService.getAdmin(tokenMessage.getAdminId());
+            String  jedisToken="";
+            try {
+                Jedis jedis = new Jedis("localhost");
+                jedisToken= jedis.get(adminlogin.getId()+"_token");
+            }catch (Exception e){
+                jsonResult.setErrorCode("501");
+                jsonResult.setMessage("服务端：操作异常,请重新登录.");
+                return  jsonResult;
+            }
+
+            if (jedisToken.equals(token)){
+                jsonResult=adminService.updateAdminPassword(adminlogin,oldPassword,newpassword);
+            }else {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("服务端:登录信息异常,请重新登录.");
+                return  jsonResult;
+            }
+        }
+
+        return  jsonResult;
+    }
+
 }
 

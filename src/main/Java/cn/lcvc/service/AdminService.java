@@ -226,18 +226,20 @@ public class AdminService {
             jsonResult.setErrorCode("500");
             jsonResult.setMessage("旧密码错误.请重试");
             return jsonResult;
+        }{
+            String salt= Md5.getRandomString(32);//盐值
+            String password=newPassword.concat(salt);
+            String md5password= Md5.MD5(password);
+
+            admin1.setSalt(salt);
+            admin1.setUserPassword(md5password);
+
+            adminDao.updateAdmin(admin1);
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("修改成功.");
         }
 
-        String salt= Md5.getRandomString(32);//盐值
-        String password=newPassword.concat(salt);
-        String md5password= Md5.MD5(password);
 
-        admin1.setSalt(salt);
-        admin1.setUserPassword(md5password);
-
-        adminDao.updateAdmin(admin1);
-        jsonResult.setErrorCode("200");
-        jsonResult.setMessage("修改成功.");
         return  jsonResult;
     }
 
