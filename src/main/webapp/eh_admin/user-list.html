@@ -24,8 +24,20 @@
 	<!--/meta 作为公共模版分离出去-->
 
 	<title>用户管理-二货</title>
-	<meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
-	<meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+	<style>
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none !important;
+			margin: 0;
+		}
+		input[type="number"]{
+			-moz-appearance: textfield;
+		}
+		.select {
+			width: 80px;
+		}
+	</style>
 </head>
 <body>
 <!--_header 作为公共模版分离出去-->
@@ -174,21 +186,26 @@
 	</nav>
 	<div class="Hui-article">
 		<article class="cl pd-20">
-			<div class="text-c" style="width: 700px; margin: 0px auto;">
+			<div class="text-c" style="margin: 0px auto ;">
 				<form id="myform">
-					<input type="text" class="input-text" style="width:150px;" placeholder="管理员用户名" id="username" name="userName">
-					<input type="text" class="input-text" style="width:150px;" placeholder="真实姓名" id="true" name="trueName">
+					<input type="text" class="input-text" style="width:120px;" placeholder="用户名" id="username" name="userName">
+					<input type="text" class="input-text" style="width:100px;" placeholder="真实姓名" id="true" name="trueName">
+					<input type="number" class="input-text" style="width:100px;" placeholder="最低在售" id="lowForSaleNumber" name="lowForSaleNumber">~
+					<input type="number" class="input-text" style="width:100px;" placeholder="最高在售" id="hiForSaleNumber" name="hiForSaleNumber">
+					<input type="number" class="input-text" style="width:100px;margin-left: 15px;" placeholder="最低销售" id="lowSellNumber" name="lowSellNumber">~
+					<input type="number" class="input-text" style="width:100px;" placeholder="最高销售" id="hiSellNumber" name="hiSellNumber">
 					<span class="select-box inline">
-                        <select name="loginState" class="select" id="loginState">
+                        <select  class="select" id="banLogin">
                             <option value="-1">登录状态</option>
                             <option value="0">允许登录</option>
                             <option value="1">禁止登录</option>
                         </select>
                     </span>
 					<span class="select-box inline">
-                        <select name="selectType" class="select" id="selectType">
-                            <option value="like">模糊查询</option>
-                            <option value="eq">精准查询</option>
+                        <select  class="select" id="banSell">
+                            <option value="-1">销售状态</option>
+                            <option value="0">允许销售</option>
+                            <option value="1">禁止销售</option>
                         </select>
                     </span>
 					<button type="submit" class="btn btn-success" id="selectBtn"  ><i class="Hui-iconfont">&#xe665;</i>查询</button>
@@ -211,7 +228,7 @@
 						<th width="40">所属校园</th>
 						<th width="100">手机号码</th>
 						<th width="100">电子邮箱</th>
-						<th width="20">在售数量</th>
+						<th width="25">在售数量</th>
 						<th width="40">销售成功总数</th>
 						<th width="100">最后登录时间</th>
 						<th width="100">登录状态</th>
@@ -220,20 +237,7 @@
 					</tr>
 					</thead>
 					<tbody id="show">
-					<tr class="text-c">
-						<td><input type="checkbox" value="1" name=""></td>
-						<td>user</td>
-						<td>哈哈哈</td>
-						<td>城市职业学院</td>
-						<td>13888888888</td>
-						<td>13888888888</td>
-						<td>13888888888</td>
-						<td>5555@qq.com</td>
-						<td>2017-8-8 20:22:33</td>
-						<td>允许登录</td>
-						<td>允许登录</td>
-						<td class="td-manage"><a title="编辑" href="javascript:;" onclick="admin_edit('用户编辑','user-edit.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-					</tr>
+
 
 					</tbody>
 				</table>
@@ -258,17 +262,50 @@
 <script type="text/javascript">
 
 	$(function () {
-
 		//验证是否登录
 		getheaderMessage();
+
 		selectUser();
 	});
+
+
+
+	$('#selectBtn').click(function () {
+        if (!eh_key) {
+            if ($('#banLogin').val() == 1 || $('#banLogin').val() == 0 ){
+                $('#banLogin').attr('name','banLogin');
+			}else {
+                $('#banLogin').removeAttr('name');
+			}
+            if ($('#banSell').val() == 1 || $('#banSell').val() == 0){
+                $('#banSell').attr('name','banSell');
+            }else {
+                $('#banSell').removeAttr('name');
+            }
+            selectUser();
+        }else {
+            getheaderMessage();
+        }
+        return false;
+    });
+
+    //重置表单
+    $('#resetBtn').click(function () {
+        if (!eh_key) {
+            $('#myform').resetForm();
+            $('#banLogin').removeAttr('name');
+            $('#banSell').removeAttr('name');
+            selectUser();
+        }else{
+            getheaderMessage();
+        }
+    });
 
 	function selectUser() {
 		$.ajax({
 			type:'GET',
 			url:serverURL+'/user/user',
-			//data:$('#myform').serialize(),
+			data:$('#myform').serialize(),
 			dataType:'json',
 			success:function (data) {
 				if (data.errorCode == "500"){
@@ -332,7 +369,8 @@
 				}
 			},
 			error:function (data) {
-				layer.msg("服务器繁忙，请稍后重试")
+				layer.msg("服务器繁忙，请稍后重试");
+                return false;
 			}
 
 		});

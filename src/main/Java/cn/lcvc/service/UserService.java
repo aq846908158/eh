@@ -419,22 +419,36 @@ public class UserService{
 
             if (user.getUserName() != null && user.getUserName().trim().length() != 0) map.put("userName", user.getUserName().trim());//用户名
             if (user.getTrueName() != null && user.getTrueName().trim().length() != 0) map.put("trueName", user.getTrueName().trim());//真实姓名
-//            if (user.getSellNumber() != null && user.getSellNumber() > 0) map.put("sellNumber",user.getSellNumber());//销售成功数
-//            if (user.getForSaleNumber() != null && user.getForSaleNumber() > 0) map.put("forSaleNumber",user.getForSaleNumber());//在售数量
-            if (user.getBanLogin() != null) map.put("banLogin", user.getBanLogin());//禁止登录
-            if (user.getBanSell() != null) map.put("banSell", user.getBanSell());//交易禁止
+            if (user.getBanLogin() != null){//登录状态
+                if (user.getBanLogin() == true){
+                    map.put("banLogin", true);
+                }
+                if (user.getBanLogin() == false){
+                    map.put("banLogin", false);
+                }
+            }
+            if (user.getBanSell() != null){//交易状态
+                if (user.getBanSell() == true){
+                    map.put("banSell", true);
+                }
+                if (user.getBanSell() == false){
+                    map.put("banSell", false);
+                }
+            }
 
         }
 
+        //销售成功数
         if (lowSellNumber != null && hiSellNumber != null) {
-            if (lowSellNumber > 0 && hiSellNumber > 0) {
+            if (lowSellNumber >= 0 && hiSellNumber >= 0) {
                 map.put("lowSellNumber", lowSellNumber);
                 map.put("hiSellNumber", hiSellNumber);
             }
         }
 
+        //在售数量
         if (lowForSaleNumber != null && hiForSaleNumber != null) {
-            if (lowForSaleNumber > 0 && hiForSaleNumber > 0) {
+            if (lowForSaleNumber >= 0 && hiForSaleNumber >= 0) {
                 map.put("lowForSaleNumber", lowForSaleNumber);
                 map.put("hiForSaleNumber", hiForSaleNumber);
             }
@@ -443,16 +457,13 @@ public class UserService{
 
         if (users.size() > 0){
              jsonResult.setErrorCode("200");
-            jsonResult.setMessage("查询成功.");
+            jsonResult.setMessage("服务端：查询成功.");
             jsonResult.setList(users);
         }else {
-            jsonResult.setMessage("500");
-            jsonResult.setMessage("无数据.");
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：无数据.");
         }
-
             return jsonResult;
-
-
     }
 
 
