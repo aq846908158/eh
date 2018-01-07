@@ -30,7 +30,8 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     public void deleteProduct(Product product) {
-        getSession().delete(product);
+        getSession().delete(getSession().load(Product.class,product.getId()));
+        getSession().flush();
     }
 
     public void updateProduct(Product product) {
@@ -80,6 +81,14 @@ public class ProductDaoImpl implements ProductDao {
         return null;
     }
 
+    @Override
+    public List<Product> getProductsBy_OneColumn(String column, Object value) {
+        Criteria criteria=getSession().createCriteria(Product.class);
+        criteria.add(Restrictions.eq(column,value));
+        List list=criteria.list();
+        return list;
+    }
+
     public Product getProductBy_TowColumn(String column1, Object value1, String column2, Object value2) {
         Criteria criteria=getSession().createCriteria(Product.class);
         criteria.add(Restrictions.eq(column1,value1));
@@ -90,6 +99,15 @@ public class ProductDaoImpl implements ProductDao {
             return (Product)list.get(0);
         }
         return null;
+    }
+
+    @Override
+    public  List<Product>  getProductsBy_TowColumn(String column1, Object value1, String column2, Object value2) {
+        Criteria criteria=getSession().createCriteria(Product.class);
+        criteria.add(Restrictions.eq(column1,value1));
+        criteria.add(Restrictions.eq(column2,value2));
+        List list=criteria.list();
+        return list;
     }
 
     public List<Product> getProductListOrderBy(String column, String orderBy) {

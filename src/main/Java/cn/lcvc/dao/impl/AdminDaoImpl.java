@@ -113,7 +113,7 @@ public class AdminDaoImpl implements AdminDao {
         return  list;
     }
 
-    public List<Admin> queryAllAdminManage(Object object, Map<String, Object> map) {
+    public List<Admin> queryAllAdminManage(Object object, Map<String, Object> map,String sort,String sortType) {
         List<Admin> list = new ArrayList<Admin>();
         Criteria criteria=getSession().createCriteria((Class) object);
         if (map.get("seltype") != null && map.get("seltype").equals("like")  ){
@@ -131,7 +131,10 @@ public class AdminDaoImpl implements AdminDao {
                 criteria.add(Restrictions.like((String) entry.getKey(), "%"+entry.getValue()+"%"));
             }
         }
-
+             if(sortType.equals("asc"))
+            criteria.addOrder(Order.asc(sort));
+             else if (sortType.equals("desc"))
+            criteria.addOrder(Order.desc(sort));
         try {
             list = criteria.list();
 

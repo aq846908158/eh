@@ -196,7 +196,7 @@
                     </span>
                     <button type="submit" class="btn btn-success" id="selectBtn"  ><i class="Hui-iconfont">&#xe665;</i>查询</button>
                     <button type="button" class="btn btn-success" id="resetBtn" >重置条件并查询</button>
-                </form>
+
 
 
 			</div>
@@ -204,6 +204,24 @@
 				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;"  id="addBtn" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a> </span>
 				<span class="r">共有数据：<strong id="dataNumber">0</strong> 条</span>
 			</div>
+			<div style="width: 98%; height: 30px;margin: 10px;"><!--排序组件-->
+				排序：
+				<div class="btn size-S radius pageNum sortName" >默认</div>
+				<input type="radio" name="sort" value="id" checked="true" style="display: none;"/>
+				<div class="btn size-S radius sortName">最后登录时间</div>
+				<input type="radio" name="sort" value="loginLastTime" style="display: none;"/>
+				<div class="btn size-S radius sortName">登录次数</div>
+				<input type="radio" name="sort" value="loginNum" style="display: none;"/>
+				<div class="btn size-S radius sortName">登录状态</div>
+				<input type="radio" name="sort" value="loginState" style="display: none;"/>
+				<div style=" line-height: 30px; display: inline; position: relative; " onclick="sortType()">
+					<div class="triangle-down" id="sortIoc">    <!--向上的三角-->   </div>
+					<input type="radio" name="sortType" value="desc" id="desc" checked="true" style="display: none;"/>
+					<input type="radio" name="sortType" value="asc" id="asc"  style="display: none;"/>
+
+				</div>
+			</div>
+			</form>
 			<div class="mt-20">
 				<table class="table table-border table-bordered table-bg table-hover table-sort">
 					<thead>
@@ -222,6 +240,17 @@
 					<tbody id="show">
 					</tbody>
 				</table>
+				<div style="width: 100%; margin-top: 20px; " >
+					<div style="width: 100%; text-align: right;">
+						<button class="btn btn-default" style="width: 70px; background: none;" id="page_back" onclick="pageBack()">上一页</button>
+
+						<div id="pageNumber" style="display: inline;">
+
+						</div>
+
+						<button class="btn btn-default" style="width: 70px; background: none;" onclick="pageNext()">下一页</button>
+					</div>
+				</div>
 			</div>
 		</article>
 	</div>
@@ -241,12 +270,14 @@
 <script type="text/javascript" src="js/eh.js"></script>
 <script src="plug/layui/layui.js"></script>
 <script type="text/javascript">
-
+//初始化数据
+var pageIndex=1;
+//---------------------
 	$(function () {
 		//判断是否登录
 	getheaderMessage();
         if (!eh_key){
-            selectAdmin();
+            select();
         }
 	});
 
@@ -257,7 +288,7 @@ $('#selectBtn').click(function (){
             $("#selectType").find("option:contains('精准查询')").attr("selected", true);
             $("#selectType").find("option:contains('模糊查询')").attr("selected", false);
         }
-        selectAdmin();
+        select();
     }else {
         getheaderMessage();
 	}
@@ -268,7 +299,7 @@ $('#selectBtn').click(function (){
     $('#resetBtn').click(function () {
         if (!eh_key) {
             $('#myform').resetForm();
-            selectAdmin();
+            select();
         }else{
             getheaderMessage();
 		}
@@ -276,7 +307,7 @@ $('#selectBtn').click(function (){
     });
 
 
-	function selectAdmin() {
+	function select() {
 		$.ajax({
 			type:'GET',
             url:serverURL+'/admin/admin',
@@ -292,9 +323,17 @@ $('#selectBtn').click(function (){
                 if (data.errorCode == "200"){
                     var adminlist=data.list;
                     $('#dataNumber').text(adminlist.length);
-
-                    $('#show').html('');
-                    $.each(adminlist,function (index,admins) {
+					//分页参数----------------------------------------------------
+						$('#show').html('');
+						var orders=data.list;
+						var totalCount=orders.length;//总记录数
+						pageCount=orders.length/pageSize;    pageCount=Math.ceil(pageCount)//总页数
+						if(pageIndex>pageCount) pageIndex=pageCount;
+						var first=(pageIndex-1)*pageSize;
+						var end=first+pageSize; if(end>totalCount) end=totalCount;
+						var pageOrders=orders.slice(first,end);
+                    //分页参数end----------------------------------------------------
+                    $.each(pageOrders,function (index,admins) {
 
 
 						if(admins.loginState =="0") {
@@ -340,6 +379,8 @@ $('#selectBtn').click(function (){
 							"<a href=\"javascript:void(0);\"  class=\"ml-5\" title=\"重置密码\" onclick='resetPassord("+admins.id+")' ><img  src=\"temp/password.png\" /></a></td>"+
                        ' </tr>'
                         );
+
+                        pageFenShow();//分页页码显示
                     });
                 }
             },

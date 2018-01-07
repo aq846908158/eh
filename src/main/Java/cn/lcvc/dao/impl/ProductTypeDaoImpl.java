@@ -31,7 +31,8 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
     }
 
     public void deleteProductType(ProductType productType) {
-        getSession().delete(productType);
+        getSession().delete(getSession().load(ProductType.class,productType.getId()));
+        getSession().flush();
     }
 
     public void updateProductType(ProductType productType) {
@@ -54,7 +55,7 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
         return criteria.list();
     }
 
-    public List<ProductType> getProductTypeList(Object object, Map<Object, Object> map) {
+    public List<ProductType> getProductTypeList(Object object, Map<Object, Object> map,String sort,String sortType) {
         List<ProductType> productTypeArrayList=new ArrayList<ProductType>();
 
         Criteria criteria = getSession().createCriteria((Class) object);
@@ -66,6 +67,10 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
             }
             criteria.add(Restrictions.eq((String) entry.getKey(),entry.getValue()));
         }
+        if(sortType.equals("asc"))
+            criteria.addOrder(Order.asc(sort));
+        else if (sortType.equals("desc"))
+            criteria.addOrder(Order.desc(sort));
         try {
             productTypeArrayList = criteria.list();
         }catch (Exception e){

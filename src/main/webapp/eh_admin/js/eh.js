@@ -3,6 +3,7 @@ var serverURL="http://localhost:8080";
 // var serverURL="http://www.jgdmhlg.xin/eh";
 //end全局变量定义（必须引用此文件）---------------------------------------------------------------------------------
 var  eh_key=false;
+var pageSize=3;
 //获取网页头部 Admin登录信息
 function getheaderMessage() {
     $.ajax({
@@ -78,6 +79,16 @@ function formatDate(now) {
     var second=now.getSeconds();
     return "20"+(year-100)+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
 }
+
+/**
+ * 让提交按钮失效
+ */
+$('#mit').click(function () {
+
+    select();
+    return false;
+})
+
 
 /**
  * 下一页
@@ -171,4 +182,63 @@ function  test(txt) {
 
 
     });
+
+}
+
+/**
+ * 分页页数显示控制
+ */
+function pageFenShow()
+{
+    //控制分页标签显示--------------------------------------------
+    $("#pageNumber").html("");
+    var pageCha=pageCount-pageIndex+1;//之后的页数
+    var temp=(5-pageCha);//存放还差多少页足够5页
+    if(pageCount>5)//超过5页
+    {
+
+        if(pageCha>=5) {//如果总页数减去当前显示页还足够5页
+            for(var i=pageIndex;i<pageIndex+5;i++){
+                if(pageIndex==i){
+                    $("#pageNumber").append("<div  class=\"btn pageNum pageTo\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\" onclick='pageTo("+i+")'  >"+i+"</div>");
+                }
+                else {
+                    $("#pageNumber").append("<div  class=\"btn pageTo\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\"  onclick='pageTo("+i+")' >"+i+"</div>");
+                }
+            }
+            $('#pageNumber').append("...");
+        }
+        else {//总页数减去当前显示页不足5页
+            $("#pageNumber").html("");
+            for(var i=pageIndex-temp;i<=pageCount	;i++){
+                if(pageIndex==i){
+                    $("#pageNumber").append("<div  class=\"btn pageNum pageTo\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\"  onclick='pageTo("+i+")' >"+i+"</div>");
+                }
+                else {
+                    $("#pageNumber").append("<div  class=\"btn pageTo\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\"  onclick='pageTo("+i+")' >"+i+"</div>");
+                }
+            }
+        }
+
+    }else{//未超过5页
+        for(var i=1;i<=pageCount;i++){
+            if(pageIndex==i){
+                $("#pageNumber").append("<div  class=\"btn pageNum pageTo\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\"  onclick='pageTo("+i+")' >"+i+"</div>");
+            }
+            else {
+                $("#pageNumber").append("<div  class=\"btn pageTo\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\"  onclick='pageTo("+i+")' >"+i+"</div>");
+            }
+        }
+    }
+    //end控制分页标签显示--------------------------------------------
+}
+
+/**
+ * 点击页码跳转到指定页数
+ * @param pageNum 页数
+ */
+function pageTo(pageNum)
+{
+    pageIndex=pageNum;
+    select();
 }

@@ -20,7 +20,7 @@ public interface ProductTypeDao {
      * @param_map需要查询的字段的值
      * @return 一个list集合的ProductType对象，0表示没查到
      */
-    List<ProductType> getProductTypeList(Object object, Map<Object,Object> map);
+    List<ProductType> getProductTypeList(Object object, Map<Object,Object> map,String sort,String sortType);
 
 
     /**

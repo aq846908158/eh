@@ -362,7 +362,7 @@ public class AdminService {
      *@params    userNmae:账户名；truneName：真实姓名,selectType:查询类型,(like:模糊查询,eq:精准查询)
      *@return 将list集合放入jsonResult的Map集合里，返回到前台
     */
-    public JsonResult selectAllAdminManage(String userNmae, String trueName, Integer loginState, String selectType){
+    public JsonResult selectAllAdminManage(String userNmae, String trueName, Integer loginState, String selectType,String sort,String sortType){
      JsonResult jsonResult = new JsonResult();
      Map<String,Object>  map = new HashMap<String, Object>(); //查询所用Map容器
      Map<Object,Object> map_admin= new HashMap<Object, Object>(); //存放查询所得数据
@@ -373,7 +373,7 @@ public class AdminService {
       if (loginState != null && loginState != -1 && loginState >= 0 && loginState <= 1) map.put("loginState",loginState);
       if (selectType != null && selectType.trim().length() != 0) map.put("seltype",selectType.trim());
 
-        List<Admin> list=adminDao.queryAllAdminManage(Admin.class,map);
+        List<Admin> list=adminDao.queryAllAdminManage(Admin.class,map,sort,sortType);
         if (list.size() > 0) {
             jsonResult.setErrorCode("200");
             jsonResult.setMessage("查询成功.");

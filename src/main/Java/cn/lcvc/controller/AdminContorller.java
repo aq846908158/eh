@@ -84,10 +84,10 @@ public class AdminContorller {
 
     @ResponseBody
     @RequestMapping(value = "/admin",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
-    public JsonResult getAdmin(Admin admin, @RequestParam(value = "selectType") String selectType) throws UnsupportedEncodingException {
+    public JsonResult getAdmin(Admin admin, @RequestParam(value = "selectType") String selectType,@RequestParam(value = "sort") String sort,@RequestParam(value = "sortType") String sortType) throws UnsupportedEncodingException {
         byte[] b=admin.getTrueName().getBytes("ISO-8859-1");//用tomcat的格式（iso-8859-1）方式去读。
         String trueName=new String(b,"utf-8");//采用utf-8去接string
-        JsonResult jsonResult =adminService.selectAllAdminManage(admin.getUserName(),trueName,admin.getLoginState(),selectType);
+        JsonResult jsonResult =adminService.selectAllAdminManage(admin.getUserName(),trueName,admin.getLoginState(),selectType,sort,sortType);
 
         return  jsonResult;
     }

@@ -152,24 +152,41 @@
 		分类管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a> </nav>
 	<div class="Hui-article">
 		<article class="cl pd-20">
-			<div class="text-c">
-				<span class="select-box inline">
-					<select name="orderState" class="select">
-						<option value="">全部级别</option>
-						<option value="1">一级分类</option>
-						<option value="2">二级分类</option>
-						<option value="3">三级分类</option>
-					</select>
-					</span>
-				<input type="text" class="input-text" style="width:150px" placeholder="分类名称" id="" name="">
-				<input type="text" class="input-text" style="width:150px" placeholder="分类代码" id="" name="">
+			<form id="myform">
+				<div class="text-c">
+					<span class="select-box inline">
+						<select name="productTypeRank" class="select">
+							<option value="">全部级别</option>
+							<option value="1">一级分类</option>
+							<option value="2">二级分类</option>
+							<option value="3">三级分类</option>
+						</select>
+						</span>
+					<input type="text" class="input-text" style="width:150px" placeholder="分类名称" id="" name="productTypeName">
+					<input type="text" class="input-text" style="width:150px" placeholder="分类代码" id="" name="productTypeCode">
 
-				<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查分类</button>
-			</div>
-			<div class="cl pd-5 bg-1 bk-gray mt-20">
-				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加分类','productType-add.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a> </span>
-				<span class="r">共有数据：<strong>54</strong> 条</span>
-			</div>
+					<button type="submit" class="btn btn-success" id="mit" name=""><i class="Hui-iconfont">&#xe665;</i> 查分类</button>
+				</div>
+
+				<div class="cl pd-5 bg-1 bk-gray mt-20">
+					<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加分类','productType-add.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a> </span>
+					<span class="r">共有数据：<strong>54</strong> 条</span>
+				</div>
+				<div style="width: 98%; height: 30px;margin: 10px;"><!--排序组件-->
+					排序：
+					<div class="btn size-S radius pageNum sortName" >默认</div>
+					<input type="radio" name="sort" value="id" checked="true" style="display: none;"/>
+					<div class="btn size-S radius sortName">分类等级</div>
+					<input type="radio" name="sort" value="productTypeRank" style="display: none;"/>
+
+					<div style=" line-height: 30px; display: inline; position: relative; " onclick="sortType()">
+						<div class="triangle-down" id="sortIoc">    <!--向上的三角-->   </div>
+						<input type="radio" name="sortType" value="desc" id="desc" checked="true" style="display: none;"/>
+						<input type="radio" name="sortType" value="asc" id="asc"  style="display: none;"/>
+
+					</div>
+				</div>
+			</form>
 			<table class="table table-border table-bordered table-bg">
 				<thead>
 					<tr>
@@ -186,19 +203,22 @@
 						<th width="100">操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr class="text-c">
-						<td><input type="checkbox" value="1" name=""></td>
-						<td>1</td>
-						<td>203364</td>
-						<td>数码设备</td>
-						<td>023365</td>
-						<td>1级分类</td>
-						<td class="td-manage"></a> <a title="编辑" href="javascript:;" onclick="admin_edit('分类编辑','admin-add.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-					</tr>
+				<tbody id="show">
+
 
 				</tbody>
 			</table>
+			<div style="width: 100%; margin-top: 20px; " >
+				<div style="width: 100%; text-align: right;">
+					<button class="btn btn-default" style="width: 70px; background: none;" id="page_back" onclick="pageBack()">上一页</button>
+
+					<div id="pageNumber" style="display: inline;">
+
+					</div>
+
+					<button class="btn btn-default" style="width: 70px; background: none;" onclick="pageNext()">下一页</button>
+				</div>
+			</div>
 		</article>
 	</div>
 </section>
@@ -214,54 +234,103 @@
 <script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script> 
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script> 
+<script type="text/javascript" src="js/eh.js"></script>
 <script type="text/javascript">
-/*
-	参数解释：
-	title	标题
-	url		请求的url
-	id		需要操作的数据id
-	w		弹出层宽度（缺省调默认值）
-	h		弹出层高度（缺省调默认值）
-*/
-/*管理员-增加*/
+//初始化数据
+getheaderMessage();
+var pageIndex=1;
+var pageCount;
+select();
+//-----------------------------
 function admin_add(title,url,w,h){
 	layer_show(title,url,w,h);
 }
-/*管理员-删除*/
+/*f分类-删除*/
 function admin_del(obj,id){
-	layer.confirm('确认要删除吗？',function(index){
+	layer.confirm('删除分类会将此分类下的商品归属到无分类栏目,也会清空此分类下的子分类,确认要删除分类吗？',function(index){
 		//此处请求后台程序，下方是成功后的前台处理……
-		
-		$(obj).parents("tr").remove();
-		layer.msg('已删除!',{icon:1,time:1000});
+        $.ajax({
+            type: 'delete',
+            url: serverURL+'/admin/productType?id='+id,
+            dataType: 'json',
+            success: function(data){
+                if(data.errorCode=="200")
+                {
+                    select();
+                    layer.msg('已删除!',{icon:1,time:1000});
+
+                }
+
+                if(data.errorCode=="500")
+                {
+                    layer.msg(data.message);
+                }
+
+            },
+            error:function(data) {
+                layer.msg("服务器繁忙,请稍后再试");
+            },
+        });
+        layer.close(index);
+
 	});
 }
 /*管理员-编辑*/
 function admin_edit(title,url,id,w,h){
 	layer_show(title,url,w,h);
 }
-/*管理员-停用*/
-function admin_stop(obj,id){
-	layer.confirm('确认要停用吗？',function(index){
-		//此处请求后台程序，下方是成功后的前台处理……
-		
-		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_start(this,id)" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">已禁用</span>');
-		$(obj).remove();
-		layer.msg('已停用!',{icon: 5,time:1000});
-	});
-}
 
-/*管理员-启用*/
-function admin_start(obj,id){
-	layer.confirm('确认要启用吗？',function(index){
-		//此处请求后台程序，下方是成功后的前台处理……
-		
-		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_stop(this,id)" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
-		$(obj).remove();
-		layer.msg('已启用!', {icon: 6,time:1000});
-	});
+
+function select()
+{
+    $.ajax({
+        type: 'GET',
+        url: serverURL+'/admin/productType',
+        async:false,
+        data:$("#myform").serialize(),
+        dataType: 'json',
+        success: function(data){
+            if(data.errorCode=="500")
+            {
+                layer.msg(data.message);
+            }
+
+            if(data.errorCode=="200")
+            {
+                var orders=data.list;
+                var totalCount=orders.length;//总记录数
+                pageCount=orders.length/pageSize;    pageCount=Math.ceil(pageCount)//总页数
+                if(pageIndex>pageCount) pageIndex=pageCount;
+                var first=(pageIndex-1)*pageSize;
+                var end=first+pageSize; if(end>totalCount) end=totalCount;
+                var pageOrders=orders.slice(first,end);
+                $("#show").html("");
+                $.each(pageOrders, function(index, type) {
+
+					$("#show").append("<tr class=\"text-c\">\n" +
+                        "\t\t\t\t\t\t<td><input type=\"checkbox\" value=\"1\" name=\"\"></td>\n" +
+                        "\t\t\t\t\t\t<td>"+type.id+"</td>\n" +
+                        "\t\t\t\t\t\t<td>"+type.productTypeCode+"</td>\n" +
+                        "\t\t\t\t\t\t<td>"+type.productTypeName+"</td>\n" +
+                        "\t\t\t\t\t\t<td>"+type.superType+"</td>\n" +
+                        "\t\t\t\t\t\t<td>"+type.productTypeRank+"</td>\n" +
+                        "\t\t\t\t\t\t<td class=\"td-manage\"></a> <a title=\"编辑\" href=\"javascript:;\" onclick=\"admin_edit('分类编辑','admin-add.html','1','800','500')\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> <a title=\"删除\" href=\"javascript:;\" onclick=\"admin_del(this,"+type.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a></td>\n" +
+                        "\t\t\t\t\t</tr>");
+                });
+
+                pageFenShow();//分页页码显示
+
+
+            }
+
+
+
+        },
+        error:function(data) {
+            layer.msg("服务器繁忙,请稍后再试");
+            return null;
+        },
+    });
 }
 </script> 
 <!--/请在上方写此页面业务相关的脚本-->

@@ -73,7 +73,7 @@ public interface AdminDao {
      *@params
      *@return
     */
-     List<Admin> queryAllAdminManage(Object object, Map<String, Object> map);
+     List<Admin> queryAllAdminManage(Object object, Map<String, Object> map,String sort,String sortType);
 
     Admin getAdminInfo(String sql);
 }

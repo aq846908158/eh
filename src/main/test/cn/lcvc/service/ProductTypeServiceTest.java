@@ -27,7 +27,7 @@ public class ProductTypeServiceTest extends BaseJunit {
 //        productType.setProductTypeRank(3);
 //        productType.setProductTypeCode("60373");
 //        productType.setSuperType("759175");
-        JsonResult jsonResult= productTypeService.getProductType(productType);
+        JsonResult jsonResult= productTypeService.getProductType(productType,"productTypeCode","desc");
         List<ProductType> list= (List<ProductType>) jsonResult.getItem().get("productTypeList");
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {

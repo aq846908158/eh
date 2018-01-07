@@ -1,7 +1,9 @@
 package cn.lcvc.service;
 
+import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.ProductType;
 import cn.lcvc.dao.AdminPermissionsDao;
+import cn.lcvc.dao.ProductDao;
 import cn.lcvc.dao.ProductTypeDao;
 import cn.lcvc.uitl.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class ProductTypeService {
     @Autowired
     private ProductTypeDao productTypeDao;
     @Autowired
+    private ProductDao productDao;
+    @Autowired
     private AdminPermissionsDao adminPermissionsDao;
 
     /*
@@ -31,7 +35,7 @@ public class ProductTypeService {
    * @param productType 产品类型对象
    * @return json
    * */
-    public  JsonResult getProductType(ProductType productType){
+    public  JsonResult getProductType(ProductType productType,String sort,String sortType){
         JsonResult jsonResult = new JsonResult();
         Map<Object, Object> map = new HashMap<Object, Object>(); //查询所用Map容器
         Map<Object,Object> map_productType= new HashMap<Object, Object>(); //存放查询所得数据
@@ -55,16 +59,14 @@ public class ProductTypeService {
             }
         }
 
-        List<ProductType> list = productTypeDao.getProductTypeList(ProductType.class,map);
+        List<ProductType> list = productTypeDao.getProductTypeList(ProductType.class,map,sort,sortType);
 
         if (list.size() > 0){
-            map_productType.put("productTypeList",list);
-
             jsonResult.setErrorCode("200");
             jsonResult.setMessage("查询成功.");
-            jsonResult.setItem(map_productType);
+            jsonResult.setList(list);
         }else {
-            jsonResult.setMessage("500");
+            jsonResult.setErrorCode("500");
             jsonResult.setMessage("查询失败:无数据.");
         }
 
@@ -156,28 +158,45 @@ public class ProductTypeService {
             ProductType productType = productTypeDao.getProductType(typeId);
             if (productType != null){
 
-                List<ProductType> list=new ArrayList<ProductType>();
-                if (productType.getProductTypeRank() !=3){
+                List<ProductType> list=new ArrayList<ProductType>();//当前分类子分类集合
+                List<Product> products=  productDao.getProductsBy_OneColumn("productType",productType);
+                if (productType.getProductTypeRank() <3){
                     list = productTypeDao.getProductTypeByList_OneColumn("superType",productType.getProductTypeCode());
+
+                    for (int i = 0; i < list.size(); i++) {//将所有当前分类和其子分类下的商品全部查出
+                        ProductType productTypeT =  list.get(i);
+                        products.addAll(productDao.getProductsBy_OneColumn("productType",productTypeT));
+                    }
                 }
 
-                    if (list.size() > 0){
-                        jsonResult.setErrorCode("500");
-                        jsonResult.setMessage("删除失败:该产品类型下有父级分类,如需删除该分类请先删除所有所属父级分类产品类型.");
-                    }else {
+
+
+                        for (int i = 0; i < products.size(); i++) {
+                            ProductType temp=new ProductType();
+                            temp.setId(1);
+                            Product product =  products.get(i);
+                            product.setState(true);
+                            product.setProductType(temp);
+                            productDao.updateProduct(product);
+                        }
+                        for (int i = 0; i < list.size(); i++) {
+                            ProductType type =  list.get(i);
+
+                            productTypeDao.deleteProductType(type);
+                        }
                         productTypeDao.deleteProductType(productType);
-                        jsonResult.setErrorCode("500");
-                        jsonResult.setMessage("服务端:删除成功.");
-                    }
+                        jsonResult.setErrorCode("200");
+                        jsonResult.setMessage("删除成功");
+
 
 
             }else{
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("删除失败:该产品类型不存在.");
+                jsonResult.setMessage("删除失败:该产品类型不存在");
             }
         }else {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("删除失败:请刷新页面后重试.");
+            jsonResult.setMessage("删除失败:请刷新页面后重试");
         }
 
 

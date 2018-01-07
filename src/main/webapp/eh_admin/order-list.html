@@ -356,7 +356,6 @@ function orderDelete(obj,orderId){
 getheaderMessage();
 //查询订单信息  初始化数据
 var pageIndex=1;
-var pageSize=5;
 var pageCount;
 select();//进入页面  默认获取全部order信息；
 /**
@@ -416,47 +415,7 @@ select();//进入页面  默认获取全部order信息；
 
                             });
 
-               //控制分页标签显示--------------------------------------------
-                            $("#pageNumber").html("");
-							var pageCha=pageCount-pageIndex+1;//之后的页数
-							var temp=(5-pageCha);//存放还差多少页足够5页
-							if(pageCount>5)//超过5页
-							{
-
-                                if(pageCha>=5) {//如果总页数减去当前显示页还足够5页
-                                    for(var i=pageIndex;i<pageIndex+5;i++){
-                                        if(pageIndex==i){
-                                            $("#pageNumber").append("<div  class=\"btn pageNum\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
-                                        }
-                                        else {
-                                            $("#pageNumber").append("<div  class=\"btn\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
-                                        }
-                                    }
-                                    	$('#pageNumber').append("...");
-                                }
-                                else {//总页数减去当前显示页不足5页
-                                    $("#pageNumber").html("");
-                                    for(var i=pageIndex-temp;i<=pageCount	;i++){
-                                        if(pageIndex==i){
-                                            $("#pageNumber").append("<div  class=\"btn pageNum\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
-                                        }
-                                        else {
-                                            $("#pageNumber").append("<div  class=\"btn\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
-                                        }
-                                    }
-								}
-
-							}else{//未超过5页
-                                for(var i=1;i<=pageCount;i++){
-                                    if(pageIndex==i){
-                                        $("#pageNumber").append("<div  class=\"btn pageNum\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
-                                    }
-                                    else {
-                                        $("#pageNumber").append("<div  class=\"btn\"  style=\"width: 30px; padding: 0px; padding-top: 5px;\">"+i+"</div>");
-                                    }
-                                }
-							}
-				//end控制分页标签显示--------------------------------------------
+               				pageFenShow();//分页页码显示
 
 
                         }
@@ -475,11 +434,6 @@ select();//进入页面  默认获取全部order信息；
 /**
  * 提交搜索表单
  */
-$('#mit').click(function () {
-
-    select();
-    return false;
-})
 
 
 
