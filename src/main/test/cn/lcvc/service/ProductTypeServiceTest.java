@@ -43,13 +43,13 @@ public class ProductTypeServiceTest extends BaseJunit {
     /* 添加产品类型*/
     @Test
     public void registerProductTypeTest(){
-        ProductType  productType =new ProductType();
-        productType.setProductTypeName("传呼机");
-        productType.setProductTypeRank(3);
-       productType.setSuperType("759175");
-        JsonResult jsonResult = productTypeService.registerProductType(productType);
-
-        System.out.println(jsonResult.getMessage());
+//        ProductType  productType =new ProductType();
+//        productType.setProductTypeName("传呼机");
+//        productType.setProductTypeRank(3);
+//       productType.setSuperType("759175");
+//        JsonResult jsonResult = productTypeService.registerProductType(productType);
+//
+//        System.out.println(jsonResult.getMessage());
 
     }
 

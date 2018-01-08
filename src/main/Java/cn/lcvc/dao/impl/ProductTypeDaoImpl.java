@@ -104,6 +104,15 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
         return list;
     }
 
+    @Override
+    public List<ProductType> getProductTypeByList_TwoColumn(String column1, Object value1, String column2, Object value2) {
+        Criteria criteria=getSession().createCriteria(ProductType.class);
+        criteria.add(Restrictions.eq(column1,value1));
+        criteria.add(Restrictions.eq(column2,value2));
+        List list=criteria.list();
+        return list;
+    }
+
     public ProductType getProductTypeBy_TowColumn(String column1, Object value1, String column2, Object value2) {
         Criteria criteria=getSession().createCriteria(ProductType.class);
         criteria.add(Restrictions.eq(column1,value1));
@@ -115,6 +124,8 @@ public class ProductTypeDaoImpl implements ProductTypeDao {
         }
         return null;
     }
+
+
 
     public List<ProductType> getProductTypeListOrderBy(String column, String orderBy) {
         Criteria criteria=getSession().createCriteria(ProductType.class);

@@ -78,70 +78,109 @@ public class ProductTypeService {
      * @param productType 产品类型对象
      * @return json
      * */
-    public JsonResult registerProductType(ProductType productType){
+    public JsonResult registerProductType(ProductType productType,Integer superId){
         JsonResult jsonResult = new JsonResult();
-
+//验证分类信息------------------------------------------------------------------------------------------------
         if (productType.getProductTypeName() != null){
             if (productType.getProductTypeName().trim().length() < 2 || productType.getProductTypeName().trim().length() > 10){
-                jsonResult.setMessage("分类名称长度在2-10位之间.");
+                jsonResult.setMessage("分类名称长度在2-10位之间");
                 jsonResult.setErrorCode("500");
                 return jsonResult;
             }
         }else {
-            jsonResult.setMessage("请输入分类名称.");
+            jsonResult.setMessage("请输入分类名称");
             jsonResult.setErrorCode("200");
             return  jsonResult;
         }
+
 
         if (productType.getProductTypeRank() != null){
             if (productType.getProductTypeRank() < 0 || productType.getProductTypeRank() > 3){  //判断分类等级是否为1-3等
-                jsonResult.setMessage("分类等级异常，请刷新页面后重试.");
+                jsonResult.setMessage("分类等级异常，请刷新页面后重试");
                 jsonResult.setErrorCode("500");
                 return jsonResult;
             }
-
-            if (productType.getProductTypeRank() >1 ){ //判断分类为二或三等时，父级类代码是否为空
-                if (productType.getProductTypeRank() == 2 && productType.getSuperType() == null){
-                    jsonResult.setMessage("请选择2级分类");
-                    jsonResult.setErrorCode("500");
-                    return  jsonResult;
-                }
-
-                if (productType.getProductTypeRank() == 3 && productType.getSuperType() == null){
-                    jsonResult.setMessage("请选择3级分类");
-                    jsonResult.setErrorCode("500");
-                    return  jsonResult;
-                }
-            }
-
         }else {
-            jsonResult.setMessage("请选择分类等级.");
-            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("请选择分类等级");
+            jsonResult.setErrorCode("500");
             return  jsonResult;
         }
-        if (productType.getSuperType() == null) productType.setSuperType("0");
+//验证分类信息--------end---------------------------------------------------------------------------------------------------
 
-        //判断分类代码是否存在数据库
-        if(productType.getProductTypeRank() != 1){
-            ProductType getSuperTypeCode = productTypeDao.getProductTypeBy_OneColumn("productTypeCode",productType.getSuperType());
-            if (getSuperTypeCode == null){
+        //code重复判断
+        int code = (int)(Math.random()*(999999-100000+1))+100000;//随机生成100000-999999的6为数字
+        while (true) {
+            if (typeCodeRepeat(code)) {
+                code = (int) (Math.random() * (999999 - 100000 + 1)) + 100000;//随机生成100000-999999的6为数字
+                continue;
+            }
+            break;
+        }
+        //确定无重复后
+        if(productType.getProductTypeRank()==1)/**如果添加的是一级分类*/
+        {
+            productType.setSuperType("0");
+            productType.setProductTypeCode(String.valueOf(code));
+            productTypeDao.addProductType(productType);
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("添加成功");
+            return  jsonResult;
+        }
+        else/**如果添加的不是一级分类*/
+        {
+            if(superId==null||superId==0)
+            {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("该父类不存在!! 请刷新页面后重试.");
+                jsonResult.setMessage("请选择上级分类");
                 return  jsonResult;
+            }
+            ProductType superProductType=productTypeDao.getProductType(superId);
+            if(productType.getProductTypeRank()==3)
+            {
+                //如果添加的是三级分类  则对其校验只允许关联到二级分类
+                if(superProductType.getProductTypeRank()==2)
+                {
+                    //校验通过后
+                    productType.setProductTypeCode(String.valueOf(code));
+                    productType.setSuperType(superProductType.getProductTypeCode());
+                    productTypeDao.addProductType(productType);
+                    jsonResult.setErrorCode("200");
+                    jsonResult.setMessage("添加成功");
+                    return  jsonResult;
+
+                }
+                else
+                {
+                    //校验未通过
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("三级分类的父类只能是二级分类");
+                    return  jsonResult;
+                }
+            }
+            else
+            {
+                //如果添加的是三级分类  则对其校验只允许关联到二级分类
+                if(superProductType.getProductTypeRank()==1)
+                {
+                    //校验通过后
+                    productType.setProductTypeCode(String.valueOf(code));
+                    productType.setSuperType(superProductType.getProductTypeCode());
+                    productTypeDao.addProductType(productType);
+                    jsonResult.setErrorCode("200");
+                    jsonResult.setMessage("添加成功");
+                    return  jsonResult;
+                }
+                else
+                {
+                    //校验未通过
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("二级分类的父类只能是一级分类");
+                    return  jsonResult;
+                }
             }
         }
 
 
-        int code = (int)(Math.random()*(999999-100000+1))+100000;//随机生成100000-999999的6为数字
-        //code重复判断
-
-        productType.setProductTypeCode(String.valueOf(code));
-
-        productTypeDao.addProductType(productType);
-        jsonResult.setErrorCode("200");
-        jsonResult.setMessage("添加成功.");
-
-        return  jsonResult;
     }
 
 
@@ -203,10 +242,63 @@ public class ProductTypeService {
         return  jsonResult;
     }
 
+    public  JsonResult getProductType_ByRank(Integer rank,Integer superId){
+        JsonResult  jsonResult = new JsonResult();
+        if(superId==null||superId==0)
+        {
+            List<ProductType> productTypes=productTypeDao.getProductTypeByList_OneColumn("productTypeRank",rank);
+            jsonResult.setList(productTypes);
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("获取成功");
+            return  jsonResult;
+        }else{
+            if(superId!=null&&superId!=0)
+            {
+                ProductType productType=productTypeDao.getProductType(superId);
+                if(productType!=null)
+                {
+                    List<ProductType> productTypes=productTypeDao.getProductTypeByList_TwoColumn("productTypeRank",rank,"superType",productType.getProductTypeCode());
+                    jsonResult.setList(productTypes);
+                    jsonResult.setErrorCode("200");
+                    jsonResult.setMessage("获取成功");
+                    return  jsonResult;
+                }
+                else
+                {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("非法操作");
+                    return  jsonResult;
+                }
+
+            }
+            else
+            {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("非法操作");
+                return  jsonResult;
+            }
+
+        }
 
 
+    }
 
-
+    /**
+     * 判断分类代码是否重复
+     * @return 有重复返回true  没有重复返回false
+     */
+    public  boolean typeCodeRepeat(int code)
+    {
+        String temp=String.valueOf(code);
+        ProductType productType=productTypeDao.getProductTypeBy_OneColumn("productTypeCode",temp);
+        if(productType==null)
+        {
+            return false;
+        }
+        else {
+            return  true;
+        }
+    }
 
 
 

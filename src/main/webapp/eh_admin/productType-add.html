@@ -26,31 +26,66 @@
 <title>添加分类 - 分类管理 - H-ui.admin v3.0</title>
 <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
 <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+    <style>
+        #RankOne_row{
+            display: none;
+        }
+        #RankTwo_row{
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <article class="cl pd-20">
-	<form action="" method="post" class="form form-horizontal" id="form-productType-add">
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分类名称：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="adminName" name="adminName">
-			</div>
-		</div>
-		
+	<form class="form form-horizontal" id="form-productType-add">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分类等级：</label>
 			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
-				<select class="select" name="adminRole" size="1">
+				<select class="select" name="adminRole" size="1" style="color: #666;" id="Rank">
+                     <option value="0" >请选择分类等级</option>
 					<option value="1">一级分类</option>
 					<option value="2">二级分类</option>
 					<option value="3">三级分类</option>
 				</select>
 				</span> </div>
 		</div>
+
+        <div class="row cl" id="RankOne_row">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>上级分类：</label>
+            <div class="formControls col-xs-8 col-sm-9" style="float: left;">
+                <span class="select-box" style="width:150px;">
+				<select class="select" name="adminRole" size="1" style="color: #666;" id="RankOne">
+                    <option value="0">请选择一级分类</option>
+
+				</select>
+				</span>
+            </div>
+        </div>
+
+        <div class="row cl" id="RankTwo_row">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span></label>
+            <div class="formControls col-xs-8 col-sm-9" style="float: left;">
+                <span class="select-box" style="width:150px;">
+				<select class="select" name="adminRole" size="1" style="color: #666;" id="RankTwo">
+                    <option value="0">请选择二级分类</option>
+
+				</select>
+				</span>
+            </div>
+        </div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分类名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder=""  id="productTypeName">
+			</div>
+		</div>
+		
+
 	
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" id="go">
 			</div>
 		</div>
 	</form>
@@ -67,54 +102,151 @@
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
-<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="js/eh.js"></script>
+
 <script type="text/javascript">
 $(function(){
-	$('.skin-minimal input').iCheck({
-		checkboxClass: 'icheckbox-blue',
-		radioClass: 'iradio-blue',
-		increaseArea: '20%'
-	});
-	
-	$("#form-admin-add").validate({
-		rules:{
-			adminName:{
-				required:true,
-				minlength:4,
-				maxlength:16
-			},
-			password:{
-				required:true,
-			},
-			password2:{
-				required:true,
-				equalTo: "#password"
-			},
-			sex:{
-				required:true,
-			},
-			phone:{
-				required:true,
-				isPhone:true,
-			},
-			email:{
-				required:true,
-				email:true,
-			},
-			adminRole:{
-				required:true,
-			},
-		},
-		onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			$(form).ajaxSubmit();
-			var index = parent.layer.getFrameIndex(window.name);
-			parent.$('.btn-refresh').click();
-			parent.layer.close(index);
-		}
-	});
+    $("#Rank").change(function () {//选择添加分类的类型时
+        if($("#Rank").val()=="0")//如果选择一级分类
+        {
+            $("#RankOne_row").css("display","none");
+            $("#RankTwo_row").css("display","none");
+        }
+        if($("#Rank").val()=="1")//如果选择一级分类
+        {
+            $("#RankOne_row").css("display","none");
+            $("#RankTwo_row").css("display","none");
+        }
+       if($("#Rank").val()=="2")//如果选择二级分类
+       {
+           load_1_Rank();
+            $("#RankOne_row").css("display","block");
+           $("#RankTwo_row").css("display","none");
+       }
+        if($("#Rank").val()=="3")//如果选择三级分类
+        {
+            load_1_Rank();
+            $("#RankOne_row").css("display","block");
+        }
+    });
+
+    $("#RankOne").change(function () {//选择一级分类时
+        if($("#Rank").val()=="3")//如果选择三级分类
+        {
+            var Id=$("#RankOne").val();
+            load_2_Rank_byOneRank(Id);
+            $("#RankTwo_row").css("display","block");
+        }
+
+        if($("#RankOne").val()=="0")//如果未选择一级分类
+        {
+
+            $("#RankTwo_row").css("display","none");
+        }
+    });
+
+    /**
+	 * 加载一级分类内容入列表
+     */
+    function load_1_Rank()
+    {
+        $.ajax({
+            type: "GET",
+            url: serverURL+"/admin/productRank",
+            data:{rank:"1",superId:""},
+            dataType:"json",
+            success: function(data){
+                if(data.errorCode=="500") {
+                    layer.msg(data.message);
+                }
+                if(data.errorCode=="200") {
+                    $("#RankOne").html("");
+                    $("#RankOne").append("<option value=\"0\">请选择一级分类</option>");
+                    $.each(data.list, function(index, p) {
+                        $("#RankOne").append("<option value='"+p.id+"'>"+p.productTypeName+"</option>")
+                    })
+                }
+            },
+            error:function(data) {
+                layer.msg("服务器繁忙,请稍后再试");
+                return null;
+            },
+        });
+    }
+
+    /**
+     * 加载二级分类内容入列表
+     */
+    function load_2_Rank_byOneRank(Id)
+    {
+
+        $.ajax({
+            type: "GET",
+            url: serverURL+"/admin/productRank",
+            data:{rank:"2",superId:Id},
+            dataType:"json",
+            success: function(data){
+                if(data.errorCode=="500") {
+                    layer.msg(data.message);
+                }
+                if(data.errorCode=="200") {
+                    $("#RankTwo").html("");
+                    $("#RankTwo").append("<option value=\"0\">请选择二级分类</option>");
+                    $.each(data.list, function(index, p) {
+                        $("#RankTwo").append("<option value='"+p.id+"'>"+p.productTypeName+"</option>")
+                    })
+                }
+            },
+            error:function(data) {
+                layer.msg("服务器繁忙,请稍后再试");
+                return null;
+            },
+        });
+    }
+
+    function addProductType(procductTypeName,productTypeRank,superId)
+	{
+        $.ajax({
+            type: "POST",
+            url: serverURL+"/admin/productRank",
+            data:{productTypeName:$("#productTypeName").val(),
+				superId:superId,
+			    productTypeRank:productTypeRank
+            },
+            dataType:"json",
+            success: function(data){
+                if(data.errorCode=="500") {
+                    layer.msg(data.message);
+                }
+                if(data.errorCode=="200") {
+                    layer.msg(data.message+",刷新页面才能看到新的数据哦");
+                }
+            },
+            error:function(data) {
+                layer.msg("服务器繁忙,请稍后再试");
+                return null;
+            },
+        });
+	}
+
+    $("#go").click(function () {
+        if($("#Rank").val()==1)
+        {
+            addProductType($("#productTypeName").val(),$("#Rank").val(),"");
+        }
+       if($("#Rank").val()==3)
+        {
+            addProductType($("#productTypeName").val(),$("#Rank").val(),$("#RankTwo").val());
+        }
+        if($("#Rank").val()==2)
+        {
+            addProductType($("#productTypeName").val(),$("#Rank").val(),$("#RankOne").val());
+        }
+
+        return false;
+    });
+
 });
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
