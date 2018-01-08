@@ -37,18 +37,22 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void updateUser(User user) {
-        User oldUser= (User) getSession().load(User.class,user.getId());
-        oldUser.setSchool(user.getSchool());
-        oldUser.setEmail(user.getEmail());
-        oldUser.setPhone(user.getPhone());
-        oldUser.setUserName(user.getUserName());
-        oldUser.setUserPassword(user.getUserPassword());
-        oldUser.setTrueName(user.getTrueName());
-        oldUser.setLastTime(user.getLastTime());
-        oldUser.setSellNumber(user.getSellNumber());
-        oldUser.setForSaleNumber(user.getForSaleNumber());
-        oldUser.setSalt(user.getSalt());
-        getSession().update(oldUser);
+//        User oldUser= (User) getSession().load(User.class,user.getId()); //研究
+//        oldUser.setSchool(user.getSchool());
+//        oldUser.setEmail(user.getEmail());
+//        oldUser.setPhone(user.getPhone());
+//        oldUser.setUserName(user.getUserName());
+//        oldUser.setUserPassword(user.getUserPassword());
+//        oldUser.setTrueName(user.getTrueName());
+//        oldUser.setLastTime(user.getLastTime());
+//        oldUser.setSellNumber(user.getSellNumber());
+//        oldUser.setForSaleNumber(user.getForSaleNumber());
+//        oldUser.setCreateTime(user.getCreateTime());
+//        oldUser.setSalt(user.getSalt());
+//        oldUser.setBanLogin(user.getBanLogin());
+//        oldUser.setBanSell(user.getBanSell());
+        getSession().update(user);
+        getSession().flush();
 
     }
 

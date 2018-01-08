@@ -306,20 +306,46 @@ public class UserService{
      * @param banNo 需要将用户禁止登录状态设置成为哪种状态
      * @return JsonResult对象 如若修改成功 （JsonResult.message="修改成功"）如若修改失败 （JsonResult.message=错误信息）
      */
-    public JsonResult updateBanLogin(Integer id,Boolean banNo)
-    {
-        JsonResult jsonResult=new JsonResult();
-        User user=userDao.getUser(id);
-        if(user!=null)
-        {
-            user.setBanLogin(banNo);
-            jsonResult.setErrorCode("200");
-            jsonResult.setMessage("修改成功");
+    public JsonResult updateBanLogin(Integer id,Integer banNo) {
+        JsonResult jsonResult =new JsonResult();
+        User user=null;
+        Boolean state=null;
+
+        if (banNo == 0 || banNo == 1){
+            if (banNo == 1) state=true;
+            if (banNo == 0) state=false;
+            user =userDao.getUser(id);
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：修改失败，请刷新后重试");
             return  jsonResult;
         }
-        jsonResult.setErrorCode("500");
-        jsonResult.setMessage("修改失败");
-        return  jsonResult;
+        if (user !=null){
+            if (user.getBanLogin() == state){
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("服务端：修改成功");
+                return  jsonResult;
+            }else {
+                user.setBanLogin(state);
+                userDao.updateUser(user);
+                User userNeW=userDao.getUser(user.getId());
+                if (userNeW.getBanLogin() == state){
+                    jsonResult.setErrorCode("200");
+                    jsonResult.setMessage("服务端：修改成功");
+                    return  jsonResult;
+                }else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端：修改失败，请刷新后重试");
+                    return  jsonResult;
+                }
+
+            }
+
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：修改状态失败，请重试");
+            return  jsonResult;
+        }
     }//完成
 
     /**
@@ -328,20 +354,47 @@ public class UserService{
      * @param banNo 需要将用户禁止发布商品状态设置成为哪种状态
      * @return JsonResult对象 如若修改成功 （JsonResult.message="修改成功"）如若修改失败 （JsonResult.message=错误信息）
      */
-    public JsonResult updateBanSell(Integer id,Boolean banNo)
+    public JsonResult updateBanSell(Integer id,Integer banNo)
     {
-        JsonResult jsonResult=new JsonResult();
-        User user=userDao.getUser(id);
-        if(user!=null)
-        {
-            user.setBanSell(banNo);
-            jsonResult.setErrorCode("200");
-            jsonResult.setMessage("修改成功");
+        JsonResult jsonResult =new JsonResult();
+        User user=null;
+        Boolean state=null;
+
+        if (banNo == 0 || banNo == 1){
+            if (banNo == 1) state=true;
+            if (banNo == 0) state=false;
+            user =userDao.getUser(id);
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：修改失败，请刷新后重试");
             return  jsonResult;
         }
-        jsonResult.setErrorCode("500");
-        jsonResult.setMessage("修改失败");
-        return  jsonResult;
+        if (user !=null){
+            if (user.getBanSell() == state){
+                jsonResult.setErrorCode("201");
+                jsonResult.setMessage("服务端：修改成功");
+                return  jsonResult;
+            }else {
+                user.setBanSell(state);
+                userDao.updateUser(user);
+                User userNeW=userDao.getUser(user.getId());
+                if (userNeW.getBanSell() == state){
+                    jsonResult.setErrorCode("200");
+                    jsonResult.setMessage("服务端：修改成功");
+                    return  jsonResult;
+                }else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("服务端：修改失败，请刷新后重试");
+                    return  jsonResult;
+                }
+
+            }
+
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("服务端：修改状态失败，请重试");
+            return  jsonResult;
+        }
     }//完成
 
     /**

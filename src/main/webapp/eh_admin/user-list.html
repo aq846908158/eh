@@ -215,7 +215,7 @@
 
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20">
-				<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加用户','user-add.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a> </span>
+				<span class="l"></span>
 				<span class="r">共有数据：<strong id="dataNumber">0</strong> 条</span>
 			</div>
 			<div class="mt-20">
@@ -301,6 +301,115 @@
         }
     });
 
+	/*修改销售状态*/
+	function banSell(obj,userId) {
+		var banSellCode=$(obj).val();
+
+		$.ajax({
+			type:'GET',
+			url:serverURL+'/adminPermissions/getPermissions', // 判断是否有高级管理员权限
+			data:{"token":localStorage.getItem("eh_token")},
+			dataType:'json',
+			success:function (data) {
+				if (data.errorCode == "200") {
+					$.ajax({
+						type:'GET',
+						url:serverURL+'/user/updateUserBanSell?id='+userId+'&banSellCode='+banSellCode,
+						dataType:'json',
+						success:function (data) {
+							if (data.errorCode == "500"){
+								layer.msg(data.message);
+							}
+							if(data.errorCode == "200"){
+								layer.msg(data.message);
+								if (banSellCode == 0){
+									$(obj).css("color","green");
+									$(obj).find("option:contains('允许销售')").attr("selected",true);
+								}
+								if (banSellCode == 1){
+									$(obj).css("color","red");
+									$(obj).find("option:contains('禁止销售')").attr("selected",true);
+								}
+							}
+						},
+						error:function (data) {
+							layer.msg("服务器繁忙，请稍后重试")
+						}
+
+					});
+				}
+				if (data.errorCode == "201") {
+					layer.msg(data.message);
+					if (banSellCode == '0'){
+						$(obj).val(1);
+					}
+					if (banSellCode == '1'){
+						$(obj).val(0);
+					}
+				}
+			},
+			error:function (data) {
+				layer.msg("服务器繁忙，请稍后重试");
+			}
+		});
+		return false;
+
+	}
+
+	/*修改登录状态*/
+	function  banLogin(obj,userID) {
+		var banLoginCode=$(obj).val();
+
+		$.ajax({
+			type:'GET',
+			url:serverURL+'/adminPermissions/getPermissions', // 判断是否有高级管理员权限
+			data:{"token":localStorage.getItem("eh_token")},
+			dataType:'json',
+			success:function (data) {
+				if (data.errorCode == "200") {
+					$.ajax({
+						type:'GET',
+						url:serverURL+'/user/updateUserBanLogin?id='+userID+'&banLoginCode='+banLoginCode,
+						dataType:'json',
+						success:function (data) {
+							if (data.errorCode == "500"){
+								layer.msg(data.message);
+							}
+							if(data.errorCode == "200"){
+								layer.msg(data.message);
+								if (banLoginCode == 0){
+									$(obj).css("color","green");
+									$(obj).find("option:contains('允许登录')").attr("selected",true);
+								}
+								if (banLoginCode == 1){
+									$(obj).css("color","red");
+									$(obj).find("option:contains('禁止登录')").attr("selected",true);
+								}
+							}
+						},
+						error:function (data) {
+							layer.msg("服务器繁忙，请稍后重试")
+						}
+
+					});
+				}
+				if (data.errorCode == "201") {
+					layer.msg(data.message);
+					if (banLoginCode == '0'){
+						$(obj).val(1);
+					}
+					if (banLoginCode == '1'){
+						$(obj).val(0);
+					}
+				}
+			},
+			error:function (data) {
+				layer.msg("服务器繁忙，请稍后重试");
+			}
+		});
+		return false;
+	}
+
 	function selectUser() {
 		$.ajax({
 			type:'GET',
@@ -322,24 +431,24 @@
 					$.each(userList,function (index,admins) {
 
 						if(!admins.banLogin) {
-							var banLogin="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+							var banLogin="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;background: none;' onchange='banLogin(this,"+admins.id+")'>"+
 									"<option value=\"0\" selected  >允许登录</option>"+
 									"<option value=\"1\">禁止登录</option>"+
 									"</select>";
 						} else {
-							var banLogin="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+							var banLogin="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;background: none;' onchange='banLogin(this,"+admins.id+")'>"+
 									"<option value=\"0\"  >允许登录</option>"+
 									"<option value=\"1\" selected >禁止登录</option>"+
 									"</select>";
 						}
 
 						if(!admins.banSell) {
-							var banSell="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+							var banSell="<select class=\"select loginStateType\"  name=\"city\" style='color: green;border: 0px;background: none;' onchange='banSell(this,"+admins.id+")'>"+
 									"<option value=\"0\" selected  >允许销售</option>"+
 									"<option value=\"1\">禁止销售</option>"+
 									"</select>";
 						} else {
-							var banSell="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;background: none;' onchange='loginStateType(this,"+admins.id+")'>"+
+							var banSell="<select class='select loginStateType'  name=\"city\" style='color: red; border: 0px;background: none;' onchange='banSell(this,"+admins.id+")'>"+
 									"<option value=\"0\"  >允许销售</option>"+
 									"<option value=\"1\" selected >禁止销售</option>"+
 									"</select>";
@@ -362,7 +471,7 @@
 								'<td>'+time+'</td>'+
 								'<td>'+banLogin+'</td>'+
 								'<td>'+banSell+'</td>'+
-								"<td class=\"td-manage\"><a title=\"编辑\" href=\"javascript:void(0);\" onclick=\"adminUpdate("+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6df;</i></a> <a title=\"删除\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
+								"<td class=\"td-manage\"><a title=\"删除\" href=\"javascript:void(0);\" onclick=\"adminDelete(this,"+admins.id+")\" class=\"ml-5\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>" +
 						'</tr>'
 						);
 					});

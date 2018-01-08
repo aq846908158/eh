@@ -42,7 +42,23 @@ public class UserContorller {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value = "/updateUserBanLogin",method = RequestMethod.GET)
+    public  JsonResult updateUserBanLogin(User user,@RequestParam(value = "banLoginCode") Integer banLoginCode){
 
+        JsonResult jsonResult =userService.updateBanLogin(user.getId(),banLoginCode);
+        return  jsonResult;
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateUserBanSell",method = RequestMethod.GET)
+    public  JsonResult updateUserBanSell(User user,@RequestParam(value = "banSellCode") Integer banSellCode){
+
+        JsonResult jsonResult =userService.updateBanSell(user.getId(),banSellCode);
+        return  jsonResult;
+
+    }
 
 
 }
