@@ -80,17 +80,17 @@ public class UserServiceTest extends BaseJunit{
     @Test
     public void updateBanLogin() throws Exception
     {
-        JsonResult jsonResult=userService.updateBanLogin(8,false);
-        System.out.println(jsonResult.getErrorCode());
-        System.out.println(jsonResult.getMessage());
+//        JsonResult jsonResult=userService.updateBanLogin(8,false);
+//        System.out.println(jsonResult.getErrorCode());
+//        System.out.println(jsonResult.getMessage());
     }//通过
 
     @Test
     public void updateBanSell() throws Exception
     {
-        JsonResult jsonResult=userService.updateBanSell(8,true);
-        System.out.println(jsonResult.getErrorCode());
-        System.out.println(jsonResult.getMessage());
+//        JsonResult jsonResult=userService.updateBanSell(8,true);
+//        System.out.println(jsonResult.getErrorCode());
+//        System.out.println(jsonResult.getMessage());
     }//通过
 
     @Test

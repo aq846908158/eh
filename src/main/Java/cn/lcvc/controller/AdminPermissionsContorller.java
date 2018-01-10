@@ -82,6 +82,7 @@ public class AdminPermissionsContorller {
         return  jsonResult;
     }
 
+
     @ResponseBody
     @RequestMapping(value =  "/getPermissions",method = RequestMethod.GET)
     public JsonResult getPermissions(@RequestParam(value = "token") String token){
