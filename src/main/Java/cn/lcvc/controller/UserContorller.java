@@ -28,6 +28,7 @@ public class UserContorller {
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST,produces =  "application/json;charset=UTF-8")
     public  JsonResult login(@RequestParam(value = "userName") String userName,@RequestParam(value = "userPassword") String userPassword){
+
         JsonResult jsonResult = userService.login(userName,userPassword);
         return  jsonResult;
 
