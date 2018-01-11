@@ -37,7 +37,7 @@ public class UploaderContorller {
 
                     System.out.println("路径 "+pathRoot + path);
                     file.transferTo(new File(pathRoot + path));
-
+ //
                     jsonResult.setMessage(pathRoot + path);
 
                 }catch (Exception e){
