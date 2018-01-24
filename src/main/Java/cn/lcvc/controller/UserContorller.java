@@ -1,7 +1,6 @@
 package cn.lcvc.controller;
 
 
-import cn.lcvc.POJO.Admin;
 import cn.lcvc.POJO.TokenMessage;
 import cn.lcvc.POJO.User;
 import cn.lcvc.service.UserService;
@@ -24,6 +23,19 @@ public class UserContorller {
     @Autowired
     private UserService userService;
 
+
+    @ResponseBody
+    @RequestMapping(value = "/register",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
+    public JsonResult register(User user,@RequestParam(value = "confirmPassword") String confirmPassword){
+        JsonResult jsonResult =userService.registerUser(user,confirmPassword);
+        return  jsonResult;
+    }
+    @ResponseBody
+    @RequestMapping(value = "/repeatName",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    public JsonResult repeatName(@RequestParam(value = "userName") String userName){
+        JsonResult jsonResult =userService.repeatName(userName);
+        return  jsonResult;
+    }
 
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST,produces =  "application/json;charset=UTF-8")
@@ -55,6 +67,7 @@ public class UserContorller {
 
             if (jedisToken.equals(token)){
                 jsonResult.getItem().put("userName",user.getUserName());
+                jsonResult.getItem().put("trueName",user.getTrueName());
                 jsonResult.setErrorCode("200");
                 jsonResult.setMessage("服务端：获取成功");
                 return  jsonResult;
@@ -74,6 +87,7 @@ public class UserContorller {
         }
 
     }
+
 
 
     @ResponseBody

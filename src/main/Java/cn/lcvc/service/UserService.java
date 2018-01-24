@@ -1,5 +1,6 @@
 package cn.lcvc.service;
 
+import cn.lcvc.POJO.School;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.SchoolDao;
 import cn.lcvc.dao.UserDao;
@@ -30,10 +31,12 @@ public class UserService{
     private SchoolDao schoolDao;
 
     /**
-     * 用户注册
-     * @param user 一个用户实体
+     *
+     * @param user
+     * @param confirmPassword 二次密码
+     * @return
      */
-    public JsonResult registerUser(User user) {
+    public JsonResult registerUser(User user,String confirmPassword) {
         JsonResult jsonResult=new JsonResult();
         if(userDao.getUserBy_OneColumn("userName",user.getUserName())!=null)
         {
@@ -51,7 +54,12 @@ public class UserService{
         else if(user.getUserPassword().length()<8||user.getUserPassword().length()>32)
         {
             jsonResult.setErrorCode("500");
-                jsonResult.setMessage("密码格式错误!应在8-32字符以内");
+            jsonResult.setMessage("密码格式错误!应在8-32字符以内");
+            return jsonResult;
+        }
+        else if (!confirmPassword.equals(user.getUserPassword())){
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("两次密码不一致！请重新输入");
             return jsonResult;
         }
         else if(!DataCheck.isTrueName(user.getTrueName()))
@@ -60,12 +68,12 @@ public class UserService{
             jsonResult.setMessage("真实姓名应该在2-4个中文字符以内");
             return jsonResult;
         }
-        else if(user.getSchool()==null||user.getSchool().getId()==0)
-        {
-            jsonResult.setErrorCode("500");
-            jsonResult.setMessage("请选择所在校园");
-            return jsonResult;
-        }
+//        else if(user.getSchool()==null||user.getSchool().getId()==0)
+//        {
+//            jsonResult.setErrorCode("500");
+//            jsonResult.setMessage("请选择所在校园");
+//            return jsonResult;
+//        }
         else if(user.getPhone().length()!=11|| !DataCheck.isMobileNO(user.getPhone()))
         {
             jsonResult.setErrorCode("500");
@@ -88,9 +96,12 @@ public class UserService{
         user.setSellNumber(0);
         user.setBanLogin(false);
         user.setBanSell(false);
+        School school = new School();
+        school.setId(1);
+        user.setSchool(school);
         userDao.addUser(user);
         jsonResult.setErrorCode("200");
-        jsonResult.setMessage("注册成功");
+        jsonResult.setMessage("服务端：注册成功");
 
         return jsonResult;
     }//完成
@@ -200,52 +211,51 @@ public class UserService{
      * @param userPassword  密码
      * @return JsonResult数据 如果登录成功（JsonResult.item）中会存放key为“user”的一个User对象用于让控制层存入Session
      */
-    public  JsonResult login(String userName,String userPassword)
-    {
-        JsonResult jsonResult=new JsonResult();
-        User user=userDao.getUserBy_OneColumn("userName",userName);
-        if(user!=null && user.getBanLogin()!=true)
-        {
-            userPassword=Md5.MD5(userPassword+user.getSalt());
+    public  JsonResult login(String userName,String userPassword) {
+        JsonResult jsonResult = new JsonResult();
+        User user = userDao.getUserBy_OneColumn("userName", userName);
+        if (user != null) {
+            if (!user.getBanLogin()) {
+                userPassword = Md5.MD5(userPassword + user.getSalt());
 
-            if(user.getUserPassword().equals(userPassword))
-            {
-                Map<Object,Object> map=new HashMap<Object,Object>();
-                String token="";
-                try {
-                     token= JWT.cretaToken(user); //签发Token
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
+                if (user.getUserPassword().equals(userPassword)) {
+                    Map<Object, Object> map = new HashMap<Object, Object>();
+                    String token = "";
+                    try {
+                        token = JWT.cretaToken(user); //签发Token
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    map.put("token", token);//将Token放到map存进json中
+                    map.put("userId", user.getId()); //将UserID 存到mao，然后通过json传到前台
+                    Jedis jedis = new Jedis("localhost"); //连接本地的 Redis 服务
+                    //System.out.println("服务正在运行: "+jedis.ping()); //查看服务是否运行
+                    jedis.set(user.getId() + "_token", token); //将key = (id_token) value = (token) 键值对存入redis
+                    jsonResult.setItem(map);//存入map集合
+                    jsonResult.setErrorCode("200");
+                    jsonResult.setMessage("登录成功");
+                    //修改最后登录时间
+                    user.setLastTime(new Timestamp(System.currentTimeMillis()));
+                    userDao.updateUser(user);
+                    //将user对象传到控制层 以便于登录成功后在控制层中将登录成功的用户对象存入Session
+                    Map<Object, Object> temp = new HashMap<Object, Object>();
+                    temp.put("user", user);
+
+                    return jsonResult;
+                } else {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("用户名或密码输入错误");
+                    return jsonResult;
                 }
-                map.put("token",token);//将Token放到map存进json中
-                map.put("userId",user.getId()); //将UserID 存到mao，然后通过json传到前台
-                Jedis jedis=new Jedis("localhost"); //连接本地的 Redis 服务
-                //System.out.println("服务正在运行: "+jedis.ping()); //查看服务是否运行
-                jedis.set(user.getId()+"_token",token); //将key = (id_token) value = (token) 键值对存入redis
-                jsonResult.setItem(map);//存入map集合
-                jsonResult.setErrorCode("200");
-                jsonResult.setMessage("登录成功");
-                //修改最后登录时间
-                user.setLastTime(new Timestamp(System.currentTimeMillis()));
-                userDao.updateUser(user);
-                //将user对象传到控制层 以便于登录成功后在控制层中将登录成功的用户对象存入Session
-                Map<Object,Object> temp=new HashMap<Object,Object>();
-                temp.put("user",user);
-
-                return  jsonResult;
-            }
-            else
-            {
+            }else {
                 jsonResult.setErrorCode("500");
-                jsonResult.setMessage("用户名或密码输入错误");
-                return  jsonResult;
+                jsonResult.setMessage("用户被禁止登录!");
+                return jsonResult;
             }
-        }
-        else{
+        } else {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("用户被禁止登录!");
-            return  jsonResult;
+            jsonResult.setMessage("服务端：用户名不存在");
+            return jsonResult;
         }
 
     }//完成
@@ -590,28 +600,19 @@ public class UserService{
         return  jsonResult;
     }
 
-    public String creatToken(User user)
-    {
-        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        String token=dateFormater.format(new Date())+user.getId()+user.getSalt();
-        token=Md5.MD5(token);
-        return token;
+
+
+    public JsonResult repeatName(String userName) {
+        JsonResult js=new JsonResult();
+        User user =userDao.getUserBy_OneColumn("userName",userName.trim());
+        if (user != null){
+            js.setErrorCode("500");
+            js.setMessage("用户名已存在");
+            return  js;
+        }else {
+            js.setErrorCode("200");
+            js.setMessage("用户名可用");
+        }
+        return  js;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
