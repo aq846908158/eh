@@ -26,18 +26,18 @@ public class UserServiceTest extends BaseJunit{
 
     @Test
     public void addUser() throws Exception {
-       User user =new User();
-        School school=new School();
-        school.setId(1);
-       user.setEmail("599999@qq.com");
-       user.setPhone("13999999999");
-       user.setSchool(school);
-       user.setTrueName("哈哈浏览");
-       user.setUserName("user2222");
-       user.setUserPassword("12345678");
-       JsonResult jsonResult=userService.registerUser(user);
-        System.out.println(jsonResult.getErrorCode());
-        System.out.println(jsonResult.getMessage());
+//       User user =new User();
+//        School school=new School();
+//        school.setId(1);
+//       user.setEmail("599999@qq.com");
+//       user.setPhone("13999999999");
+//       user.setSchool(school);
+//       user.setTrueName("哈哈浏览");
+//       user.setUserName("user2222");
+//       user.setUserPassword("12345678");
+//       JsonResult jsonResult=userService.registerUser(user);
+//        System.out.println(jsonResult.getErrorCode());
+//        System.out.println(jsonResult.getMessage());
     }//通过
     @Test
     public void deleteUser() throws Exception {
