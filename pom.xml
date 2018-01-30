@@ -8,9 +8,6 @@
   <name>eh Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
-
-
-
   <build>
     <finalName>eh</finalName>
     <plugins>

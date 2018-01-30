@@ -70,7 +70,7 @@ public class AdminServiceTest extends  BaseJunit {
     /*管理员管理 75%*/
     @Test
     public  void  seleteAllAdminManageTest(){
-        /*JsonResult jsonResult=adminService.selectAllAdminManage("","","");
+        /*JsonResult jsonResult=adminService.selectAllAdminManage("","","","","","");
         List<Admin> adminList= (List<Admin>) jsonResult.getItem().get("admin");
         System.out.println(jsonResult.getMessage());
 
@@ -84,7 +84,7 @@ public class AdminServiceTest extends  BaseJunit {
     /*删除管理员 100%*/
     @Test
     public  void deleteAdminTest(){
-        JsonResult jsonResult=adminService.deleteAdmin(40);
+        JsonResult jsonResult=adminService.deleteAdmin(2);
         System.out.println(jsonResult.getMessage());
     }
 

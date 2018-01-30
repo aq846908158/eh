@@ -24,7 +24,7 @@ public class RedisTest extends BaseJunit {
         {
             User user=new User();
             user.setUserName("哈哈哈");
-            user.setId(1);
+            user.setId(10+i);
             users.add(user);
         }
 

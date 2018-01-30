@@ -88,6 +88,7 @@ public class AdminService {
 
                 admin.setLoginLastTime(admin.getLastTime());
                 admin.setLastTime(new Timestamp(System.currentTimeMillis()));
+                admin.setLoginNum(admin.getLoginNum()+1);
                 adminDao.updateAdmin(admin);
 
                 jsonResult.setItem(map);

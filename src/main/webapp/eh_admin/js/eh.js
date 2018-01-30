@@ -142,7 +142,7 @@ $(".sortName").click(function () {
 *
 * */
 $('#info').click(function () {
-    layer_show("个人信息","admin-info.html","800","700");
+    layer_show("个人信息","admin-info.html","800","550");
 });
 
 
