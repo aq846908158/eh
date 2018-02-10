@@ -57,12 +57,12 @@
 			color: orange;
 		}
 		#updatePassword{
-
 			background-color: orange;
 			border:none;
 			color: white;
 			transition: all 0.5s  ease;
-			margin-right: 30px;
+			float: right;
+			margin-top: -15px;
 		}
 		#updatePassword:hover{
 
@@ -72,6 +72,7 @@
 </head>
 <body>
 <article class="cl pd-20" id="main">
+	<input class="btn btn-primary radius" type="button" id="updatePassword" value="修改密码" >
 	<form class="form form-horizontal" id="myform" action="#">
 		<div class="row cl" style="border-bottom: 1px dashed #ccc; margin-top: 17px;">
 			<label class="form-label col-xs-4 col-sm-3" style="text-align: left;" > 用户名：</label>
@@ -113,8 +114,7 @@
 			<span id="permissions">user</span>
 		</div>
 		<div class="row cl" style="margin-top: 35px;">
-			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-				<input class="btn btn-primary radius" type="button" id="updatePassword" value="修改密码" >
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 ">
 				<input class="btn btn-primary radius" type="submit" id="Btn" value="提交修改">
 			</div>
 		</div>

@@ -41,6 +41,7 @@ public class ProductTypeService {
         Map<Object,Object> map_productType= new HashMap<Object, Object>(); //存放查询所得数据
 
         if (productType != null){
+
             //产品类型名称 like
             if (productType.getProductTypeName() !=null && productType.getProductTypeName().trim().length() != 0){
                 map.put("productTypeName",productType.getProductTypeName());
@@ -67,7 +68,7 @@ public class ProductTypeService {
             jsonResult.setList(list);
         }else {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("查询失败:无数据.");
+            jsonResult.setMessage("服务端:无数据.");
         }
 
         return  jsonResult;

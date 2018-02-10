@@ -39,8 +39,64 @@ public class UserContorller {
 
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST,produces =  "application/json;charset=UTF-8")
-    public  JsonResult login(@RequestParam(value = "userName") String userName,@RequestParam(value = "userPassword") String userPassword){
-        JsonResult jsonResult = userService.login(userName,userPassword);
+    public  JsonResult login(@RequestParam(value = "userName") String userName,
+                             @RequestParam(value = "userPassword") String userPassword,
+                             @RequestParam(value = "localIp") String localIp,
+                             @RequestParam(value = "sliderStatus") Boolean sliderStatus,
+                             @RequestParam(value = "sliderObj") Boolean sliderObj){
+
+        JsonResult jsonResult=new JsonResult();
+        String count="1";//ip登录累加次数
+        if (localIp.trim().length() == 0 || localIp == null){
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("请检查您的网络情况...");
+            return  jsonResult;
+        }else {
+            Jedis jedis = new Jedis("localhost");
+            String serverIp = jedis.get("ip_"+localIp);
+
+            //查询redis中如果IP不为空，则说明该IP在三分钟内属于第二次以上登录，
+            if (serverIp != null ){
+                int localCount= Integer.parseInt(serverIp);
+                if (localCount > 2){
+                    if (sliderStatus){
+                        localCount++;
+                        count= String.valueOf(localCount);
+                        jedis.setex("ip_"+localIp,180,count);//将此Ip存储在redis中，有效时长3分钟
+                        jsonResult=userService.login(userName,userPassword);
+                    }else {
+                        jsonResult.setErrorCode("405");
+                        jsonResult.setMessage("为了您的账户安全，请重新进行验证");
+                        return  jsonResult;
+                    }
+                }else {
+                    localCount++;
+                    count= String.valueOf(localCount);
+                    jedis.setex("ip_"+localIp,180,count);//将此Ip存储在redis中，有效时长3分钟
+                    jsonResult=userService.login(userName,userPassword);
+                }
+            }else {
+                //redis中的ip存储时间已过，但html页面中还存在滑块验证功能，故需判断是否完成滑块验证
+                if (sliderObj){ //滑块存在
+                    if (sliderStatus){
+                        //该IP首次登录
+                        count="1";
+                        jedis.setex("ip_"+localIp,180,count);//将此Ip存储在redis中，有效时长3分钟
+                        jsonResult = userService.login(userName,userPassword);
+                    }else {
+                        jsonResult.setErrorCode("405");
+                        jsonResult.setMessage("为了您的账户安全，请重新进行验证");
+                        return  jsonResult;
+                    }
+                }else {
+                    //该IP首次登录
+                    count="1";
+                    jedis.setex("ip_"+localIp,180,count);//将此Ip存储在redis中，有效时长3分钟
+                    jsonResult = userService.login(userName,userPassword);
+                }
+
+            }
+        }
         return  jsonResult;
 
     }
@@ -128,6 +184,24 @@ public class UserContorller {
         JsonResult jsonResult =userService.updateBanSell(user.getId(),banSellCode);
         return  jsonResult;
 
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getIPStatus",method = RequestMethod.GET)
+    public  JsonResult getIPStatus(@RequestParam(value = "localIp") String localIp){
+        JsonResult jsonResult = new JsonResult();
+        Jedis jedis = new Jedis("localhost");
+        String serverIp = jedis.get("ip_"+localIp);
+
+        //查询redis中如果IP不为空，则说明该IP在三分钟内属于第二次以上登录，
+        if (serverIp != null && serverIp.equals(localIp)){
+
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("true");
+                return  jsonResult;
+
+        }
+        return  jsonResult;
     }
 
 

@@ -86,6 +86,7 @@ public class AdminService {
                 Jedis jedis = new Jedis("localhost");//链接本地Redis
                 jedis.set(admin.getId()+"_token",token);//tonken存入Redis
 
+
                 admin.setLoginLastTime(admin.getLastTime());
                 admin.setLastTime(new Timestamp(System.currentTimeMillis()));
                 admin.setLoginNum(admin.getLoginNum()+1);

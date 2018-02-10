@@ -254,7 +254,7 @@ public class UserService{
             }
         } else {
             jsonResult.setErrorCode("500");
-            jsonResult.setMessage("服务端：用户名不存在");
+            jsonResult.setMessage("用户名不存在");
             return jsonResult;
         }
 

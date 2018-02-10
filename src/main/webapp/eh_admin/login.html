@@ -14,17 +14,27 @@
 <link href="static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
 <link href="static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
 <link href="lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+  <link href="css/jquery.slider.css" rel="stylesheet">
 <!--[if IE 6]>
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <title>后台登录 -二货</title>
+<style>
 
+  form{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
+</style>
 </head>
 <body>
-<input type="hidden" id="TenantId" name="TenantId" value="" />
 <div class="loginWraper">
-  <div id="loginform" class="loginBox" style="height: 200px;">
+  <div id="loginform" class="loginBox" >
     <form class="form form-horizontal" id="myform">
       <div class="row cl">
         <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
@@ -39,56 +49,86 @@
         </div>
       </div>
       <div class="row cl">
+        <label class="form-label col-xs-3"><i class="Hui-iconfont"><img src="img/slider-title.png" draggable="false"></i></label>
+        <div class="formControls col-xs-8">
+          <div id="slider2" ></div>
+        </div>
+      </div>
+
+      <div class="row cl">
         <div class="formControls col-xs-8 col-xs-offset-3">
           <input name="" type="submit" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;" id="enter">
-          <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+
         </div>
       </div>
     </form>
   </div>
 </div>
-<div class="footer">Copyright 二货-校园二手交易平台 by H-ui.admin v3.1</div>
-<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
+
+
+<div class="footer" style="padding: 0px;">Copyright 二货-校园二手交易平台</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="plug/layer/layer.js"></script>
 <script type="text/javascript" src="js/eh.js"></script>
+<script type="text/javascript" src="js/jquery.slider.min.js"></script>
 
-<!--此乃百度统计代码，请自行删除-->
+
 <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
+    $("#slider2").slider({
+        width: 340, // width
+        height: 40, // height
+        sliderBg: "#888", // 滑块背景颜色
+        color: "#fff", // 文字颜色
+        fontSize: 14, // 文字大小
+        bgColor: "#33CC00", // 背景颜色
+        textMsg: "按住滑块，拖拽验证", // 提示文字
+        successMsg: "验证通过", // 验证成功提示文字
+        successColor: "#fff", // 滑块验证成功提示文字颜色
+        // time: 4900, // 返回时间
+        callback: function(result) { // 回调函数，true(成功),false(失败)
+
+             sliderState=result;
+
+        }
+    });
+
+    $(function(){
+        sliderState=false;
+
+      $('#enter').click(function(){
+          if (!sliderState){
+              layer.msg("请完成滑块验证");
+              return false;
+          }
+          $.ajax({
+              type: "POST",
+              url: serverURL+"/admin/login",
+              data:$('#myform').serialize(),
+              dataType:"json",
+              success: function(data){
+                  if(data.errorCode=="500") {
+                      layer.msg(data.message);
+                  }
+                  if(data.errorCode=="200") {
+
+                      localStorage.setItem("eh_token",data.item.token);
+                      window.location.href="index.html";
+                      //$("#slider2").slider("restore");//还原滑块
+                  }
+              },
+              error:function(data) {
+                  layer.msg("服务器繁忙,请稍后再试");
+                  return false;
+              },
+          });
+          return false;
+      });
+});
 
 
-$(function(){
-    $('#enter').click(function(){
-        $.ajax({
-            type: "POST",
-            url: serverURL+"/admin/login",
-            data:$('#myform').serialize(),
-            dataType:"json",
-            success: function(data){
-                if(data.errorCode=="500") {
-                    layer.msg(data.message);
-                }
-                if(data.errorCode=="200") {
-                    localStorage.setItem("eh_token",data.item.token);
-                    window.location.href="index.html";
-                }
-            },
-            error:function(data) {
-                layer.msg("服务器繁忙,请稍后再试");
-                return null;
-            },
-        });
-        return false;
-    })
-})
+
 </script>
-<!--/此乃百度统计代码，请自行删除
+
 </body>
 </html>

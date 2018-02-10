@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.UnsupportedEncodingException;
+
 @Controller
 @RequestMapping("/admin")
 public class ProductTypeController {
@@ -27,8 +29,11 @@ public class ProductTypeController {
      */
     @ResponseBody
     @RequestMapping(value = "/productType",method =  RequestMethod.GET,produces = "application/json;charset=UTF-8")
-    public JsonResult getProductTypeMessage(ProductType productType, @RequestParam(value = "sort") String sort, @RequestParam(value = "sortType") String sortType)
-    {
+    public JsonResult getProductTypeMessage(ProductType productType, @RequestParam(value = "sort") String sort, @RequestParam(value = "sortType") String sortType) throws UnsupportedEncodingException {
+        byte[] b=productType.getProductTypeName().getBytes("ISO-8859-1");
+        String productTypeName=new String(b,"utf-8");//采用utf-8去接string
+        productType.setProductTypeName(productTypeName);
+
         JsonResult jsonResult = productTypeService.getProductType(productType,sort,sortType);
         return jsonResult;
     }

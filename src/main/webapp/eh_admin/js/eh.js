@@ -3,6 +3,7 @@ var serverURL="http://localhost:8080";
 // var serverURL="http://www.jgdmhlg.xin/eh";
 //end全局变量定义（必须引用此文件）---------------------------------------------------------------------------------
 var  eh_key=false;
+
 var pageSize=3;
 //获取网页头部 Admin登录信息
 function getheaderMessage() {

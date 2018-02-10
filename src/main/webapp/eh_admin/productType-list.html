@@ -162,15 +162,15 @@
 							<option value="3">三级分类</option>
 						</select>
 						</span>
-					<input type="text" class="input-text" style="width:150px" placeholder="分类名称" id="" name="productTypeName">
-					<input type="text" class="input-text" style="width:150px" placeholder="分类代码" id="" name="productTypeCode">
+					<input type="text" class="input-text" style="width:150px" placeholder="分类名称"  name="productTypeName">
+					<input type="text" class="input-text" style="width:150px" placeholder="分类代码" name="productTypeCode">
 
 					<button type="submit" class="btn btn-success" id="mit" name=""><i class="Hui-iconfont">&#xe665;</i> 查分类</button>
 				</div>
 
 				<div class="cl pd-5 bg-1 bk-gray mt-20">
 					<span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加分类','productType-add.html','800','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a> </span>
-					<span class="r">共有数据：<strong>54</strong> 条</span>
+					<span class="r">共有数据：<strong id="selectNumber" >54</strong> 条</span>
 				</div>
 				<div style="width: 98%; height: 30px;margin: 10px;"><!--排序组件-->
 					排序：
@@ -299,6 +299,7 @@ function select()
             {
                 var orders=data.list;
                 var totalCount=orders.length;//总记录数
+				$('#selectNumber').text(totalCount);
                 pageCount=orders.length/pageSize;    pageCount=Math.ceil(pageCount)//总页数
                 if(pageIndex>pageCount) pageIndex=pageCount;
                 var first=(pageIndex-1)*pageSize;

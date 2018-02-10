@@ -18,37 +18,52 @@ public class RedisTest extends BaseJunit {
     {
         //链接Redis
         Jedis jedis=new Jedis("localhost");
-        List<User> users=new ArrayList<User>();
-        //往users里面add三条记录
-        for(int i=0;i<3;i++)
-        {
-            User user=new User();
-            user.setUserName("哈哈哈");
-            user.setId(10+i);
-            users.add(user);
-        }
 
-        //创建Gson对象
-        Gson gson=new Gson();
+        jedis.setex("ip_192.168.0.101",30,"192.168.0.101");
+        jedis.setex("ip_192.168.0.102",60,"192.168.0.102");
 
-        //将users转换为json
-        String json=gson.toJson(users);
+        System.out.println("ip存储成功,存储时间为15分钟");
+//        List<User> users=new ArrayList<User>();
+//        //往users里面add三条记录
+//        for(int i=0;i<3;i++)
+//        {
+//            User user=new User();
+//            user.setUserName("哈哈哈");
+//            user.setId(10+i);
+//            users.add(user);
+//        }
 
-        //将json存如Redis
-        jedis.set("list",json);
-
-        //将json从Redis取出
-        String redisJson=jedis.get("list");
-
-        //将redisJson转换为List<User>
-        List<User> users1=gson.fromJson(redisJson,new TypeToken<List<User>>(){}.getType());
-
-        //检查转换成功的List<User>
-        for (int i = 0; i < users1.size(); i++) {
-            User user =  users1.get(i);
-            System.out.println(user.getUserName());
-        }
+//        //创建Gson对象
+//        Gson gson=new Gson();
+//
+//        //将users转换为json
+//        String json=gson.toJson(users);
+//
+//        //将json存如Redis
+//        jedis.set("list",json);
+//
+//        //将json从Redis取出
+//        String redisJson=jedis.get("list");
+//
+//        //将redisJson转换为List<User>
+//        List<User> users1=gson.fromJson(redisJson,new TypeToken<List<User>>(){}.getType());
+//
+//        //检查转换成功的List<User>
+//        for (int i = 0; i < users1.size(); i++) {
+//            User user =  users1.get(i);
+//            System.out.println(user.getUserName());
+//        }
     }
+    @Test
+    public void getIp(){
+        //链接Redis
+        Jedis jedis=new Jedis("localhost");
+
+        System.out.println("查询ip:  "+jedis.get("ip_192.168.0.101"));
+        System.out.println("查询ip:  "+jedis.get("ip_192.168.0.102"));
+
+    }
+
 
     /**
      * 删除单个文件
