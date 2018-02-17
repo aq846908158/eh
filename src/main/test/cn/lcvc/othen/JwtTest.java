@@ -12,7 +12,11 @@ import com.google.gson.Gson;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +31,13 @@ public class JwtTest extends BaseJunit {
         System.out.println(t.getUserId());
 
     }
+
+    @Test
+    public  void  test1() throws ParseException {
+        Date epoch =  new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-14");
+        System.out.println(epoch);
+    }
+
 
 
 }

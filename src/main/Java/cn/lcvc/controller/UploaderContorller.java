@@ -31,24 +31,18 @@ public class UploaderContorller {
                     //获得文件后缀名称
                     String imageName = contentType.substring(contentType.indexOf("/") + 1);
                     String fileName = (int)(Math.random() * 10000000) + "." + imageName;
-                    path = "/eh_admin/image/" + fileName;
+                    path = "/eh_admin/producImage_temporary/" + fileName;
 
-
-
-                    System.out.println("路径 "+pathRoot + path);
+                    System.out.println("路径 "+path);
                     file.transferTo(new File(pathRoot + path));
 
-                    jsonResult.setMessage(pathRoot + path);
+                    jsonResult.setMessage(path);
 
                 }catch (Exception e){
                     System.out.println(e);
                 }
             }
-
-
             return  jsonResult;
-
-
 
         }
 

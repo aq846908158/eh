@@ -3,21 +3,27 @@ package cn.lcvc.uitl;
 import cn.lcvc.POJO.Admin;
 import cn.lcvc.POJO.TokenMessage;
 import cn.lcvc.POJO.User;
+import cn.lcvc.service.UserService;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.Date;
 
 public class JWT {
     private  static final String key="eh";
 
+    @Autowired
+    private static UserService userService;
 
     /**
      * 创建User  Token
@@ -32,7 +38,7 @@ public class JWT {
                 .withIssuer("com.eh") //发行者
                 .withSubject(user.getUserName()) //主题
                 .withClaim("userId",user.getId() ) //
-                .withExpiresAt(new Date(System.currentTimeMillis()+259200000)) //过期时间 tonken保存时间为3天
+                .withExpiresAt(new Date(System.currentTimeMillis()+259200000)) //过期时间 tonken保存时间为3天 (ms)
                 .withIssuedAt(new Date()) //发行时间
                 .sign(al);//算法加密签名
        return token;
@@ -52,7 +58,7 @@ public class JWT {
                 .withIssuer("com.eh") //发行者
                 .withSubject(admin.getUserName()) //主题
                 .withClaim("adminId",admin.getId() ) //
-                .withExpiresAt(new Date(System.currentTimeMillis()+259200000)) //过期时间 tonken保存时间为3天
+                .withExpiresAt(new Date(System.currentTimeMillis()+259200000)) //过期时间 tonken保存时间为3天(ms)
                 .withIssuedAt(new Date()) //发行时间
                 .sign(al);//算法加密签名
         return token;
@@ -118,5 +124,46 @@ public class JWT {
         String newJWT=JWT.replaceAll( temp+".","");
         newJWT=StringUtils.substringBefore(newJWT,".");
         return newJWT;
+    }
+
+    /**
+     * 验证token信息  返回一个User
+     * @param token
+     * @return User对象
+     */
+    public static   User checkoutUserToken(String token){
+        User user;
+        if (JWT.verifyJwt(token))
+        {
+            TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
+              user=userService.getUser(tokenMessage.getUserId());
+            String  jedisToken="";
+            try {
+                Jedis jedis = new Jedis("localhost");
+                jedisToken= jedis.get(user.getId()+"_token");
+            }catch (Exception e){
+                return  user=null;
+            }
+
+            if (jedisToken.equals(token)){
+                return  user;
+            }else {
+                return  user=null;
+            }
+        }
+        else
+        {
+            return  user=null;
+        }
+
+
+    }
+
+    public static Timestamp testStringToTimestamp(String str) {
+        // 注：String的类型必须形如： yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错！！！
+        // 如果String为其他格式，可考虑重新解析下字符串，再重组~~
+
+        Timestamp ts = Timestamp.valueOf(str+" 0:0:0");  // 2011-05-09 11:49:45.0
+        return  ts;
     }
 }
