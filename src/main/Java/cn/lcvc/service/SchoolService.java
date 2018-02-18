@@ -57,7 +57,15 @@ public class SchoolService {
     }
 
 
-
+    public School isSchoolCode(Integer id){
+        School school;
+        if (id != null && id >0){
+            school=schoolDao.getSchool(id);
+           return  school;
+        }else {
+            return  school=null;
+        }
+    }
 
 
 

@@ -301,7 +301,21 @@ public class ProductTypeService {
         }
     }
 
+    /**
+     * 查询分类是否存在
+     * @param id
+     * @return
+     */
+    public ProductType isTypeCode(Integer id){
+        ProductType productType=new ProductType();
 
+        productType=productTypeDao.getProductType(id);
+        if (productType != null){
+            return  productType;
+        }
+
+        return  productType;
+    }
 
 
 

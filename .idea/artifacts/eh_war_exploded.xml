@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="eh:war exploded">
-    <output-path>$PROJECT_DIR$/target/eh</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/eh_war_exploded</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -55,13 +55,7 @@
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.2" />
           <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.3.1" />
-          <element id="archive" name="eh-1.0-SNAPSHOT.jar">
-            <element id="module-output" name="eh" />
-          </element>
         </element>
-      </element>
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/target/eh/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="eh/web/Web" />
     </root>

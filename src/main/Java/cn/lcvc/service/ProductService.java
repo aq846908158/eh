@@ -36,7 +36,7 @@ public class ProductService {
     public JsonResult issueProduct(Product product,User sessionUser,List<String> urls) {
         JsonResult jsonResult=new JsonResult();
 
-        if(product.getProductName().length()<2||product.getProductName().length()>30)
+        if(product.getProductName().trim().length()<2||product.getProductName().trim().length()>30)
         {
             jsonResult.setMessage("商品名称格式错误!应在2-30字符以内");
             return jsonResult;
@@ -83,6 +83,7 @@ public class ProductService {
         product.setCriateTime(new Timestamp(System.currentTimeMillis()));
         product.setUser(sessionUser);
         product.setSeeNumber(0);
+        product.setState(false);
         productDao.addProduct(product);
         for (int i = 0; i < urls.size(); i++) {
             String s =  urls.get(i);

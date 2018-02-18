@@ -126,40 +126,9 @@ public class JWT {
         return newJWT;
     }
 
-    /**
-     * 验证token信息  返回一个User
-     * @param token
-     * @return User对象
-     */
-    public static   User checkoutUserToken(String token){
-        User user;
-        if (JWT.verifyJwt(token))
-        {
-            TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
-              user=userService.getUser(tokenMessage.getUserId());
-            String  jedisToken="";
-            try {
-                Jedis jedis = new Jedis("localhost");
-                jedisToken= jedis.get(user.getId()+"_token");
-            }catch (Exception e){
-                return  user=null;
-            }
-
-            if (jedisToken.equals(token)){
-                return  user;
-            }else {
-                return  user=null;
-            }
-        }
-        else
-        {
-            return  user=null;
-        }
 
 
-    }
-
-    public static Timestamp testStringToTimestamp(String str) {
+    public static Timestamp StringToTimestamp(String str) {
         // 注：String的类型必须形如： yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错！！！
         // 如果String为其他格式，可考虑重新解析下字符串，再重组~~
 

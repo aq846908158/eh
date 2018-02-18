@@ -13,6 +13,8 @@ import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
@@ -33,9 +35,10 @@ public class JwtTest extends BaseJunit {
     }
 
     @Test
-    public  void  test1() throws ParseException {
-        Date epoch =  new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-14");
-        System.out.println(epoch);
+    public  void  test1() {
+        NumberFormat nf = new DecimalFormat("#.00");
+        double a = 3.09;
+        double b= Double.parseDouble(nf.format(a));
     }
 
 

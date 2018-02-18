@@ -1,6 +1,7 @@
 package cn.lcvc.service;
 
 import cn.lcvc.POJO.School;
+import cn.lcvc.POJO.TokenMessage;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.SchoolDao;
 import cn.lcvc.dao.UserDao;
@@ -615,4 +616,6 @@ public class UserService{
         }
         return  js;
     }
+
+
 }
