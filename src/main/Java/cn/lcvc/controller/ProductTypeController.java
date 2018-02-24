@@ -54,7 +54,7 @@ public class ProductTypeController {
 
     /**
      * 根据分类等级查询分类信息
-     * @param rank 要查询的分类等级
+     * @param rank 要查询的分类等级 【如果rank位空则查询所有分类@wuruibao 修改】
      * @param superId  父分类ID（ 如果是二级分类 要查的是哪个一级分类下的二级分类）【如果只想查所有二级分类可以传空参数】
      * @return
      */

@@ -245,13 +245,22 @@ public class ProductTypeService {
 
     public  JsonResult getProductType_ByRank(Integer rank,Integer superId){
         JsonResult  jsonResult = new JsonResult();
+
+        if(rank == 0 && superId== 0){
+            List<ProductType> productTypeList=productTypeDao.getProductTypeList();
+            jsonResult.setList(productTypeList);
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("获取所有分类成功");
+            return  jsonResult;
+        }
         if(superId==null||superId==0)
         {
-            List<ProductType> productTypes=productTypeDao.getProductTypeByList_OneColumn("productTypeRank",rank);
-            jsonResult.setList(productTypes);
-            jsonResult.setErrorCode("200");
-            jsonResult.setMessage("获取成功");
-            return  jsonResult;
+                List<ProductType> productTypes=productTypeDao.getProductTypeByList_OneColumn("productTypeRank",rank);
+                jsonResult.setList(productTypes);
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("获取成功");
+                return  jsonResult;
+
         }else{
             if(superId!=null&&superId!=0)
             {

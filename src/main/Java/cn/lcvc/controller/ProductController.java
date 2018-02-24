@@ -94,7 +94,12 @@ public class ProductController {
         }
 
         product.setBuyTime(StringToTimestamp(buyTimeCode));
-        product.setExpire(StringToTimestamp(expireCode));
+        if (expireCode.length() == 0 || expireCode == null){
+            product.setExpire(null);
+        }else {
+            product.setExpire(StringToTimestamp(expireCode));
+        }
+
         NumberFormat nf = new DecimalFormat("#.00");
         product.setProductPrice(Double.valueOf(nf.format(product.getProductPrice())));
 

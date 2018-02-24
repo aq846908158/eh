@@ -75,11 +75,11 @@ public class ProductService {
             jsonResult.setMessage("入手时间必须填写");
             return jsonResult;
         }
-        if(product.getExpire()==null)
-        {
-            jsonResult.setMessage("保修到期时间时间必须填写");
-            return jsonResult;
-        }
+//        if(product.getExpire()==null)
+//        {
+//            jsonResult.setMessage("保修到期时间时间必须填写");
+//            return jsonResult;
+//        }
         product.setCriateTime(new Timestamp(System.currentTimeMillis()));
         product.setUser(sessionUser);
         product.setSeeNumber(0);
