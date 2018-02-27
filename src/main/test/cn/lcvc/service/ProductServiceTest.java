@@ -87,5 +87,13 @@ public class ProductServiceTest extends BaseJunit{
         System.out.println(jsonResult.getMessage());
     }
 
+    @Test
+    public  void  getBlock_oneTest(){
+      JsonResult jsonResult=productService.getBlock_one();
+        List<Product> list=jsonResult.getList();
+        for (int i=0;i<list.size();i++){
+            System.out.println(list.get(i).getProductName());
+        }
+    }
 
 }

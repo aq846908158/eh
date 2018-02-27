@@ -178,4 +178,29 @@ public class ProductDaoImpl implements ProductDao {
 
         return list;
     }
+
+    @Override
+    public List<Product> getProductRandLimit() {
+        List<Product> list=getSession().createSQLQuery("SELECT *FROM (SELECT * FROM product WHERE state=0 AND grounding=1  ORDER BY id DESC  LIMIT 4,60) pro ORDER BY RAND() LIMIT 6").addEntity(Product.class).list();
+
+        return list;
+    }
+
+    @Override
+    public List<Product> getFirstProduct() {
+        List<Product> list= getSession().createSQLQuery("SELECT * FROM product WHERE state=0 AND grounding=1 ORDER BY id DESC  LIMIT 4").addEntity(Product.class).list();
+        return list;
+    }
+
+    @Override
+    public List<Product> getNewLeave() {
+        List<Product> list= getSession().createSQLQuery("SELECT * FROM product WHERE state=0 AND grounding=1 AND degree=99 ORDER BY id DESC LIMIT 4,6").addEntity(Product.class).list();
+        return list;
+    }
+
+    @Override
+    public List<Product> getTopSeeNumber() {
+        List<Product> list= getSession().createSQLQuery("SELECT * FROM  product WHERE state=0 AND grounding=1 ORDER BY seeNumber DESC  LIMIT 6").addEntity(Product.class).list();
+        return list;
+    }
 }

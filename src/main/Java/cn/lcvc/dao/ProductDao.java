@@ -69,4 +69,17 @@ public interface ProductDao {
      * @return 一个有序List<Product>集合，null表示没查到
      */
     List<Product> getProductList(Object object, Map<Object, Object> map);
+
+    /**
+     * @author wuruibao
+     * @date 2018-2-25 17:24:17
+     * @return 在product表中前50条记录中取20条随机记录，
+     */
+    List<Product> getProductRandLimit();
+
+    List<Product> getFirstProduct();
+
+    List<Product> getNewLeave();
+
+    List<Product> getTopSeeNumber();
 }

@@ -138,4 +138,11 @@ public class ProductController {
         return  jsonResult;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/getBlock_one",method = RequestMethod.GET)
+    public JsonResult getBlock_one(){
+        JsonResult jsonResult=productService.getBlock_one();
+        return  jsonResult;
+    }
+
 }
