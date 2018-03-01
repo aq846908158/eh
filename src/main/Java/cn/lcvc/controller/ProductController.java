@@ -145,4 +145,19 @@ public class ProductController {
         return  jsonResult;
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "/getProduct",method = RequestMethod.GET)
+    public JsonResult getProduct(@RequestParam(value = "pid") Integer pid){
+        JsonResult jsonResult = new JsonResult();
+
+        if (pid == null || pid <= 0){
+            jsonResult.setErrorCode("500");
+            return jsonResult;
+        }
+         jsonResult=productService.getProduct(pid);
+
+        return  jsonResult;
+    }
+
 }

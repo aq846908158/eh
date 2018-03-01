@@ -26,8 +26,8 @@ public class ShoppingCartServiceTest extends BaseJunit {
         User user=new User();
         product.setId(2);
         user.setId(7);
-        JsonResult jsonResult=shoppingCartItemService.addShoppingCartItem(product,1,user);
-        System.out.println(jsonResult.getMessage());
+//        JsonResult jsonResult=shoppingCartItemService.addShoppingCartItem(product,1,user);
+//        System.out.println(jsonResult.getMessage());
     }//通过
 
     @Test

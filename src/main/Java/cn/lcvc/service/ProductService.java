@@ -273,13 +273,18 @@ public class ProductService {
     }
 
 
+    public JsonResult getProduct(Integer pid) {
+        JsonResult jsonResult=new JsonResult();
+        Map<Object, Object> map = new HashMap<Object, Object>();
+        Product product = productDao.getProduct(pid);
+        List<Product> list=productDao.getProductRandLimit();//推荐模块  随机商品
 
+            jsonResult.setList(list);
+            map.put("product",product);
+            jsonResult.setItem(map);
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("查询成功");
 
-
-
-
-
-
-
-
+        return  jsonResult;
+    }
 }

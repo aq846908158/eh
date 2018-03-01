@@ -29,15 +29,16 @@ public class ShoppingCartItemService {
 //--------------------------------------------------------------------------------------------
     /**
      * 已登录用户       购物车商品添加
-     * @param product 所需要添加进购物车的商品
+     * @param pid 所需要添加进购物车的商品id
      * @param number 需要购买的商品的数量
      * @param user Session中的user对象登录信息
      * @return 成功（JsonResult.message="添加成功"） 失败 （JsonResult.message="添加失败"）
      */
-    public JsonResult addShoppingCartItem(Product product,Integer number,User user)
+    public JsonResult addShoppingCartItem(Integer pid,Integer number,User user)
     {
         JsonResult jsonResult=new JsonResult();
-        if(product!=null && product.getId()!=0 && number!=0 && user!=null && user.getId()!=0) {
+        Product product=productDao.getProduct(pid);
+        if(product!=null && product.getId()!=0 && number!=0 && user!= null && user.getId()!= 0) {
             ShoppingCartItem shoppingCartItem = shoppingCartItemDao.getShoppingCartItemBy_TowColumn("product",product,"user",user);
             if(shoppingCartItem==null) {
                 //判断商品库存是否充足
@@ -53,7 +54,7 @@ public class ShoppingCartItemService {
                 shoppingCartItem.setUser(user);
                 shoppingCartItemDao.addShoppingCartItem(shoppingCartItem);
                 jsonResult.setErrorCode("200");
-                jsonResult.setMessage("添加成功");
+                jsonResult.setMessage("添加成功,咱在购物车见哦~~");
                 return jsonResult;
             }
             else
@@ -68,7 +69,7 @@ public class ShoppingCartItemService {
                 shoppingCartItem.setNumber(number+shoppingCartItem.getNumber());
                 shoppingCartItemDao.updateShoppingCartItem(shoppingCartItem);
                 jsonResult.setErrorCode("200");
-                jsonResult.setMessage("添加成功");
+                jsonResult.setMessage("添加成功,咱在购物车见哦~~");
                 return  jsonResult;
             }
         }
@@ -285,7 +286,7 @@ public class ShoppingCartItemService {
         if(user!=null&&user.getId()!=0) {
             for (int i = 0; i < sessionShoppingCart.size(); i++) {
                 ShoppingCartItem shoppingCartItem = sessionShoppingCart.get(i);
-                addShoppingCartItem(shoppingCartItem.getProduct(),shoppingCartItem.getNumber(),user);
+                addShoppingCartItem(shoppingCartItem.getProduct().getId(),shoppingCartItem.getNumber(),user);
             }
             jsonResult.setErrorCode("200");
             jsonResult.setMessage("转换成功");
