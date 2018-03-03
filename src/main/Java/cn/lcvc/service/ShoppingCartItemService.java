@@ -202,12 +202,12 @@ public class ShoppingCartItemService {
         shoppingCartItem.setNumber(number);
         shoppingCartItem.setProduct(product);
         sessionShoppingCart.add(shoppingCartItem);
+
+        jsonResult.setList(sessionShoppingCart);
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("添加成功");
-        jsonResult.setList(sessionShoppingCart);
+
         return jsonResult;
-
-
     }
 //--------------------------------------------------------------------------------------------
     /**
@@ -263,12 +263,12 @@ public class ShoppingCartItemService {
             }
             sessionShoppingCart.get(index).setNumber(number);
             jsonResult.setErrorCode("200");
-            jsonResult.setMessage("修改成功");
+            jsonResult.setMessage("加入购物车成功");
             jsonResult.setList(sessionShoppingCart);
             return  jsonResult;
         }
         jsonResult.setErrorCode("500");
-        jsonResult.setMessage("修改失败");
+        jsonResult.setMessage("无法加入购物车");
         jsonResult.setList(sessionShoppingCart);
         return  jsonResult;
     }

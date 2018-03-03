@@ -7,11 +7,11 @@ import java.util.Map;
 
 public interface ProductDao {
 
-    public void addProduct(Product product);
-    public void deleteProduct(Product product);
-    public void updateProduct(Product product);
-    public Product getProduct(Integer id);
-    public List<Product> getProductList();
+     void addProduct(Product product);
+     void deleteProduct(Product product);
+     void updateProduct(Product product);
+     Product getProduct(Integer id);
+     List<Product> getProductList();
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
@@ -19,7 +19,7 @@ public interface ProductDao {
      * @param_value需要查询的字段的值
      * @return 一个Product对象，null表示没查到
      */
-    public Product getProductBy_OneColumn(String column, Object value);
+     Product getProductBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
@@ -27,7 +27,7 @@ public interface ProductDao {
      * @param_value需要查询的字段的值
      * @return 一个Product集合，null表示没查到
      */
-    public List<Product> getProductsBy_OneColumn(String column, Object value);
+     List<Product> getProductsBy_OneColumn(String column, Object value);
 
     /**
      * @author huanghaibin
@@ -38,7 +38,7 @@ public interface ProductDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Product对象，null表示没查到
      */
-    public Product getProductBy_TowColumn(String column1, Object value1, String column2, Object value2);
+     Product getProductBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -49,7 +49,7 @@ public interface ProductDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Product集合，null表示没查到
      */
-    public List<Product>  getProductsBy_TowColumn(String column1, Object value1, String column2, Object value2);
+     List<Product>  getProductsBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
 
     /**
@@ -59,7 +59,7 @@ public interface ProductDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<Product>集合，null表示没查到
      */
-    public List<Product> getProductListOrderBy(String column, String orderBy);
+     List<Product> getProductListOrderBy(String column, String orderBy);
 
     /**
      * @author wuruibao

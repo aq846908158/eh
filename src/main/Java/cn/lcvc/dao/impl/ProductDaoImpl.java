@@ -35,21 +35,23 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     public void updateProduct(Product product) {
-        Product oldProduct = (Product) getSession().load(Product.class,product.getId());
-        oldProduct.setProductName(product.getProductName());
-        oldProduct.setProductNumber(product.getProductNumber());
-        oldProduct.setProductType(product.getProductType());
-        oldProduct.setProductPrice(product.getProductPrice());
-        oldProduct.setSchool(product.getSchool());
-        oldProduct.setProductIntroduce(product.getProductIntroduce());
-        oldProduct.setDegree(product.getDegree());
-        oldProduct.setGrounding(product.getGrounding());
-        oldProduct.setBuyTime(product.getBuyTime());
-        oldProduct.setExpire(product.getExpire());
-        oldProduct.setCriateTime(product.getCriateTime());
-        oldProduct.setUser(product.getUser());
-        oldProduct.setSeeNumber(product.getSeeNumber());
-        getSession().update(oldProduct);
+//        Product oldProduct = (Product) getSession().load(Product.class,product.getId());
+//        oldProduct.setProductName(product.getProductName());
+//        oldProduct.setProductNumber(product.getProductNumber());
+//        oldProduct.setProductType(product.getProductType());
+//        oldProduct.setProductPrice(product.getProductPrice());
+//        oldProduct.setSchool(product.getSchool());
+//        oldProduct.setProductIntroduce(product.getProductIntroduce());
+//        oldProduct.setDegree(product.getDegree());
+//        oldProduct.setGrounding(product.getGrounding());
+//        oldProduct.setBuyTime(product.getBuyTime());
+//        oldProduct.setExpire(product.getExpire());
+//        oldProduct.setCriateTime(product.getCriateTime());
+//        oldProduct.setUser(product.getUser());
+//        oldProduct.setSeeNumber(product.getSeeNumber());
+//        oldProduct.setState(product.getState());
+        getSession().update(product);
+        getSession().flush();
     }
 
     public Product getProduct(Integer id) {

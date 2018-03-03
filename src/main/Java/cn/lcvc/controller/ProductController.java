@@ -7,7 +7,11 @@ import cn.lcvc.service.SchoolService;
 import cn.lcvc.service.UserService;
 import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,8 +22,7 @@ import redis.clients.jedis.Jedis;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static cn.lcvc.uitl.JWT.StringToTimestamp;
 
@@ -151,12 +154,36 @@ public class ProductController {
     public JsonResult getProduct(@RequestParam(value = "pid") Integer pid){
         JsonResult jsonResult = new JsonResult();
 
-        if (pid == null || pid <= 0){
-            jsonResult.setErrorCode("500");
-            return jsonResult;
-        }
-         jsonResult=productService.getProduct(pid);
+        jsonResult=productService.getProduct(pid);
 
+        return  jsonResult;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/pushCookie",method = RequestMethod.POST,produces =  "application/json;charset=UTF-8")
+    public JsonResult pushCookie(HttpServletRequest request,@RequestParam(value = "ds") String da){
+        System.out.println(da);
+        JsonResult jsonResult = new JsonResult();
+//        String ds = request.getParameter("ds");
+        JSONArray json=JSONArray.fromObject(da);
+        JSONObject jsonOne;
+        List<ShoppingCartItem> cartList = new ArrayList<ShoppingCartItem>();
+
+        for(int i=0;i<json.size();i++){
+           ShoppingCartItem cartItem=new ShoppingCartItem();
+            Product p=new Product();
+            jsonOne = json.getJSONObject(i);
+            cartItem.setId(i+1);
+            p.setId((Integer) jsonOne.get("pid"));
+            cartItem.setProduct(p);
+            cartItem.setNumber((Integer) jsonOne.get("pNumber"));
+            cartList.add(cartItem);
+        }
+
+
+        jsonResult.setList(cartList);
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("ok");
         return  jsonResult;
     }
 

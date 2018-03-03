@@ -273,17 +273,25 @@ public class ProductService {
     }
 
 
-    public JsonResult getProduct(Integer pid) {
+    public JsonResult getProduct(Integer pid) throws NullPointerException{
         JsonResult jsonResult=new JsonResult();
         Map<Object, Object> map = new HashMap<Object, Object>();
-        Product product = productDao.getProduct(pid);
+        Product product=null;
+        if(pid != null && pid > 0){
+            product= productDao.getProduct(pid);
+        }
+
         List<Product> list=productDao.getProductRandLimit();//推荐模块  随机商品
 
-            jsonResult.setList(list);
-            map.put("product",product);
-            jsonResult.setItem(map);
-            jsonResult.setErrorCode("200");
-            jsonResult.setMessage("查询成功");
+        jsonResult.setList(list);
+        if(product != null && product.getId() != null){
+                map.put("product",product);
+                product.setSeeNumber(product.getSeeNumber()+1);
+                productDao.updateProduct(product);
+        }
+        jsonResult.setItem(map);
+        jsonResult.setErrorCode("200");
+        jsonResult.setMessage("查询成功");
 
         return  jsonResult;
     }
