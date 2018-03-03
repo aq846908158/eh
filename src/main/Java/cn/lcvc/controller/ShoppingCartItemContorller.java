@@ -166,4 +166,47 @@ public class ShoppingCartItemContorller {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value = "/cartList",method = RequestMethod.GET,produces =  "application/json;charset=UTF-8")
+    public JsonResult getCartList(@RequestParam(value = "token") String token){
+        JsonResult jsonResult = new JsonResult();
+
+        //验证token
+        User user;
+        if (token != null && token.trim().length() > 0){
+            if (JWT.verifyJwt(token)) {
+                TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
+                User user_Token=userService.getUser(tokenMessage.getUserId());
+                String  jedisToken="";
+                try {
+                    Jedis jedis = new Jedis("localhost");
+                    jedisToken= jedis.get(user_Token.getId()+"_token");
+                }catch (Exception e){
+                    jsonResult.setErrorCode("501");
+                    jsonResult.setMessage("系统异常,请重新登录");
+                    return  jsonResult;
+                }
+
+                if (jedisToken.equals(token)){
+                    user=user_Token;
+                    jsonResult=shoppingCart.getShoppingCartItemList(user);
+                }else {
+                    jsonResult.setErrorCode("501");
+                    jsonResult.setMessage("信息异常,请重新登录");
+                    return  jsonResult;
+                }
+            }
+            else
+            {
+                jsonResult.setErrorCode("501");
+                jsonResult.setMessage("信息异常,请重新登录");
+                return  jsonResult;
+            }
+        }
+
+        return  jsonResult;
+
+    }
+
+
 }
