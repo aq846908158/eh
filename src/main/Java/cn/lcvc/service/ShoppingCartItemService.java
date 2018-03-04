@@ -83,19 +83,21 @@ public class ShoppingCartItemService {
      * @param id 购物车项id
      * @return 成功（JsonResult.message="删除成功"） 失败 （JsonResult.message="删除失败"）
      */
-    public JsonResult deleteShoppingCartItem(Integer id)
+    public JsonResult deleteShoppingCartItem(Integer id,User user)
     {
         JsonResult jsonResult =new JsonResult();
 
         ShoppingCartItem shoppingCartItem=shoppingCartItemDao.getShoppingCartItem(id);
-        if(shoppingCartItem!=null)
-        {
-            shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);
-            jsonResult.setMessage("删除成功");
-            jsonResult.setErrorCode("200");
-            return  jsonResult;
+        if (shoppingCartItem.getUser().equals(user)){
+            if(shoppingCartItem!=null)
+            {
+                shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);
+                jsonResult.setMessage("删除成功");
+                jsonResult.setErrorCode("200");
+                return  jsonResult;
+            }
         }
-        jsonResult.setMessage("删除失败");
+        jsonResult.setMessage("哎呀,删除失败");
         jsonResult.setErrorCode("500");
         return  jsonResult;
     }
@@ -106,27 +108,32 @@ public class ShoppingCartItemService {
      * @param number 修改的数量
      * @return 成功（JsonResult.message="修改成功"） 失败 （JsonResult.message="修改失败"）
      */
-    public JsonResult updateShoppingCartProductNumber(Integer id,Integer number)
+    public JsonResult updateShoppingCartProductNumber(Integer id,Integer number,User user)
     {
         JsonResult jsonResult=new JsonResult();
+
         ShoppingCartItem shoppingCartItem=shoppingCartItemDao.getShoppingCartItem(id);
-        if (shoppingCartItem!=null)
-        {
-            //判断商品库存是否充足
-            if (!productNumberIs(id,number))
+//        判断此购物车项是否是此用户下的
+        if (shoppingCartItem.getUser().equals(user)){
+            if (shoppingCartItem!=null)
             {
-                jsonResult.setErrorCode("500");
-                jsonResult.setMessage("商品库存不足");
-                return  jsonResult;
+                //判断商品库存是否充足
+                if (!productNumberIs(shoppingCartItem.getProduct().getId(),number))
+                {
+                    jsonResult.setErrorCode("500");
+                    jsonResult.setMessage("商品库存不足");
+                    return  jsonResult;
+                }
+                shoppingCartItem.setNumber(number);
+                shoppingCartItemDao.updateShoppingCartItem(shoppingCartItem);
+                jsonResult.setErrorCode("200");
+                jsonResult.setMessage("修改成功");
+                return jsonResult;
             }
-            shoppingCartItem.setNumber(number);
-            shoppingCartItemDao.updateShoppingCartItem(shoppingCartItem);
-            jsonResult.setErrorCode("200");
-            jsonResult.setMessage("修改成功");
-            return jsonResult;
         }
+
         jsonResult.setErrorCode("500");
-        jsonResult.setMessage("修改失败");
+        jsonResult.setMessage("哎呀,修改失败了...");
         return jsonResult;
     }
 //--------------------------------------------------------------------------------------------

@@ -33,15 +33,15 @@ public class ShoppingCartServiceTest extends BaseJunit {
     @Test
     public void deleteShoppingCartItem()
     {
-        JsonResult jsonResult=shoppingCartItemService.deleteShoppingCartItem(1);
-        System.out.println(jsonResult.getMessage());
+//        JsonResult jsonResult=shoppingCartItemService.deleteShoppingCartItem(1);
+//        System.out.println(jsonResult.getMessage());
     }//通过
 
     @Test
     public void updateShoppingCartItemProductNumber()
     {
-        JsonResult jsonResult=shoppingCartItemService.updateShoppingCartProductNumber(2,1);
-        System.out.println(jsonResult.getMessage());
+//        JsonResult jsonResult=shoppingCartItemService.updateShoppingCartProductNumber(2,1);
+//        System.out.println(jsonResult.getMessage());
     }//通过
 
     @Test

@@ -29,14 +29,16 @@ public class ShoppingCarItemDaoImpl implements ShoppingCartItemDao {
 
     public void deleteShoppingCartItem(ShoppingCartItem shoppingCartItem) {
         getSession().delete(shoppingCartItem);
+        getSession().flush();
     }
 
     public void updateShoppingCartItem(ShoppingCartItem shoppingCartItem) {
-        ShoppingCartItem oldShoppingCartItem= (ShoppingCartItem) getSession().load(ShoppingCartItem.class,shoppingCartItem.getId());
-        oldShoppingCartItem.setNumber(shoppingCartItem.getNumber());
-        oldShoppingCartItem.setUser(shoppingCartItem.getUser());
-        oldShoppingCartItem.setProduct(shoppingCartItem.getProduct());
-        getSession().update(oldShoppingCartItem);
+//        ShoppingCartItem oldShoppingCartItem= (ShoppingCartItem) getSession().load(ShoppingCartItem.class,shoppingCartItem.getId());
+//        oldShoppingCartItem.setNumber(shoppingCartItem.getNumber());
+//        oldShoppingCartItem.setUser(shoppingCartItem.getUser());
+//        oldShoppingCartItem.setProduct(shoppingCartItem.getProduct());
+        getSession().update(shoppingCartItem);
+        getSession().flush();
     }
 
     public ShoppingCartItem getShoppingCartItem(Integer id) {
