@@ -269,8 +269,33 @@ public class OrderService {
     }
 
 
+    /**
+     *获取个人订单
+     *@Author @wuruibao
+     *@Date 2017/12/5 19:00
+     *@params id:订单ID
+     *@return  返回删除结果。
+     */
+    public  JsonResult getOrderByUser(Integer uid,String productName){
+        JsonResult jsonResult = new JsonResult();
 
-
+        if(uid==null||uid==0)
+        {
+            jsonResult.setMessage("查询失败");
+            jsonResult.setErrorCode("500");
+        }
+        Map<String,Object> map=new HashMap<>();
+        if(productName!=null&&productName!="")
+        {
+            map.put("product",productName);
+        }
+        User user=userDao.getUser(uid);
+        List<Order> orders=orderDao.getOrderByUser(user,map);
+        jsonResult.setList(orders);
+        jsonResult.setMessage("查询成功");
+        jsonResult.setErrorCode("200");
+        return jsonResult;
+    }
 
 
 

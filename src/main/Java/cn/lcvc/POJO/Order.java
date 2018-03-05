@@ -14,6 +14,7 @@ public class Order {
     private User buyUser;
     private Product product;
     private String orderState;
+    private User sellUser;
 
     @Id
     @Column(name = "id")
@@ -43,6 +44,16 @@ public class Order {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    @Basic
+    @Column(name = "sellUser")
+    public User getSellUser() {
+        return sellUser;
+    }
+
+    public void setSellUser(User sellUser) {
+        this.sellUser = sellUser;
     }
 
     @Basic

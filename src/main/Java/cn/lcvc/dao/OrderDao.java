@@ -1,6 +1,7 @@
 package cn.lcvc.dao;
 
 import cn.lcvc.POJO.Order;
+import cn.lcvc.POJO.User;
 
 import java.util.List;
 import java.util.Map;
@@ -48,4 +49,13 @@ public interface OrderDao {
      *@return
      */
     List<Order> getOrder(Object  object, Map<String, Object> map,String column,String orderBy);
+
+    /**
+     *获取数据库中个人用户订单信息
+     *@Author @huangahibin
+     *@Date 2017-3-5 11:46:33
+     *@params
+     *@return
+     */
+    List<Order> getOrderByUser(User user,Map<String,Object>map);
 }

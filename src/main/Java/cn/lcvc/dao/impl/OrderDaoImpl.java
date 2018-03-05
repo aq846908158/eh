@@ -1,6 +1,7 @@
 package cn.lcvc.dao.impl;
 
 import cn.lcvc.POJO.Order;
+import cn.lcvc.POJO.User;
 import cn.lcvc.dao.OrderDao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -132,5 +133,16 @@ public class OrderDaoImpl implements OrderDao {
         }
 
         return list;
+    }
+
+    @Override
+    public List<Order> getOrderByUser(User user, Map<String, Object> map) {
+        List<Order> list =new ArrayList<Order>();
+        Criteria criteria=getSession().createCriteria(Order.class);
+        for (Map.Entry  entry : map.entrySet()) {//遍历map
+            criteria.add(Restrictions.like((String) entry.getKey(),"%"+entry.getValue()+"%"));
+        }
+        criteria.add(Restrictions.eq("buyUser",user));
+        return criteria.list();
     }
 }
