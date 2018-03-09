@@ -4,6 +4,7 @@ import cn.lcvc.POJO.*;
 import cn.lcvc.dao.ProductDao;
 import cn.lcvc.dao.ShoppingCartItemDao;
 import cn.lcvc.dao.UserDao;
+import cn.lcvc.uitl.ArithmeticUtils;
 import cn.lcvc.uitl.JWT;
 import cn.lcvc.uitl.JsonResult;
 import com.alibaba.fastjson.JSON;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ShoppingCartItemService {
@@ -92,6 +95,16 @@ public class ShoppingCartItemService {
             if(shoppingCartItem!=null)
             {
                 shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);
+                List<ShoppingCartItem> shoppingCartItems=shoppingCartItemDao.getShoppingCartItemsBy_OneColumn("user",user);
+                if (shoppingCartItems.size() > 0){
+                    Map<Object,Object> map=new HashMap<>();
+                    Double subtotal=0.00D;
+                    for (int i=0;i<shoppingCartItems.size();i++){
+                        subtotal+= ArithmeticUtils.add(subtotal,shoppingCartItems.get(i).getProduct().getProductPrice());
+                    }
+                    map.put("subtotal",subtotal);
+                    jsonResult.setItem(map);
+                }
                 jsonResult.setMessage("删除成功");
                 jsonResult.setErrorCode("200");
                 return  jsonResult;
@@ -330,7 +343,7 @@ public class ShoppingCartItemService {
 
         for (int i = 0; i < shoppingCartItems.size(); i++) {
             ShoppingCartItem shoppingCartItem =  shoppingCartItems.get(i);
-            JsonResult orderResult=orderService.createOrder(shoppingCartItem.getProduct().getId(),shoppingCartItem.getNumber(),shoppingCartItem.getUser().getId(),orderMessage);
+            JsonResult orderResult=orderService.createOrder(shoppingCartItem.getProduct().getId(),shoppingCartItem.getNumber(),shoppingCartItem.getUser(),shoppingCartItem.getProduct().getUser(),orderMessage);
             orders.add((Order) orderResult.getItem().get("order"));
             shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);
         }

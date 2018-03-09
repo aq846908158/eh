@@ -36,16 +36,16 @@ public class OrderService {
      * 创建订单
      * @param productId 商品Id
      * @param number 购买数量
-     * @param buyUserId session中登录信息
+     * @param buyUser 购买者
+     * @param sellUser 出售者者
      * @param orderMessage 订单备注
      * @return JsonResult信息
      */
-    public JsonResult createOrder(Integer productId,Integer number,Integer buyUserId,String orderMessage)
+    public JsonResult createOrder(Integer productId,Integer number,User buyUser,User sellUser,String orderMessage)
     {
         JsonResult jsonResult=new JsonResult();
         Order order=new Order();
         Product product=productDao.getProduct(productId);
-        User user=userDao.getUser(buyUserId);
 
         if(product==null)
         {
@@ -53,22 +53,16 @@ public class OrderService {
             jsonResult.setMessage("商品不存在");
             return  jsonResult;
         }
-        if(user==null)
-        {
-            jsonResult.setErrorCode("500");
-            jsonResult.setMessage("用户不存在");
-            return  jsonResult;
-        }
 
         product.setId(productId);
         order.setProduct(product);
         order.setNumber(number);
-        order.setBuyUser(user);
-        order.setOrderState("0");
+        order.setBuyUser(buyUser);
+        order.setOrderState("未支付");
         order.setOrderPrice(number*product.getProductPrice());
         SimpleDateFormat dateFormater = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         Date date=new Date();
-        String orderCode=dateFormater.format(date)+product.getId()+user.getId();
+        String orderCode=dateFormater.format(date)+product.getId()+buyUser.getId();
         order.setOrderCode(orderCode);
         order.setCreateTime(new Timestamp(System.currentTimeMillis()));
         order.setMessage(orderMessage);
