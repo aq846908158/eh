@@ -161,8 +161,8 @@ public class ShoppingCartServiceTest extends BaseJunit {
         User user=new User();
         user.setId(7);
         List<ShoppingCartItem> shoppingCartItems=shoppingCartItemService.getShoppingCartItemList(user).getList();
-        JsonResult jsonResult=shoppingCartItemService.shoppingCartSettle(shoppingCartItems,"我草草");
-        System.out.println(jsonResult.getMessage());
+//        JsonResult jsonResult=shoppingCartItemService.shoppingCartSettle(shoppingCartItems,"我草草");
+//        System.out.println(jsonResult.getMessage());
     }
 
     @Test

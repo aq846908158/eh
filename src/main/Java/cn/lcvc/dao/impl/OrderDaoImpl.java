@@ -125,7 +125,6 @@ public class OrderDaoImpl implements OrderDao {
         else if (orderBy.equals("desc"))
             criteria.addOrder(org.hibernate.criterion.Order.desc(column));
 
-        System.out.println("代码已经更新");
         try{
             list=criteria.list();
         }catch (Exception e){

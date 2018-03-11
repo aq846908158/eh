@@ -59,8 +59,8 @@ public class OrderServiceTest extends BaseJunit {
     @Test
     public void createOrder()
     {
-        JsonResult jsonResult=orderService.createOrder(2,2,8,"明天中午");
-        System.out.println(jsonResult.getMessage());
+//        JsonResult jsonResult=orderService.createOrder(2,2,8,"明天中午");
+//        System.out.println(jsonResult.getMessage());
     }
     @Test
     public void orderPay()

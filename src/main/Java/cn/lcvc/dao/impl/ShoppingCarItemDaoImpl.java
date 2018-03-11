@@ -28,7 +28,7 @@ public class ShoppingCarItemDaoImpl implements ShoppingCartItemDao {
     }
 
     public void deleteShoppingCartItem(ShoppingCartItem shoppingCartItem) {
-        getSession().delete(shoppingCartItem);
+        getSession().delete(getSession().load(ShoppingCartItem.class,shoppingCartItem.getId()));
         getSession().flush();
     }
 

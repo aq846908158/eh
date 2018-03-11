@@ -2,9 +2,11 @@ package cn.lcvc.service;
 
 import cn.lcvc.POJO.Order;
 import cn.lcvc.POJO.Product;
+import cn.lcvc.POJO.ShoppingCartItem;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.OrderDao;
 import cn.lcvc.dao.ProductDao;
+import cn.lcvc.dao.ShoppingCartItemDao;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
 import com.alibaba.fastjson.JSON;
@@ -31,47 +33,79 @@ public class OrderService {
     @Autowired
     private ProductDao productDao;
     @Autowired
+    private ShoppingCartItemDao shoppingCartItemDao;
+    @Autowired
     private ShoppingCartItemService shoppingCartItemService;
+
     /**
      * 创建订单
-     * @param productId 商品Id
-     * @param number 购买数量
      * @param buyUser 购买者
-     * @param sellUser 出售者者
-     * @param orderMessage 订单备注
      * @return JsonResult信息
      */
-    public JsonResult createOrder(Integer productId,Integer number,User buyUser,User sellUser,String orderMessage)
+    public JsonResult createOrder(User buyUser, List<Order> orders, List<ShoppingCartItem> shoppingCartItemList)
     {
         JsonResult jsonResult=new JsonResult();
         Order order=new Order();
-        Product product=productDao.getProduct(productId);
+        List<Order> orderList=new ArrayList<>();
+        Product product=new  Product();
+        for (int i=0;i<orders.size();i++){
+            product=productDao.getProduct(orders.get(i).getProduct().getId());
+            if(product == null)
+            {
+                jsonResult.setErrorCode("500");
+                jsonResult.setMessage("商品不存在");
+                return  jsonResult;
+            }
+            order.setProduct(product);
+            order.setNumber(shoppingCartItemList.get(i).getNumber());
+            order.setBuyUser(buyUser);
+            order.setSellUser(product.getUser());
+            order.setOrderState("未支付");
+            order.setOrderPrice(shoppingCartItemList.get(i).getNumber()*product.getProductPrice());
+            SimpleDateFormat dateFormater = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+            Date date=new Date();
+            String orderCode=dateFormater.format(date)+product.getId()+buyUser.getId();
+            order.setOrderCode(orderCode);
+            order.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            order.setMessage(orders.get(i).getMessage());
 
-        if(product==null)
-        {
-            jsonResult.setErrorCode("500");
-            jsonResult.setMessage("商品不存在");
-            return  jsonResult;
+            ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+            shoppingCartItem.setId(shoppingCartItemList.get(i).getId());
+//            shoppingCartItem.setUser(buyUser);
+//            shoppingCartItem.setProduct(product);
+            shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);//移除购物车项中加入订单的商品
+            orderDao.addOrder(order);//创建订单
+
+//            User buyUserOld=new User();
+//            buyUser.setId(order.getBuyUser().getId());
+//            buyUser.setUserName(order.getBuyUser().getUserName());
+//            buyUser.setTrueName(order.getBuyUser().getTrueName());
+//            order.setBuyUser(buyUserOld);
+//
+//            User sellUserOld=new User();
+//            sellUserOld.setId(order.getSellUser().getId());
+//            sellUserOld.setUserName(order.getSellUser().getUserName());
+//            sellUserOld.setTrueName(order.getSellUser().getTrueName());
+//            order.setSellUser(sellUserOld);
+//
+            Order orderPayList= new Order();
+//            orderPayList.setOrderCode(order.getOrderCode());
+//            orderPayList.setCreateTime(order.getCreateTime());
+//            orderPayList.setOrderPrice(order.getOrderPrice());
+
+            orderPayList.setId(order.getId());
+            orderList.add(orderPayList);
+            order=new Order();
+            orderPayList=new Order();
+            product=new  Product();
         }
 
-        product.setId(productId);
-        order.setProduct(product);
-        order.setNumber(number);
-        order.setBuyUser(buyUser);
-        order.setOrderState("未支付");
-        order.setOrderPrice(number*product.getProductPrice());
-        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        Date date=new Date();
-        String orderCode=dateFormater.format(date)+product.getId()+buyUser.getId();
-        order.setOrderCode(orderCode);
-        order.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        order.setMessage(orderMessage);
-        orderDao.addOrder(order);
-        Map<Object,Object> temp=new HashMap<>();
-        temp.put("order",order);
-        jsonResult.setItem(temp);
+
+//        Map<Object,Object> temp=new HashMap<>();
+//        temp.put("order",order);
+        jsonResult.setList(orderList);
         jsonResult.setErrorCode("200");
-        jsonResult.setMessage("创建成功");
+        jsonResult.setMessage("提交订单成功");
         return jsonResult;
     }
 
@@ -268,7 +302,7 @@ public class OrderService {
      *@Author @wuruibao
      *@Date 2017/12/5 19:00
      *@params id:订单ID
-     *@return  返回删除结果。
+     *@return
      */
     public  JsonResult getOrderByUser(Integer uid,String productName){
         JsonResult jsonResult = new JsonResult();
@@ -292,7 +326,54 @@ public class OrderService {
     }
 
 
+    /**
+     * 获取用户个人未支付订单信息，
+     * @param user
+     * @return
+     */
+    public  JsonResult getOderisPayList(User user){
+        JsonResult jsonResult=new JsonResult();
 
+        Map<String,Object> sqlMap=new HashMap<>();
+        sqlMap.put("orderState","未支付");
+
+        List<Order> orderList=orderDao.getOrderByUser(user,sqlMap);
+        Order orderPay= new Order();
+        Product p=new Product();
+        User u=new User();
+        List<Order> orderPayList=new ArrayList<Order>();
+        Double price=0.00D;
+        for (int i=0;i<orderList.size();i++){
+            orderPay.setId(orderList.get(i).getId());
+            p.setId(orderList.get(i).getProduct().getId());
+            p.setProductName(orderList.get(i).getProduct().getProductName());
+            orderPay.setProduct(p);
+            orderPay.setOrderCode(orderList.get(i).getOrderCode());
+            u.setUserName(orderList.get(i).getSellUser().getUserName());
+            orderPay.setSellUser(u);
+            orderPay.setOrderPrice(orderList.get(i).getOrderPrice());
+            price+=orderPay.getOrderPrice();
+            orderPayList.add(orderPay);
+            orderPay=new Order();
+            p=new Product();
+        }
+
+
+        if (orderPayList.size() >0){
+            Map<Object,Object> map=new HashMap<>();
+            map.put("orderTime",orderList.get(orderList.size()-1).getCreateTime());
+            map.put("totalPrice",price);
+            jsonResult.setItem(map);
+            jsonResult.setList(orderPayList);
+            jsonResult.setErrorCode("200");
+            jsonResult.setMessage("ok");
+        }else {
+            jsonResult.setErrorCode("500");
+            jsonResult.setMessage("error");
+        }
+
+        return  jsonResult;
+    }
 
 
 

@@ -95,14 +95,19 @@ public class ShoppingCartItemService {
             if(shoppingCartItem!=null)
             {
                 shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);
+                Map<Object,Object> map=new HashMap<>();
                 List<ShoppingCartItem> shoppingCartItems=shoppingCartItemDao.getShoppingCartItemsBy_OneColumn("user",user);
                 if (shoppingCartItems.size() > 0){
-                    Map<Object,Object> map=new HashMap<>();
                     Double subtotal=0.00D;
                     for (int i=0;i<shoppingCartItems.size();i++){
                         subtotal+= ArithmeticUtils.add(subtotal,shoppingCartItems.get(i).getProduct().getProductPrice());
                     }
                     map.put("subtotal",subtotal);
+                    map.put("cartListSize",shoppingCartItems.size());
+                    jsonResult.setItem(map);
+
+                }else {
+                    map.put("cartListSize",shoppingCartItems.size());
                     jsonResult.setItem(map);
                 }
                 jsonResult.setMessage("删除成功");
@@ -318,7 +323,7 @@ public class ShoppingCartItemService {
     }
 
 
-    public JsonResult shoppingCartSettle(List<ShoppingCartItem> shoppingCartItems,String orderMessage)
+  /*  public JsonResult shoppingCartSettle(List<ShoppingCartItem> shoppingCartItems,String orderMessage)
     {
         JsonResult jsonResult=new JsonResult();
         Jedis jedis=new Jedis("localhost");
@@ -343,7 +348,7 @@ public class ShoppingCartItemService {
 
         for (int i = 0; i < shoppingCartItems.size(); i++) {
             ShoppingCartItem shoppingCartItem =  shoppingCartItems.get(i);
-            JsonResult orderResult=orderService.createOrder(shoppingCartItem.getProduct().getId(),shoppingCartItem.getNumber(),shoppingCartItem.getUser(),shoppingCartItem.getProduct().getUser(),orderMessage);
+            JsonResult orderResult=orderService.createOrder();
             orders.add((Order) orderResult.getItem().get("order"));
             shoppingCartItemDao.deleteShoppingCartItem(shoppingCartItem);
         }
@@ -355,7 +360,7 @@ public class ShoppingCartItemService {
 
         return  jsonResult;
     }
-
+*/
     /**
      * 购物车结算后 订单合并支付
      * @param JWT 用户Token
