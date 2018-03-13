@@ -196,7 +196,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public List<Product> getNewLeave() {
-        List<Product> list= getSession().createSQLQuery("SELECT * FROM (SELECT * FROM product WHERE state=0 AND grounding=1 AND degree>=95 ORDER BY id DESC LIMIT 4,6) p ORDER BY p.id").addEntity(Product.class).list();
+        List<Product> list= getSession().createSQLQuery("SELECT * FROM product WHERE state=0 AND grounding=1 AND degree=99 ORDER BY id DESC LIMIT 4,6").addEntity(Product.class).list();
         return list;
     }
 

@@ -5,7 +5,6 @@ import cn.lcvc.POJO.Product;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.UserDao;
 import cn.lcvc.uitl.JsonResult;
-import org.aspectj.weaver.ast.Or;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -66,8 +65,8 @@ public class OrderServiceTest extends BaseJunit {
     @Test
     public void orderPay()
     {
-//        JsonResult jsonResult=orderService.orderPay(1);
-//        System.out.println(jsonResult.getMessage());
+        JsonResult jsonResult=orderService.orderPay(1);
+        System.out.println(jsonResult.getMessage());
     }
 
     @Test
@@ -80,18 +79,6 @@ public class OrderServiceTest extends BaseJunit {
         System.out.println(jsonResult1.getMessage());
     }
 
-
-    @Test
-    public  void getPayOrderByIdTest(){
-        Integer id[] = new Integer[]{16,17,18};
-        JsonResult jsonResult= orderService.getPayOrderById(id);
-
-        List<Order> orderList=jsonResult.getList();
-
-        for (Order i:orderList){
-            System.out.println(i.getId());
-        }
-    }
 
 
 }

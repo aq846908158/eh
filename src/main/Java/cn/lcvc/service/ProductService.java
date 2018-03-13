@@ -273,7 +273,7 @@ public class ProductService {
     }
 
 
-    public JsonResult getProduct(Integer pid,Boolean pageIndex) throws NullPointerException{
+    public JsonResult getProduct(Integer pid) throws NullPointerException{
         JsonResult jsonResult=new JsonResult();
         Map<Object, Object> map = new HashMap<Object, Object>();
         Product product=null;
@@ -286,11 +286,8 @@ public class ProductService {
         jsonResult.setList(list);
         if(product != null && product.getId() != null){
                 map.put("product",product);
-            if (pageIndex){//判断是否首次浏览商品
                 product.setSeeNumber(product.getSeeNumber()+1);
                 productDao.updateProduct(product);
-            }
-
         }
         jsonResult.setItem(map);
         jsonResult.setErrorCode("200");

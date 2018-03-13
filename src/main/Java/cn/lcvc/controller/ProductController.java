@@ -151,10 +151,10 @@ public class ProductController {
 
     @ResponseBody
     @RequestMapping(value = "/getProduct",method = RequestMethod.GET)
-    public JsonResult getProduct(@RequestParam(value = "pid") Integer pid,@RequestParam(value = "page") Boolean pageIsIndex){
+    public JsonResult getProduct(@RequestParam(value = "pid") Integer pid){
         JsonResult jsonResult = new JsonResult();
 
-        jsonResult=productService.getProduct(pid,pageIsIndex);
+        jsonResult=productService.getProduct(pid);
 
         return  jsonResult;
     }

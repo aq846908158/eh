@@ -200,10 +200,9 @@ public class OrderContorller {
     }
 
 
-
     @ResponseBody
     @RequestMapping(value = "/payOrder",method =  RequestMethod.POST,produces = "application/json;charset=UTF-8")
-    public JsonResult payOrder(@RequestParam(value = "token") String token,@RequestParam(value = "ds") String orderData){
+    public JsonResult payOrder(@RequestParam(value = "token") String token){
         JsonResult jsonResult =new JsonResult();
 
         User user;
@@ -223,24 +222,7 @@ public class OrderContorller {
 
                 if (jedisToken.equals(token)){
                     user=user_Token;
-                    List<Order> orderList = new ArrayList<Order>();
-                    JSONArray json=JSONArray.fromObject(orderData);//解析字符串
-                    Integer[] oid = new Integer[json.size()];
-
-                    JSONObject jsonOne;
-
-                    //遍历字符串
-                    for(int i=0;i<json.size();i++){
-//                        Order order=new Order();
-                        jsonOne = json.getJSONObject(i);
-//                        order.setId((Integer) jsonOne.get("oid"));
-//                        order.setOrderCode((String) jsonOne.get("oCode"));
-//                        orderList.add(order);
-                        oid[i]= (Integer) jsonOne.get("oid");
-                    }
-
-                    jsonResult=orderService.getPayOrderById(oid);
-
+                    jsonResult=orderService.getOderisPayList(user);
                     return  jsonResult;
                 }else {
                     jsonResult.setErrorCode("501");
@@ -259,64 +241,6 @@ public class OrderContorller {
             jsonResult.setMessage("信息异常,请重新登录");
             return  jsonResult;
         }
-
-
-    }
-
-
-    @ResponseBody
-    @RequestMapping(value = "/pay",method =  RequestMethod.POST,produces = "application/json;charset=UTF-8")
-    public JsonResult doPayOrder(@RequestParam(value = "token") String token,@RequestParam(value = "ds") String orderData){
-        JsonResult jsonResult = new JsonResult();
-        User user;
-        if (token != null && token.trim().length() > 0){
-            if (JWT.verifyJwt(token)) {
-                TokenMessage tokenMessage=JWT.getPayloadDecoder(token);
-                User user_Token=userService.getUser(tokenMessage.getUserId());
-                String  jedisToken="";
-                try {
-                    Jedis jedis = new Jedis("localhost");
-                    jedisToken= jedis.get(user_Token.getId()+"_token");
-                }catch (Exception e){
-                    jsonResult.setErrorCode("501");
-                    jsonResult.setMessage("系统异常,请重新登录");
-                    return  jsonResult;
-                }
-
-                if (jedisToken.equals(token)){
-                    user=user_Token;
-                    List<Order> orderList = new ArrayList<Order>();
-                    JSONArray json=JSONArray.fromObject(orderData);//解析字符串
-                    Integer[] oid = new Integer[json.size()];
-
-                    JSONObject jsonOne;
-
-                    //遍历字符串
-                    for(int i=0;i<json.size();i++){
-                        jsonOne = json.getJSONObject(i);
-                        oid[i]= (Integer) jsonOne.get("oid");
-                    }
-
-                    jsonResult=orderService.orderPay(oid);
-                    return  jsonResult;
-                }else {
-                    jsonResult.setErrorCode("501");
-                    jsonResult.setMessage("信息异常,请重新登录");
-                    return  jsonResult;
-                }
-            }
-            else
-            {
-                jsonResult.setErrorCode("501");
-                jsonResult.setMessage("信息异常,请重新登录");
-                return  jsonResult;
-            }
-        }else {
-            jsonResult.setErrorCode("501");
-            jsonResult.setMessage("信息异常,请重新登录");
-            return  jsonResult;
-        }
-
 
 
     }
