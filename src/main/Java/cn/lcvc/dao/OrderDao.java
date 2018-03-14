@@ -48,7 +48,7 @@ public interface OrderDao {
      *@params
      *@return
      */
-    List<Order> getOrder(Object  object, Map<String, Object> map,String column,String orderBy);
+    List<Order> getOrder(Object object, Map<String, Object> map, String column, String orderBy);
 
     /**
      *获取数据库中个人用户订单信息
@@ -57,5 +57,13 @@ public interface OrderDao {
      *@params
      *@return
      */
-    List<Order> getOrderByUser(User user,Map<String,Object>map);
+    List<Order> getOrderByUser(User user, Map<String, Object> map);
+
+    /**
+     * wu
+     * 获取范围内的id
+     * @param oid
+     * @return
+     */
+    List<Order> getorderInId(Integer[] oid);
 }

@@ -4,6 +4,7 @@ import cn.lcvc.POJO.Order;
 import cn.lcvc.POJO.User;
 import cn.lcvc.dao.OrderDao;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -142,6 +143,22 @@ public class OrderDaoImpl implements OrderDao {
             criteria.add(Restrictions.like((String) entry.getKey(),"%"+entry.getValue()+"%"));
         }
         criteria.add(Restrictions.eq("buyUser",user));
+        criteria.addOrder(org.hibernate.criterion.Order.desc("id"));
         return criteria.list();
+    }
+
+    @Override
+    public List<Order> getorderInId(Integer[] oid) {
+        String hql = "from Order  where id in (:oid) and orderState='0'";
+        Query query=getSession().createQuery(hql);
+        query.setParameterList("oid", oid);
+
+        List<Order> orderList=query.list();
+       if (orderList.size() > 0){
+           return  orderList;
+       }else {
+           return null;
+       }
+
     }
 }

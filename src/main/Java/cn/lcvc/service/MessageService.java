@@ -1,7 +1,10 @@
 package cn.lcvc.service;
 
 import cn.lcvc.POJO.Message;
+import cn.lcvc.POJO.Product;
+import cn.lcvc.POJO.User;
 import cn.lcvc.dao.MessageDao;
+import cn.lcvc.dao.ProductDao;
 import cn.lcvc.uitl.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,32 +20,29 @@ public class MessageService {
 
     @Autowired
     private MessageDao messageDao;
+    @Autowired
+    private ProductDao productDao;
     JsonResult jsonResult = new JsonResult();
 
     /**
      *用户留言功能
      */
-    public JsonResult registerMessage(Message message){
-        if (message != null){
+    public JsonResult registerMessage(User user,Integer pid,String text,String superCode){
 
-            if (message.getText() == null || message.getText().trim().length() == 0){
+            if (text == null || text.trim().length() == 0){
                 jsonResult.setMessage("服务端:留言失败,请输入留言内容.");
                 jsonResult.setErrorCode("500");
                 return  jsonResult;
             }
+            Product product=productDao.getProduct(pid);
 
-            if (message.getUser().getId() == null){
-                jsonResult.setMessage("服务端:留言失败.请重新登录.");
-                jsonResult.setErrorCode("500");
-                return  jsonResult;
-            }
-            if (message.getProduct().getId() == null){
+            if (product == null || product.getId() == null){
                 jsonResult.setErrorCode("500");
                 jsonResult.setMessage("服务端:留言失败,请刷新页面后重试");
                 return  jsonResult;
             }
-            if (message.getSuperCode() != null && message.getSuperCode().trim().length() ==6){ //如果父级留言代号不为空,则判断父级代号是否存在与message表中
-                Message message_SuperCode = messageDao.getMessageBy_OneColumn("code",message.getSuperCode());
+            if (superCode != null && superCode.trim().length() ==6){ //如果父级留言代号不为空,则判断父级代号是否存在与message表中
+                Message message_SuperCode = messageDao.getMessageBy_OneColumn("code",superCode);
                 if (message_SuperCode ==null){
                     jsonResult.setErrorCode("500");
                     jsonResult.setMessage("服务端:留言失败,请刷新页面后重试");
@@ -50,15 +50,18 @@ public class MessageService {
                 }
             }
 
-        }
         int code=getMessageCode();
 
+        Message message=new Message();
+        message.setUser(user);
+        message.setText(text);
+        message.setProduct(product);
         message.setCode(String.valueOf(code));
         message.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
         messageDao.addMessage(message);
         jsonResult.setErrorCode("200");
-        jsonResult.setMessage("服务端:留言成功.");
+        jsonResult.setMessage("服务端:留言成功");
         return  jsonResult;
     }
 

@@ -13,7 +13,7 @@ public class Order {
     private String message;
     private User buyUser;
     private Product product;
-    private String orderState;
+    private String orderState;/* 0表示未付款 1表示已付款 2表示交易完成 3表示交易关闭*/
     private User sellUser;
 
     @Id

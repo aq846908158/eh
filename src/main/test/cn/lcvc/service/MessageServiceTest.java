@@ -13,18 +13,18 @@ public class MessageServiceTest extends  BaseJunit {
 
     @Test
     public  void addMessageTest(){
-        Message message=new Message();
-        Product product=new Product();
-        User user=new User();
-        product.setId(3);
-        user.setId(4);
-        message.setText("完全OBJK");
-        message.setSuperCode("790930");
-        message.setProduct(product);
-        message.setUser(user);
-        JsonResult jsonResult=messageService.registerMessage(message);
-
-        System.out.print(jsonResult.getMessage());
+//        Message message=new Message();
+//        Product product=new Product();
+//        User user=new User();
+//        product.setId(3);
+//        user.setId(4);
+//        message.setText("完全OBJK");
+//        message.setSuperCode("790930");
+//        message.setProduct(product);
+//        message.setUser(user);
+//        JsonResult jsonResult=messageService.registerMessage(message);
+//
+//        System.out.print(jsonResult.getMessage());
 
     }
 }
