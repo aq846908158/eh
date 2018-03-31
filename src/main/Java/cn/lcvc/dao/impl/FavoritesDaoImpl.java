@@ -1,6 +1,7 @@
 package cn.lcvc.dao.impl;
 
 import cn.lcvc.POJO.Favorites;
+import cn.lcvc.POJO.User;
 import cn.lcvc.dao.FavoritesDao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -29,6 +30,8 @@ public class FavoritesDaoImpl implements FavoritesDao {
 
     public void deleteFavorites(Favorites favorites) {
         getSession().delete(favorites);
+        getSession().flush();
+
     }
 
     public void updateFavorites(Favorites favorites) {
@@ -87,5 +90,12 @@ public class FavoritesDaoImpl implements FavoritesDao {
             return list;
         }
         return null;
+    }
+
+    @Override
+    public List<Favorites> getFavoritesListByUser(User user) {
+        Criteria criteria=getSession().createCriteria(Favorites.class);
+        criteria.add(Restrictions.eq("user",user));
+        return  criteria.list();
     }
 }

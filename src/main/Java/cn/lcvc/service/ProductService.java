@@ -75,20 +75,19 @@ public class ProductService {
             jsonResult.setMessage("入手时间必须填写");
             return jsonResult;
         }
-//        if(product.getExpire()==null)
-//        {
-//            jsonResult.setMessage("保修到期时间时间必须填写");
-//            return jsonResult;
-//        }
+
         product.setCriateTime(new Timestamp(System.currentTimeMillis()));
         product.setUser(sessionUser);
         product.setSeeNumber(0);
         product.setState(false);
+        product.setImgUrl(urls.get(0));//选取第一张图片
         productDao.addProduct(product);
+
         for (int i = 0; i < urls.size(); i++) {
             String s =  urls.get(i);
-            productImgService.addProductImg(s,product.getId());
+             productImgService.addProductImg(s,product.getId());
         }
+
         jsonResult.setErrorCode("200");
         jsonResult.setMessage("发布成功");
         return jsonResult;
@@ -262,7 +261,7 @@ public class ProductService {
         List<Product> list = productDao.getProductRandLimit();//猜你喜欢模块  随机商品
         list.addAll(0,productDao.getFirstProduct());//最新出售模块 product表前4项
         list.addAll(10,productDao.getNewLeave());// 全新闲置模块  新旧程度位99新项
-        list.addAll(16,productDao.getTopSeeNumber());
+        list.addAll(16,productDao.getTopSeeNumber()); //最热商品
         if (list.size() >0){
             jsonResult.setErrorCode("200");
             jsonResult.setMessage("ok");

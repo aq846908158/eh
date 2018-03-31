@@ -1,16 +1,18 @@
 package cn.lcvc.dao;
 
 import cn.lcvc.POJO.Favorites;
+import cn.lcvc.POJO.User;
 
 import java.util.List;
+import java.util.Objects;
 
 public interface FavoritesDao {
 
-    public void addFavorites(Favorites favorites);
-    public void deleteFavorites(Favorites favorites);
-    public void updateFavorites(Favorites favorites);
-    public Favorites getFavorites(Integer id);
-    public List<Favorites> getFavoritesList();
+     void addFavorites(Favorites favorites);
+     void deleteFavorites(Favorites favorites);
+     void updateFavorites(Favorites favorites);
+     Favorites getFavorites(Integer id);
+     List<Favorites> getFavoritesList();
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:35:15
@@ -18,7 +20,7 @@ public interface FavoritesDao {
      * @param_value需要查询的字段的值
      * @return 一个Favorites对象，null表示没查到
      */
-    public Favorites getFavoritesBy_OneColumn(String column, Object value);
+     Favorites getFavoritesBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -28,7 +30,7 @@ public interface FavoritesDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个Favorites对象，null表示没查到
      */
-    public Favorites getFavoritesBy_TowColumn(String column1, Object value1, String column2, Object value2);
+     Favorites getFavoritesBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -37,5 +39,7 @@ public interface FavoritesDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<Favorites>集合，null表示没查到
      */
-    public List<Favorites> getFavoritesListOrderBy(String column, String orderBy);
+     List<Favorites> getFavoritesListOrderBy(String column, String orderBy);
+
+    List<Favorites> getFavoritesListByUser(User user);
 }

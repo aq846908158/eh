@@ -289,6 +289,12 @@
       <version>2.4</version>
       <classifier>jdk15</classifier>
     </dependency>
+    <!--///略缩图插件-->
+    <dependency>
+      <groupId>net.coobird</groupId>
+      <artifactId>thumbnailator</artifactId>
+      <version>0.4.8</version>
+    </dependency>
 
   </dependencies>
 </project>

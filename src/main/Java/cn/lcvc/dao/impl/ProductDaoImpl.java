@@ -1,6 +1,7 @@
 package cn.lcvc.dao.impl;
 
 import cn.lcvc.POJO.Product;
+import cn.lcvc.POJO.ProductType;
 import cn.lcvc.dao.ProductDao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -183,6 +184,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public List<Product> getProductRandLimit() {
+//        SELECT pro.*,productimg.imgUrl FROM (SELECT * FROM product WHERE state=0 AND grounding=1  ORDER BY id DESC  LIMIT 4,60) pro LEFT JOIN productimg ON pro.id=productimg.product AND productimg.id in (select min(productimg.id) from productimg group by productimg.product) 	 ORDER BY RAND() LIMIT 6
         List<Product> list=getSession().createSQLQuery("SELECT *FROM (SELECT * FROM product WHERE state=0 AND grounding=1  ORDER BY id DESC  LIMIT 4,60) pro ORDER BY RAND() LIMIT 6").addEntity(Product.class).list();
 
         return list;
@@ -190,18 +192,23 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public List<Product> getFirstProduct() {
-        List<Product> list= getSession().createSQLQuery("SELECT * FROM product WHERE state=0 AND grounding=1 ORDER BY id DESC  LIMIT 4").addEntity(Product.class).list();
+        //SELECT  product.*,productimg.imgUrl  FROM product   LEFT JOIN  productimg  ON  product.id=productimg.product  AND productimg.id in (select min(productimg.id) from productimg group by productimg.product) WHERE state=0 AND grounding=1 ORDER BY id DESC  LIMIT 4
+//        List<Object> resultList=getSession().createSQLQuery("SELECT  product.*,productimg.imgUrl  FROM product   LEFT JOIN  productimg  ON  product.id=productimg.product  AND productimg.id in (select min(productimg.id) from productimg group by productimg.product) WHERE state=0 AND grounding=1 ORDER BY id DESC  LIMIT 4").list();
+
+        List<Product> list= getSession().createSQLQuery("SELECT  product.*,productimg.imgUrl  FROM product   LEFT JOIN  productimg  ON  product.id=productimg.product  AND productimg.id in (select min(productimg.id) from productimg group by productimg.product) WHERE state=0 AND grounding=1 ORDER BY id DESC  LIMIT 4").addEntity(Product.class).list();
         return list;
     }
 
     @Override
     public List<Product> getNewLeave() {
+//        SELECT pro.*,productimg.imgUrl FROM (SELECT * FROM product WHERE state=0 AND grounding=1 AND degree>=95 ORDER BY id DESC LIMIT 4,6) pro LEFT JOIN productimg ON pro.id=productimg.product AND productimg.id in (select min(productimg.id) from productimg group by productimg.product)  ORDER BY pro.id
         List<Product> list= getSession().createSQLQuery("SELECT * FROM (SELECT * FROM product WHERE state=0 AND grounding=1 AND degree>=95 ORDER BY id DESC LIMIT 4,6) p ORDER BY p.id").addEntity(Product.class).list();
         return list;
     }
 
     @Override
     public List<Product> getTopSeeNumber() {
+//        SELECT product.*,productimg.imgUrl FROM  product LEFT JOIN  productimg  ON  product.id=productimg.product  AND productimg.id in (select min(productimg.id) from productimg group by productimg.product) WHERE state=0 AND grounding=1 ORDER BY seeNumber DESC  LIMIT 6
         List<Product> list= getSession().createSQLQuery("SELECT * FROM  product WHERE state=0 AND grounding=1 ORDER BY seeNumber DESC  LIMIT 6").addEntity(Product.class).list();
         return list;
     }

@@ -1,6 +1,8 @@
 package cn.lcvc.controller;
 
+import cn.lcvc.service.UploaderService;
 import cn.lcvc.uitl.JsonResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,8 @@ import java.io.IOException;
 @RequestMapping(value = "/uploader")
 public class UploaderContorller {
 
+    @Autowired
+    private UploaderService uploaderService;
 
     @ResponseBody
     @RequestMapping(value = "/fileImg")
@@ -30,13 +34,14 @@ public class UploaderContorller {
                     String contentType = file.getContentType();
                     //获得文件后缀名称
                     String imageName = contentType.substring(contentType.indexOf("/") + 1);
-                    String fileName = (int)(Math.random() * 10000000) + "." + imageName;
-                    path = "/eh_admin/producImage_temporary/" + fileName;
+                    String fileName=uploaderService.getUUID()+"."+imageName;
+                    String homeUrl=System.getProperty("user.dir");//获取项目绝对路径
+                    //！！！！特别注意  如果移动eh_home项目，请及时更改项目绝对路径
+                    path = "G:\\IDEAPoject\\eh_home\\assets\\images\\productImg\\" + fileName;
 
-                    System.out.println("路径 "+path);
-                    file.transferTo(new File(pathRoot + path));
-
-                    jsonResult.setMessage(path);
+//                    System.out.println("路径 "+path);
+                    file.transferTo(new File(path));
+                    jsonResult.setMessage(fileName);
 
                 }catch (Exception e){
                     System.out.println(e);

@@ -20,6 +20,9 @@ public class Product {
     private User user;
     private Timestamp criateTime;
     private Boolean state;
+    private  String imgUrl; //图片路径
+
+
 
     @Id
     @Column(name = "id")
@@ -141,6 +144,16 @@ public class Product {
         this.state = state;
     }
 
+    @Basic
+    @Column(name = "imgUrl")
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         Product product = (Product) o;
@@ -160,6 +173,12 @@ public class Product {
         result = 31 * result + (buyTime != null ? buyTime.hashCode() : 0);
         result = 31 * result + (expire != null ? expire.hashCode() : 0);
         result = 31 * result + (seeNumber != null ? seeNumber.hashCode() : 0);
+        result = 31 * result + (productType != null ? productType.hashCode() : 0);
+        result = 31 * result + (school != null ? school.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (criateTime != null ? criateTime.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (imgUrl != null ? imgUrl.hashCode() : 0);
         return result;
     }
 

@@ -18,17 +18,19 @@ public class ProductImgService {
     @Autowired
     private ProductImgDao productImgDao;
 
+
     public JsonResult addProductImg(String url, Integer productId)
     {
+        JsonResult jsonResult=new JsonResult();
         Product product=new Product();
         product.setId(productId);
-        JsonResult jsonResult =new JsonResult();
         ProductImg productImg=new ProductImg();
         productImg.setImgUrl(url);
         productImg.setProduct(product);
         productImgDao.addProductImg(productImg);
+
+        jsonResult.setMessage("ok");
         jsonResult.setErrorCode("200");
-        jsonResult.setMessage("添加成功");
         return  jsonResult;
     }
 

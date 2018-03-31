@@ -21,7 +21,7 @@ public interface UserDao {
      * @param_value需要查询的字段的值
      * @return 一个User对象，null表示没查到
      */
-    public User getUserBy_OneColumn(String column,Object value);
+    public User getUserBy_OneColumn(String column, Object value);
     /**
      * @author huanghaibin
      * @date 2017-11-29 16:59:53
@@ -31,7 +31,7 @@ public interface UserDao {
      * @param_ value1需要查询的第二个字段的值
      * @return 一个User对象，null表示没查到
      */
-    public User getUserBy_TowColumn(String column1,Object value1,String column2,Object value2);
+    public User getUserBy_TowColumn(String column1, Object value1, String column2, Object value2);
 
     /**
      * @author huanghaibin
@@ -40,7 +40,7 @@ public interface UserDao {
      * @param_orderBy排序规则 如"asc","desc"
      * @return 一个有序List<User>集合，null表示没查到
      */
-    public List<User> getUserListOrderBy(String column,String orderBy);
+    public List<User> getUserListOrderBy(String column, String orderBy);
 
     /**
      *获取数据库中object对象。如map中存在数据则根据数据进行查询
